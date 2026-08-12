@@ -8,11 +8,17 @@ you can sign in; if you don't have one, ask them first.
 
 - **Google Chrome must already be installed** on this computer — the app
   drives a copy of it to do the scraping.
-- **Node.js must be installed.** If you're not sure, open a terminal
-  (see below) and type `node -v`. If you see a version number, you're
-  set — skip to the next section. If not, download and install the
-  **LTS** version from [nodejs.org](https://nodejs.org), then come back
-  here.
+- **Node.js must be installed — and it needs to be the LTS version, not
+  the newest one.** Open a terminal (see below) and type `node -v`.
+  - If nothing happens / it says the command isn't found, install
+    Node.js from [nodejs.org](https://nodejs.org) — the button labeled
+    **LTS**, not "Current."
+  - If you get a version number, check it: **it needs to start with 22
+    or lower (v22.x, v20.x, etc.) — not v23 or higher.** A too-new
+    version installs fine but breaks one specific step later in a way
+    that's confusing to diagnose (see the troubleshooting section at the
+    bottom). If yours is too new, install the LTS version from the link
+    above over it, then re-check with `node -v`.
 
 ## Windows
 
@@ -79,3 +85,24 @@ setup) — there's no in-app update button yet.
 Screenshot whatever you're seeing (the error message, or what the screen
 looks like) and send it to your admin rather than trying to fix it
 yourself — most issues are quick to diagnose with a screenshot in hand.
+
+### One specific error worth knowing about
+
+If `npm start` shows something like:
+
+```
+Error: Electron failed to install correctly, please delete node_modules/electron and try installing again
+```
+
+...deleting and reinstalling **will not fix it** if it's caused by what
+it usually is: too new a Node.js version (see the checklist at the top).
+The real fix:
+
+1. Install the **LTS** version of Node.js from
+   [nodejs.org](https://nodejs.org), replacing whatever's there now.
+2. In this folder, delete the `node_modules` folder and the
+   `package-lock.json` file.
+3. Run `npm install` again, then `npm start`.
+
+If it still happens after that, screenshot the error and send it to your
+admin rather than guessing further.
