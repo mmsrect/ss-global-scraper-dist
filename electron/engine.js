@@ -1,1 +1,1215 @@
-const _0x31523a=_0x194b;(function(_0x3bcb7d,_0x4c7567){const _0x409fac=_0x194b,_0x5abaa3=_0x3bcb7d();while(!![]){try{const _0x7e31a=parseInt(_0x409fac(0x18a))/0x1*(-parseInt(_0x409fac(0x2f3))/0x2)+parseInt(_0x409fac(0x218))/0x3*(-parseInt(_0x409fac(0x2b8))/0x4)+parseInt(_0x409fac(0x300))/0x5+-parseInt(_0x409fac(0x2ac))/0x6+parseInt(_0x409fac(0x1ff))/0x7*(parseInt(_0x409fac(0x226))/0x8)+-parseInt(_0x409fac(0x235))/0x9*(parseInt(_0x409fac(0x27b))/0xa)+parseInt(_0x409fac(0x2df))/0xb*(parseInt(_0x409fac(0x243))/0xc);if(_0x7e31a===_0x4c7567)break;else _0x5abaa3['push'](_0x5abaa3['shift']());}catch(_0x163bf1){_0x5abaa3['push'](_0x5abaa3['shift']());}}}(_0x22ae,0xdcbb5));const _0x462863=(function(){const _0x3c0ede=_0x194b,_0x8ac153={'jrZuT':function(_0x17f681,_0x34259d){return _0x17f681!==_0x34259d;},'pyWpd':_0x3c0ede(0x26d),'cljgu':_0x3c0ede(0x15e),'fNDVd':function(_0x1dcedb,_0xb907bc){return _0x1dcedb(_0xb907bc);},'ITtYg':_0x3c0ede(0x177),'BajiM':function(_0x3e590a,_0xb8f763){return _0x3e590a!==_0xb8f763;},'AyhzW':'Ibyvi'};let _0x5743dd=!![];return function(_0xf2c320,_0x3f9049){const _0x20e22a=_0x3c0ede;if(_0x8ac153[_0x20e22a(0x1e4)](_0x20e22a(0x17f),_0x8ac153[_0x20e22a(0x198)])){const _0x59664e=_0x5743dd?function(){const _0x3b882c=_0x20e22a;if(_0x8ac153[_0x3b882c(0x1bf)](_0x8ac153[_0x3b882c(0x162)],_0x8ac153[_0x3b882c(0x1eb)])){if(_0x3f9049){const _0x3fdbc5=_0x3f9049[_0x3b882c(0x270)](_0xf2c320,arguments);return _0x3f9049=null,_0x3fdbc5;}}else return _0x20d7a0['evaluate'](()=>{const _0x56076f=_0x3b882c,_0x11b82f=_0x282565[_0x56076f(0x2bf)]||'',_0x1e272a=_0x5a49a1[_0x56076f(0x21a)]?_0x33ad43[_0x56076f(0x21a)][_0x56076f(0x282)]:'',_0x2eb199=_0x14b35a['body']?_0x3cc012[_0x56076f(0x2d7)][_0x56076f(0x203)][_0x56076f(0x29d)](0x0,0x320):'';return/\/rate-limited/i[_0x56076f(0x289)](_0x1e272a)||/rate limit exceeded/i[_0x56076f(0x289)](_0x2eb199)||/rate limited/i[_0x56076f(0x289)](_0x11b82f);})[_0x3b882c(0x242)](()=>![]);}:function(){};return _0x5743dd=![],_0x59664e;}else _0x8ac153[_0x20e22a(0x2b2)](_0xf48004,_0x8ac153[_0x20e22a(0x208)]);};}()),_0x5961a3=_0x462863(this,function(){const _0xb34b6b=_0x194b,_0x28d850={'sCPUw':function(_0x436496,_0x43b53a){return _0x436496!==_0x43b53a;},'nXdVq':_0xb34b6b(0x238)};if(_0x28d850['sCPUw'](_0x5961a3['bind']()[_0xb34b6b(0x274)]()['indexOf']('\x0a'),-0x1))return;return _0x5961a3[_0xb34b6b(0x274)]()[_0xb34b6b(0x297)]('(((.+)+)+)+$')['toString']()['constructor'](_0x5961a3)[_0xb34b6b(0x297)](_0x28d850[_0xb34b6b(0x2b6)]);});_0x5961a3();const path=require('path'),os=require('os'),fs=require('fs'),{app,screen}=require(_0x31523a(0x1b2)),rawChrome=require(_0x31523a(0x1b6));function profileDir(){const _0x1f438a=_0x31523a,_0x40fb42={'LfRYM':_0x1f438a(0x1a3),'NFgkI':_0x1f438a(0x157)};return path[_0x1f438a(0x1e9)](app[_0x1f438a(0x2a6)](_0x40fb42['LfRYM']),_0x40fb42[_0x1f438a(0x1b7)]);}function realChromeProfilePaths(){const _0x597b68=_0x31523a,_0x41609d={'ZRqRR':_0x597b68(0x1de),'uYkez':function(_0x56d1c3,_0x265f61){return _0x56d1c3!==_0x265f61;},'jEDkZ':_0x597b68(0x23a),'sQgFg':'Library','GoOjE':_0x597b68(0x22b),'rFNrv':_0x597b68(0x217),'FOwkj':_0x597b68(0x200),'AshuW':'win32','QqGgZ':_0x597b68(0x15b),'ICVCl':'User\x20Data','dnNgp':_0x597b68(0x1fa)},_0x32d739=os[_0x597b68(0x1e3)]();if(process['platform']===_0x41609d[_0x597b68(0x168)]){if(_0x41609d[_0x597b68(0x2a7)](_0x597b68(0x23a),_0x41609d['jEDkZ']))_0x413f71[_0x597b68(0x2be)]('dl')[_0x597b68(0x185)](_0x4e222e=>{const _0x1697c9=_0x597b68,_0x4c0271=_0x4e222e['querySelector']('dt')?.[_0x1697c9(0x272)]?.[_0x1697c9(0x250)]()||'',_0x23b3fc=_0x4e222e[_0x1697c9(0x1ac)]('dd')?.[_0x1697c9(0x272)]?.[_0x1697c9(0x250)]()||'',_0x47610c=_0x3c1220[_0x4c0271];if(_0x47610c)_0x3db663[_0x47610c]=_0x23b3fc;});else{const _0x17bc2b=path[_0x597b68(0x1e9)](_0x32d739,_0x41609d[_0x597b68(0x24c)],_0x597b68(0x22e),_0x41609d[_0x597b68(0x2f5)],_0x41609d['rFNrv']);return{'root':_0x17bc2b,'defaultProfile':path[_0x597b68(0x1e9)](_0x17bc2b,_0x41609d[_0x597b68(0x2da)])};}}if(process['platform']===_0x41609d[_0x597b68(0x2dc)]){const _0x14810e=process.env.LOCALAPPDATA||path['join'](_0x32d739,'AppData',_0x41609d[_0x597b68(0x1d7)]),_0x2c7929=path[_0x597b68(0x1e9)](_0x14810e,_0x597b68(0x22b),_0x597b68(0x217),_0x41609d[_0x597b68(0x1cd)]);return{'root':_0x2c7929,'defaultProfile':path[_0x597b68(0x1e9)](_0x2c7929,_0x597b68(0x200))};}const _0x1a2874=path[_0x597b68(0x1e9)](_0x32d739,_0x41609d['dnNgp'],_0x597b68(0x1dc));return{'root':_0x1a2874,'defaultProfile':path['join'](_0x1a2874,_0x41609d['FOwkj'])};}function realChromeExecutablePath(){const _0xe8bdc3=_0x31523a,_0x260ed2={'LAyAr':_0xe8bdc3(0x29f),'RwPYU':function(_0xb52238,_0x22dcdd){return _0xb52238===_0x22dcdd;},'twpVR':_0xe8bdc3(0x1de),'UOGhl':_0xe8bdc3(0x205),'snKiS':_0xe8bdc3(0x1ab),'wSQbB':function(_0x281a7e,_0x92271b){return _0x281a7e===_0x92271b;},'Rsxgc':_0xe8bdc3(0x1d3),'usFEC':'C:\x5cProgram\x20Files\x20(x86)','XNLrC':_0xe8bdc3(0x217),'BPEqY':_0xe8bdc3(0x29b),'FrEFn':_0xe8bdc3(0x2fb),'KJVQC':_0xe8bdc3(0x1af),'zcBfg':_0xe8bdc3(0x27d)};let _0x8bf619;if(_0x260ed2[_0xe8bdc3(0x1c1)](process[_0xe8bdc3(0x209)],_0x260ed2[_0xe8bdc3(0x29e)])){if(_0x260ed2[_0xe8bdc3(0x1aa)]===_0x260ed2[_0xe8bdc3(0x1aa)])_0x8bf619=_0x260ed2[_0xe8bdc3(0x249)];else throw new _0x1eafb3(_0x260ed2[_0xe8bdc3(0x25d)]);}else{if(_0x260ed2['wSQbB'](process['platform'],_0x260ed2['Rsxgc'])){const _0x28c522=process.env['ProgramFiles']||_0xe8bdc3(0x1d1),_0x29486f=process.env['ProgramFiles(x86)']||_0x260ed2['usFEC'];_0x8bf619=[path[_0xe8bdc3(0x1e9)](_0x28c522,_0xe8bdc3(0x22b),_0x260ed2[_0xe8bdc3(0x1c4)],_0x260ed2['BPEqY'],_0x260ed2[_0xe8bdc3(0x181)]),path[_0xe8bdc3(0x1e9)](_0x29486f,'Google',_0x260ed2[_0xe8bdc3(0x1c4)],_0x260ed2['BPEqY'],_0x260ed2[_0xe8bdc3(0x181)])][_0xe8bdc3(0x204)](_0x2ed094=>fs[_0xe8bdc3(0x16f)](_0x2ed094));}else _0x8bf619=[_0x260ed2[_0xe8bdc3(0x20e)],_0x260ed2['zcBfg']][_0xe8bdc3(0x204)](_0xf045b4=>fs[_0xe8bdc3(0x16f)](_0xf045b4));}return _0x8bf619&&fs['existsSync'](_0x8bf619)?_0x8bf619:undefined;}function realChromeIsRunning(_0x50d089){const _0x1d7601=_0x31523a;try{return fs['readlinkSync'](path[_0x1d7601(0x1e9)](_0x50d089,_0x1d7601(0x171))),!![];}catch{return![];}}function copyFileBestEffort(_0x23ef38,_0x5c0bec){const _0x313b5d=_0x31523a;try{fs['mkdirSync'](path[_0x313b5d(0x22c)](_0x5c0bec),{'recursive':!![]}),fs['copyFileSync'](_0x23ef38,_0x5c0bec);}catch{}}function copyDirBestEffort(_0x1fc8d3,_0x1b4f36){const _0x49b449=_0x31523a,_0x2126d2={'gDYAs':'/Applications/Google\x20Chrome.app/Contents/MacOS/Google\x20Chrome','bgSFe':function(_0x4fc8ee,_0x5f5a00){return _0x4fc8ee===_0x5f5a00;},'zRIOK':'TGaiT','kNNHs':function(_0x449ae3,_0xf79a57,_0x1718d0){return _0x449ae3(_0xf79a57,_0x1718d0);},'UgPXd':function(_0x46648c,_0x12c678,_0x30827e){return _0x46648c(_0x12c678,_0x30827e);}};let _0xae104a;try{_0xae104a=fs[_0x49b449(0x211)](_0x1fc8d3,{'withFileTypes':!![]});}catch{if(_0x2126d2[_0x49b449(0x1e8)](_0x49b449(0x2a4),_0x2126d2['zRIOK']))_0x1ff0cf=cIpgZe[_0x49b449(0x213)];else return;}for(const _0x347530 of _0xae104a){const _0x740ad9=path['join'](_0x1fc8d3,_0x347530[_0x49b449(0x2e0)]),_0xec65ff=path[_0x49b449(0x1e9)](_0x1b4f36,_0x347530[_0x49b449(0x2e0)]);if(_0x347530[_0x49b449(0x302)]())_0x2126d2[_0x49b449(0x1f4)](copyDirBestEffort,_0x740ad9,_0xec65ff);else{if(_0x347530[_0x49b449(0x196)]())_0x2126d2['UgPXd'](copyFileBestEffort,_0x740ad9,_0xec65ff);}}}const CLONE_ALLOWLIST=[_0x31523a(0x2fd),_0x31523a(0x24f),_0x31523a(0x207),_0x31523a(0x28d),_0x31523a(0x1e0)];function cloneRealChromeProfileIfFirstRun(){const _0x804ce=_0x31523a,_0x37649e={'oMmZd':_0x804ce(0x200),'oSXFl':function(_0x40fdc3,_0x25b303,_0x4cfb26){return _0x40fdc3(_0x25b303,_0x4cfb26);},'uKKST':_0x804ce(0x1f8),'elasr':_0x804ce(0x2f4),'gThqC':function(_0x555444){return _0x555444();},'AIThC':function(_0x3c5f02,_0x4abb44,_0x54195c){return _0x3c5f02(_0x4abb44,_0x54195c);},'PXGNN':'Local\x20State','sZnSs':function(_0x11fa16){return _0x11fa16();},'kvFSD':function(_0x1d3e69,_0x30108e){return _0x1d3e69!==_0x30108e;},'eytHL':_0x804ce(0x176),'sYUrA':function(_0x45928e){return _0x45928e();},'pLZER':_0x804ce(0x2eb),'ZJMMq':function(_0x5e065b,_0x280fc1){return _0x5e065b===_0x280fc1;},'PsBCc':_0x804ce(0x2ec),'lEblh':'sMGlZ','nRiFL':'HAodY','WIwzo':function(_0x5b1418,_0x49537d,_0x3053e0){return _0x5b1418(_0x49537d,_0x3053e0);}};if(fs[_0x804ce(0x16f)](_0x37649e[_0x804ce(0x2f8)](profileDir)))return;const {root:_0x30892e,defaultProfile:_0xae3704}=_0x37649e[_0x804ce(0x2f8)](realChromeProfilePaths);if(!fs[_0x804ce(0x16f)](_0xae3704))return;if(realChromeIsRunning(_0x30892e))return;fs['mkdirSync'](profileDir(),{'recursive':!![]}),_0x37649e[_0x804ce(0x241)](copyFileBestEffort,path[_0x804ce(0x1e9)](_0x30892e,_0x37649e[_0x804ce(0x2a8)]),path[_0x804ce(0x1e9)](_0x37649e['sZnSs'](profileDir),_0x37649e[_0x804ce(0x2a8)]));try{if(_0x37649e[_0x804ce(0x1f6)](_0x37649e['eytHL'],_0x37649e[_0x804ce(0x2f0)]))_0x4d33d7['profile'][_0x804ce(0x239)]&&(_0x19af2d[_0x804ce(0x248)][_0x804ce(0x239)]={'Default':_0x2d9f96[_0x804ce(0x248)][_0x804ce(0x239)][_0x804ce(0x200)]||{}}),_0x2d86e7[_0x804ce(0x248)][_0x804ce(0x17d)]=_0x37649e['oMmZd'],_0x18355f[_0x804ce(0x248)][_0x804ce(0x1d9)]=[_0x37649e['oMmZd']],_0x2139c3[_0x804ce(0x248)][_0x804ce(0x268)]=[_0x37649e['oMmZd']];else{const _0x26251d=path['join'](_0x37649e['sYUrA'](profileDir),_0x37649e['PXGNN']),_0xf6b4e5=JSON[_0x804ce(0x2b7)](fs['readFileSync'](_0x26251d,_0x37649e[_0x804ce(0x175)]));_0xf6b4e5[_0x804ce(0x248)]&&(_0x37649e[_0x804ce(0x216)](_0x37649e[_0x804ce(0x275)],_0x37649e[_0x804ce(0x1e5)])?_0x37649e['oSXFl'](_0x300030,'log',_0x19dc2e):(_0xf6b4e5[_0x804ce(0x248)][_0x804ce(0x239)]&&(_0x804ce(0x16e)===_0x37649e[_0x804ce(0x1f5)]?_0xf6b4e5[_0x804ce(0x248)][_0x804ce(0x239)]={'Default':_0xf6b4e5[_0x804ce(0x248)][_0x804ce(0x239)][_0x804ce(0x200)]||{}}:(_0x49fe95=!![],_0x2c1834(_0x37649e['uKKST'],_0x37649e[_0x804ce(0x292)]))),_0xf6b4e5['profile'][_0x804ce(0x17d)]=_0x804ce(0x200),_0xf6b4e5[_0x804ce(0x248)][_0x804ce(0x1d9)]=[_0x37649e['oMmZd']],_0xf6b4e5['profile'][_0x804ce(0x268)]=[_0x37649e[_0x804ce(0x1d5)]])),fs['writeFileSync'](_0x26251d,JSON[_0x804ce(0x2f2)](_0xf6b4e5));}}catch{}const _0x76885c=path[_0x804ce(0x1e9)](profileDir(),_0x37649e[_0x804ce(0x1d5)]);fs[_0x804ce(0x233)](_0x76885c,{'recursive':!![]});for(const _0x217575 of CLONE_ALLOWLIST){const _0x3d388f=path[_0x804ce(0x1e9)](_0xae3704,_0x217575);if(!fs['existsSync'](_0x3d388f))continue;const _0x5c7f90=path['join'](_0x76885c,_0x217575);try{if(fs[_0x804ce(0x170)](_0x3d388f)['isDirectory']())_0x37649e['AIThC'](copyDirBestEffort,_0x3d388f,_0x5c7f90);else _0x37649e[_0x804ce(0x27f)](copyFileBestEffort,_0x3d388f,_0x5c7f90);}catch{}}}async function markProfileForCleanStart(){const _0x8acee8=_0x31523a,_0x46695f={'NBMoM':function(_0x15f3d4,_0x57457e){return _0x15f3d4(_0x57457e);},'BAPDd':'fs/promises','EHYnN':function(_0x2f3028){return _0x2f3028();},'PsDoQ':_0x8acee8(0x200),'yMuIp':_0x8acee8(0x207),'grwyv':_0x8acee8(0x19c)},_0x164167=_0x46695f['NBMoM'](require,_0x46695f[_0x8acee8(0x290)]),_0xf48996=path[_0x8acee8(0x1e9)](_0x46695f[_0x8acee8(0x1a9)](profileDir),_0x46695f['PsDoQ'],_0x46695f['yMuIp']);try{const _0x510200=await _0x164167[_0x8acee8(0x1f9)](_0xf48996,'utf8'),_0x18436e=JSON[_0x8acee8(0x2b7)](_0x510200);_0x18436e[_0x8acee8(0x248)]=_0x18436e[_0x8acee8(0x248)]||{},_0x18436e[_0x8acee8(0x248)][_0x8acee8(0x174)]=_0x46695f[_0x8acee8(0x255)],_0x18436e[_0x8acee8(0x248)][_0x8acee8(0x273)]=!![],_0x18436e['session']=_0x18436e[_0x8acee8(0x1e6)]||{},_0x18436e[_0x8acee8(0x1e6)][_0x8acee8(0x2a3)]=0x5,await _0x164167[_0x8acee8(0x1a5)](_0xf48996,JSON[_0x8acee8(0x2f2)](_0x18436e));}catch{}}function rightHalfWindowArgs(){const _0xa6c473=_0x31523a,_0x37ff8e={'zcYPZ':function(_0x54b1a3,_0x2b33fc){return _0x54b1a3+_0x2b33fc;}},{workArea:_0xab5756}=screen[_0xa6c473(0x2ef)](),_0x12d196=Math['floor'](_0xab5756['width']/0x2),_0x4c4366=_0x37ff8e['zcYPZ'](_0xab5756['x'],_0x12d196),_0x5a0ee1=_0xab5756['y'];return[_0xa6c473(0x23d)+_0x4c4366+','+_0x5a0ee1,_0xa6c473(0x1ce)+_0x12d196+','+_0xab5756[_0xa6c473(0x163)]];}function _0x194b(_0x19b2c8,_0x556fe3){_0x19b2c8=_0x19b2c8-0x157;const _0x1b5d78=_0x22ae();let _0x5961a3=_0x1b5d78[_0x19b2c8];if(_0x194b['pFMreh']===undefined){var _0x462863=function(_0x1e712d){const _0x2a178e='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+/=';let _0xa911c7='',_0x163c4a='',_0x37149c=_0xa911c7+_0x462863,_0x3480dc=(''+function(){return 0x0;})['indexOf']('\x0a')!==-0x1;for(let _0x2e8863=0x0,_0x48ed5d,_0xbc77b4,_0x3c223d=0x0;_0xbc77b4=_0x1e712d['charAt'](_0x3c223d++);~_0xbc77b4&&(_0x48ed5d=_0x2e8863%0x4?_0x48ed5d*0x40+_0xbc77b4:_0xbc77b4,_0x2e8863++%0x4)?_0xa911c7+=_0x3480dc||_0x37149c['charCodeAt'](_0x3c223d+0xa)-0xa!==0x0?String['fromCharCode'](0xff&_0x48ed5d>>(-0x2*_0x2e8863&0x6)):_0x2e8863:0x0){_0xbc77b4=_0x2a178e['indexOf'](_0xbc77b4);}for(let _0x1ec788=0x0,_0x5e7b12=_0xa911c7['length'];_0x1ec788<_0x5e7b12;_0x1ec788++){_0x163c4a+='%'+('00'+_0xa911c7['charCodeAt'](_0x1ec788)['toString'](0x10))['slice'](-0x2);}return decodeURIComponent(_0x163c4a);};_0x194b['rWUbtR']=_0x462863,_0x194b['NIWkvH']={},_0x194b['pFMreh']=!![];}const _0x22ae13=_0x1b5d78[0x0],_0x194bbb=_0x19b2c8+_0x22ae13,_0x2916e2=_0x194b['NIWkvH'][_0x194bbb];if(!_0x2916e2){const _0x566e5e=function(_0x292418){this['NSBZpm']=_0x292418,this['hyniWA']=[0x1,0x0,0x0],this['kqMKZX']=function(){return'newState';},this['CdJNOo']='\x5c\x77\x2b\x20\x2a\x5c\x28\x5c\x29\x20\x2a\x7b\x5c\x77\x2b\x20\x2a',this['oNWUVd']='\x5b\x27\x7c\x22\x5d\x2e\x2b\x5b\x27\x7c\x22\x5d\x3b\x3f\x20\x2a\x7d';};_0x566e5e['prototype']['OXlzsg']=function(){const _0x416b2e=new RegExp(this['CdJNOo']+this['oNWUVd']),_0x21d565=_0x416b2e['test'](this['kqMKZX']['toString']())?--this['hyniWA'][0x1]:--this['hyniWA'][0x0];return this['qqjCDt'](_0x21d565);},_0x566e5e['prototype']['qqjCDt']=function(_0x5cf2ca){if(!Boolean(~_0x5cf2ca))return _0x5cf2ca;return this['vhVYJJ'](this['NSBZpm']);},_0x566e5e['prototype']['vhVYJJ']=function(_0x6d33c4){for(let _0x189d52=0x0,_0x46afe7=this['hyniWA']['length'];_0x189d52<_0x46afe7;_0x189d52++){this['hyniWA']['push'](Math['round'](Math['random']())),_0x46afe7=this['hyniWA']['length'];}return _0x6d33c4(this['hyniWA'][0x0]);},(''+function(){return 0x0;})['indexOf']('\x0a')===-0x1&&new _0x566e5e(_0x194b)['OXlzsg'](),_0x5961a3=_0x194b['rWUbtR'](_0x5961a3),_0x194b['NIWkvH'][_0x194bbb]=_0x5961a3;}else _0x5961a3=_0x2916e2;return _0x5961a3;}let browser=null,page=null;async function prepareBrowserForRun(){const _0x3d4407=_0x31523a,_0x4a616={'QBBey':function(_0xc840dd){return _0xc840dd();}};await _0x4a616[_0x3d4407(0x2d6)](ensureBrowser);}function clearStaleOwnProfileLock(){const _0xe3437f=_0x31523a,_0x33bf74={'MSAeT':function(_0x39a60d,_0x5a2327){return _0x39a60d(_0x5a2327);},'taKPh':'⛔\x20Rate\x20limit\x20hit\x20-\x20stopping\x20the\x20run.\x20Change\x20your\x20proxy,\x20then\x20click\x20Resume.','Qqnmd':function(_0x3645f2){return _0x3645f2();},'NqnaV':function(_0x1a10c8,_0x4fa35d){return _0x1a10c8!==_0x4fa35d;},'wnTPh':_0xe3437f(0x25b),'Miewg':_0xe3437f(0x2e3),'NhzAw':function(_0x54a345,_0x37d689,_0x559e2b){return _0x54a345(_0x37d689,_0x559e2b);},'zLDZC':'powershell','HSQBa':'-NoProfile','fcFnc':_0xe3437f(0x1f7),'kyJse':_0xe3437f(0x159),'pLOuw':_0xe3437f(0x171),'kQLTY':'SingletonSocket','MQDPu':_0xe3437f(0x212),'sKphv':function(_0x1b5b04,_0x26e7a3){return _0x1b5b04===_0x26e7a3;},'YvNZZ':_0xe3437f(0x2f9)},_0x512d9a=_0x33bf74['Qqnmd'](profileDir);try{fs['readlinkSync'](path[_0xe3437f(0x1e9)](_0x512d9a,_0xe3437f(0x171)));}catch{return;}try{if(_0x33bf74[_0xe3437f(0x269)](_0x33bf74['wnTPh'],_0xe3437f(0x25b))){const _0x2e5eb5=_0x2f2163[_0xe3437f(0x234)](_0xbbc1b8[_0xe3437f(0x2be)](_0xe3437f(0x1da)))[_0xe3437f(0x25e)](_0x28f6ef=>_0x28f6ef['getAttribute']('data-link'))[_0xe3437f(0x28c)](_0x973b95);return _0x3825ff[_0xe3437f(0x234)](new _0x274cff(_0x2e5eb5));}else{const {execFileSync:_0xa68f11}=_0x33bf74['MSAeT'](require,_0x33bf74[_0xe3437f(0x1c7)]);process[_0xe3437f(0x209)]===_0xe3437f(0x1d3)?_0x33bf74[_0xe3437f(0x2c4)](_0xa68f11,_0x33bf74[_0xe3437f(0x286)],[_0x33bf74[_0xe3437f(0x2ff)],_0x33bf74[_0xe3437f(0x15c)],_0xe3437f(0x231)+_0x512d9a+_0xe3437f(0x2c9)]):_0xa68f11(_0x33bf74[_0xe3437f(0x18c)],['-f',_0x512d9a]);}}catch{}for(const _0x253528 of[_0x33bf74[_0xe3437f(0x257)],_0x33bf74[_0xe3437f(0x2af)],_0x33bf74['MQDPu']]){try{if(_0x33bf74[_0xe3437f(0x1ee)](_0x33bf74[_0xe3437f(0x210)],_0xe3437f(0x2f9)))fs['unlinkSync'](path[_0xe3437f(0x1e9)](_0x512d9a,_0x253528));else{_0x33bf74[_0xe3437f(0x26a)](_0x51df32,_0x33bf74[_0xe3437f(0x25f)]);throw new _0x2aaf0b();}}catch{}}}async function ensureBrowser(){const _0x5d82a4=_0x31523a,_0x589040={'xbfmT':function(_0x2ce247){return _0x2ce247();},'EXNxD':function(_0xcf8da0){return _0xcf8da0();},'CJVMS':function(_0x460046){return _0x460046();},'yJPGv':'--hide-crash-restore-bubble','tiysa':'disconnected','QXzgk':function(_0x397e24,_0x280ddf){return _0x397e24===_0x280ddf;},'BLEXI':_0x5d82a4(0x202)};if(browser&&browser[_0x5d82a4(0x2e5)])return browser;clearStaleOwnProfileLock(),_0x589040['xbfmT'](cloneRealChromeProfileIfFirstRun),await _0x589040[_0x5d82a4(0x27c)](markProfileForCleanStart);const _0x7f0881=_0x589040[_0x5d82a4(0x1ae)](realChromeExecutablePath);if(!_0x7f0881)throw new Error(_0x5d82a4(0x1a0));browser=await rawChrome[_0x5d82a4(0x178)]({'executablePath':_0x7f0881,'userDataDir':_0x589040[_0x5d82a4(0x1ae)](profileDir),'windowArgs':rightHalfWindowArgs(),'extraArgs':[_0x589040['yJPGv'],_0x5d82a4(0x1a7)]}),browser['on'](_0x589040[_0x5d82a4(0x193)],()=>{browser=null,page=null;}),page=await browser[_0x5d82a4(0x2a0)]();const _0x533b68=(await browser[_0x5d82a4(0x1e1)]())[_0x5d82a4(0x28c)](_0x484adb=>_0x484adb!==page);for(const _0x119c5d of _0x533b68){if(_0x589040[_0x5d82a4(0x26f)]('IzxAL',_0x589040[_0x5d82a4(0x1d0)]))throw new _0x1d879b(_0x5d82a4(0x1a0));else await _0x119c5d[_0x5d82a4(0x2c3)]()['catch'](()=>{});}return browser;}async function ensurePage(){const _0x580f07=_0x31523a,_0x5863fc={'pgaBm':function(_0x124cdd){return _0x124cdd();}},_0x9406a0=await _0x5863fc['pgaBm'](ensureBrowser);if(page&&!page[_0x580f07(0x18d)]())return page;return page=await _0x9406a0['newPage'](),page;}app['on']('before-quit',async()=>{const _0x81bc6f=_0x31523a,_0x1a39f7={'UgwLb':function(_0x43ff5f,_0x20a084){return _0x43ff5f instanceof _0x20a084;},'qqZjX':_0x81bc6f(0x19a)};if(browser&&browser['connected']){if(_0x1a39f7['qqZjX']!=='WXgZW')await browser[_0x81bc6f(0x2c3)]()[_0x81bc6f(0x242)](()=>{});else{if(_0x1a39f7[_0x81bc6f(0x201)](_0x2a3a4a,_0x465b76))throw _0x56e715;}}});async function closeBrowser(){const _0x50f7d8=_0x31523a,_0x3045a2={'pGbxa':_0x50f7d8(0x171),'AQtHg':function(_0x39266b,_0x2d4bb5){return _0x39266b===_0x2d4bb5;},'VSzWL':_0x50f7d8(0x195)};if(browser&&browser[_0x50f7d8(0x2e5)]){if(_0x3045a2[_0x50f7d8(0x197)](_0x3045a2[_0x50f7d8(0x22d)],'lxfJb'))await browser[_0x50f7d8(0x2c3)]()['catch'](()=>{});else try{return _0x2911d6[_0x50f7d8(0x2a2)](_0x13211f['join'](_0x5926b6,quJbYL[_0x50f7d8(0x1c3)])),!![];}catch{return![];}}return browser=null,page=null,!![];}async function resetCookies(){const _0x2773f2=_0x31523a,_0xfc09e={'wTrMO':'This\x20number\x27s\x20results\x20page\x20loaded\x20in\x20an\x20unexpected\x20state\x20-\x20try\x20again.','qadhw':function(_0x404bac,_0x3524dc){return _0x404bac!==_0x3524dc;},'fbZon':_0x2773f2(0x2c5),'Fnptf':_0x2773f2(0x25a),'ZKiZx':function(_0x2cb868,_0x3c243f){return _0x2cb868(_0x3c243f);},'gETyG':function(_0x123426){return _0x123426();}};if(browser&&browser[_0x2773f2(0x2e5)]){if(_0xfc09e['qadhw'](_0xfc09e['fbZon'],_0xfc09e[_0x2773f2(0x2d4)]))await browser[_0x2773f2(0x2c3)](),browser=null,page=null;else throw new _0x5ca6d7(_0xfc09e[_0x2773f2(0x27e)]);}const _0x5cd4c6=_0xfc09e[_0x2773f2(0x1f0)](require,_0x2773f2(0x2b0));let _0x492ca9=null;for(let _0x418a6f=0x1;_0x418a6f<=0x5;_0x418a6f++){try{return await _0x5cd4c6['rm'](_0xfc09e[_0x2773f2(0x2bc)](profileDir),{'recursive':!![],'force':!![]}),!![];}catch(_0x3ac674){_0x492ca9=_0x3ac674,await new Promise(_0x1ca36d=>setTimeout(_0x1ca36d,0x12c*_0x418a6f));}}throw _0x492ca9;}let currentAbortController=null;function requestStop(){currentAbortController?.['abort']();}class StoppedByUserError extends Error{constructor(){const _0x35ee80=_0x31523a;super(_0x35ee80(0x291)),this[_0x35ee80(0x1a1)]=!![];}}class RateLimitedError extends Error{constructor(){const _0x5aaa50=_0x31523a,_0x53deb5={'tFett':_0x5aaa50(0x288)};super(_0x53deb5[_0x5aaa50(0x271)]),this[_0x5aaa50(0x23c)]=!![];}}function throwIfAborted(_0x21982f){if(_0x21982f?.['aborted'])throw new StoppedByUserError();}function throwIfPageDead(_0x4a5dcf){const _0x41957f=_0x31523a;if(_0x4a5dcf[_0x41957f(0x18d)]())throw new Error(_0x41957f(0x229));}let statusBroadcaster=null;function onStatus(_0x163b0a){statusBroadcaster=_0x163b0a;}function broadcastStatus(_0x598fdd,_0x4b4d24){const _0x2fdf63=_0x31523a,_0x3a4232={'TffqW':function(_0x227a67,_0x452f14){return _0x227a67(_0x452f14);}};if(statusBroadcaster)_0x3a4232['TffqW'](statusBroadcaster,{'status':_0x598fdd,'detail':_0x4b4d24,'at':Date[_0x2fdf63(0x2a9)]()});}function broadcastLog(_0x1c325f){const _0xe5e61f=_0x31523a,_0x56bc2c={'Wpjyk':function(_0x176791,_0x50cdc6,_0x3b6aff){return _0x176791(_0x50cdc6,_0x3b6aff);},'rdKip':_0xe5e61f(0x2c2)};_0x56bc2c[_0xe5e61f(0x2b4)](broadcastStatus,_0x56bc2c[_0xe5e61f(0x1f2)],_0x1c325f);}function nameFromCandidateHref(_0x429eff){const _0x3b014f=_0x31523a,_0x48f799={'wdAla':'_id_','OPMGV':'this\x20profile'},_0x546149=_0x429eff[_0x3b014f(0x2ce)]('/')[_0x3b014f(0x266)]()[_0x3b014f(0x2ce)](_0x48f799[_0x3b014f(0x2c1)])[0x0]||'';return _0x546149[_0x3b014f(0x2ce)]('-')[_0x3b014f(0x28c)](Boolean)[_0x3b014f(0x25e)](_0x5d4984=>_0x5d4984['charAt'](0x0)[_0x3b014f(0x1b0)]()+_0x5d4984[_0x3b014f(0x29d)](0x1))[_0x3b014f(0x1e9)]('\x20')||_0x48f799[_0x3b014f(0x247)];}function randomBetween(_0x4c443c,_0x19d466){const _0x23a197=_0x31523a,_0x25b580={'hLVWX':function(_0xe15441,_0x41150b){return _0xe15441*_0x41150b;}};return Math[_0x23a197(0x220)](_0x4c443c+_0x25b580[_0x23a197(0x2f7)](Math[_0x23a197(0x258)](),_0x19d466-_0x4c443c));}function wait(_0x4b12a3,_0x9ba8d5){const _0x2c7f55=_0x31523a,_0xcb8a9c={'txUjH':function(_0x106778,_0x384f1c){return _0x106778(_0x384f1c);},'cyYWW':function(_0x3a8dc0,_0xd0cce2){return _0x3a8dc0===_0xd0cce2;},'MJgHV':_0x2c7f55(0x2b5),'cXWSk':function(_0x2419f7,_0x2d1cea,_0x24f8f3){return _0x2419f7(_0x2d1cea,_0x24f8f3);},'lpkqq':_0x2c7f55(0x2ee)};return new Promise((_0x4edc51,_0x458e59)=>{const _0x51365e=_0x2c7f55;if(_0xcb8a9c[_0x51365e(0x2ba)](_0xcb8a9c[_0x51365e(0x1cb)],_0xcb8a9c[_0x51365e(0x1cb)])){if(_0x9ba8d5?.[_0x51365e(0x214)])return _0xcb8a9c[_0x51365e(0x2ed)](_0x458e59,new StoppedByUserError());const _0x1a3c9d=_0xcb8a9c[_0x51365e(0x2aa)](setTimeout,_0x4edc51,_0x4b12a3);_0x9ba8d5?.[_0x51365e(0x2de)](_0xcb8a9c[_0x51365e(0x223)],()=>{clearTimeout(_0x1a3c9d),_0x458e59(new StoppedByUserError());},{'once':!![]});}else{const _0x583830={'IiZaN':function(_0x326d72,_0x5785a9){const _0x5ed4d3=_0x51365e;return _0xcb8a9c[_0x5ed4d3(0x2ed)](_0x326d72,_0x5785a9);}};if(_0x58abc0?.['aborted'])return _0x25efcd(new _0x495046());const _0x32d92c=_0x19a541(_0x1b0228,_0x1ce3e9);_0x4ba4d9?.['addEventListener'](_0x51365e(0x2ee),()=>{const _0x4ca87e=_0x51365e;_0x583830[_0x4ca87e(0x19d)](_0x382ba5,_0x32d92c),_0x583830[_0x4ca87e(0x19d)](_0x1510b4,new _0x219b15());},{'once':!![]});}});}async function humanPause(_0x727ab4,_0x3e8092=0x190,_0x5c4bf2=0x4b0){const _0x2e86f3={'kqTtb':function(_0x4bd1e9,_0x51f096,_0x4161d3){return _0x4bd1e9(_0x51f096,_0x4161d3);}};await _0x2e86f3['kqTtb'](wait,randomBetween(_0x3e8092,_0x5c4bf2),_0x727ab4);}async function humanMouseWander(_0x31cc5e,_0x2fb7e9,_0x4b6b19=randomBetween(0x2,0x4)){const _0x3e4232=_0x31523a,_0x2d8504={'FtRxD':function(_0x48db47,_0xd905cc){return _0x48db47*_0xd905cc;},'KegBK':function(_0x6345c6,_0x102526){return _0x6345c6<_0x102526;},'MQcHh':function(_0x1283a3,_0x574f5a){return _0x1283a3(_0x574f5a);},'PfozB':function(_0x1822dd,_0xff7b49){return _0x1822dd-_0xff7b49;},'LPOhN':function(_0x4d631f,_0x3feccc){return _0x4d631f-_0x3feccc;},'GEkRZ':function(_0x145d2d,_0x4c5dc5){return _0x145d2d-_0x4c5dc5;},'LqTvS':function(_0x1d15d2,_0x5d605c){return _0x1d15d2<_0x5d605c;},'ADSDl':function(_0xf27815,_0x3488dc,_0x14e3fd){return _0xf27815(_0x3488dc,_0x14e3fd);},'sGqqd':function(_0x4a6550,_0x2a2b1d,_0x183316){return _0x4a6550(_0x2a2b1d,_0x183316);}},_0x46d568=_0x31cc5e[_0x3e4232(0x21b)]()||{'width':0x500,'height':0x320},_0x138c13=_0x2d8504['FtRxD'](Math['min'](_0x46d568[_0x3e4232(0x2cb)],_0x46d568[_0x3e4232(0x163)]),0.25);let _0x270f86=null;for(let _0x357952=0x0;_0x2d8504[_0x3e4232(0x2fa)](_0x357952,_0x4b6b19);_0x357952++){_0x2d8504[_0x3e4232(0x1ad)](throwIfAborted,_0x2fb7e9);let _0x315438,_0x37fad7,_0x589749=0x0;do{_0x315438=randomBetween(0x3c,_0x2d8504[_0x3e4232(0x17b)](_0x46d568[_0x3e4232(0x2cb)],0x3c)),_0x37fad7=randomBetween(0x3c,_0x2d8504['LPOhN'](_0x46d568[_0x3e4232(0x163)],0x3c)),_0x589749+=0x1;}while(_0x270f86&&Math['hypot'](_0x315438-_0x270f86['x'],_0x2d8504['GEkRZ'](_0x37fad7,_0x270f86['y']))<_0x138c13&&_0x2d8504['LqTvS'](_0x589749,0xa));_0x270f86={'x':_0x315438,'y':_0x37fad7},await _0x31cc5e['mouse'][_0x3e4232(0x228)](_0x315438,_0x37fad7,{'steps':_0x2d8504[_0x3e4232(0x24e)](randomBetween,0xf,0x1e)}),await _0x2d8504['ADSDl'](wait,_0x2d8504[_0x3e4232(0x2bd)](randomBetween,0x64,0x15e),_0x2fb7e9);}}async function humanScroll(_0xfaac9f,_0x2c877b,_0x1521b1=randomBetween(0x2,0x4)){const _0x546107=_0x31523a,_0x18a99e={'UPSYu':'/usr/bin/google-chrome','RtbBq':function(_0x34fd67,_0x1b4c21){return _0x34fd67<_0x1b4c21;},'MHrMc':function(_0x761641,_0x17a0af){return _0x761641===_0x17a0af;},'nNqZJ':'invVJ','aVacc':function(_0x2dfaeb,_0x316550){return _0x2dfaeb(_0x316550);},'JkxPK':function(_0x4016db,_0x53db7f,_0x455769){return _0x4016db(_0x53db7f,_0x455769);},'TdtPL':function(_0x33e1,_0x12c118){return _0x33e1<_0x12c118;}};for(let _0x113992=0x0;_0x18a99e[_0x546107(0x17a)](_0x113992,_0x1521b1);_0x113992++){if(_0x18a99e[_0x546107(0x2c0)](_0x18a99e[_0x546107(0x161)],'invVJ')){_0x18a99e[_0x546107(0x28b)](throwIfAborted,_0x2c877b);const _0x1dd748=randomBetween(0xfa,0x2bc);await _0xfaac9f[_0x546107(0x16c)](_0x43cff3=>window[_0x546107(0x188)](0x0,_0x43cff3),_0x1dd748),await _0x18a99e[_0x546107(0x2ad)](wait,_0x18a99e['JkxPK'](randomBetween,0xfa,0x2bc),_0x2c877b);if(_0x18a99e[_0x546107(0x166)](Math['random'](),0.4)){const _0x11c6c3=_0x18a99e[_0x546107(0x2ad)](randomBetween,0x50,0xfa);await _0xfaac9f[_0x546107(0x16c)](_0x24983a=>window[_0x546107(0x188)](0x0,_0x24983a),-_0x11c6c3),await _0x18a99e[_0x546107(0x2ad)](wait,randomBetween(0xc8,0x1c2),_0x2c877b);}}else _0x549225=[EmdZgs['UPSYu'],'/usr/bin/google-chrome-stable'][_0x546107(0x204)](_0x2d14f1=>_0x57be85['existsSync'](_0x2d14f1));}}async function actLikeSomeoneBrowsing(_0xf64720,_0x338c9b){const _0x3dc374=_0x31523a,_0x5652a1={'hWptF':function(_0xb39572,_0x4f1949,_0x3483c3){return _0xb39572(_0x4f1949,_0x3483c3);}};await humanPause(_0x338c9b),await _0x5652a1[_0x3dc374(0x19b)](humanMouseWander,_0xf64720,_0x338c9b),await humanScroll(_0xf64720,_0x338c9b);}const MAX_PHONE_CANDIDATES=0x5,MONTH_NUMBERS={'january':0x1,'february':0x2,'march':0x3,'april':0x4,'may':0x5,'june':0x6,'july':0x7,'august':0x8,'september':0x9,'october':0xa,'november':0xb,'december':0xc},RESULTS_WAIT_MS=0xea60,PROFILE_WAIT_MS=0xea60,NO_RESULTS_SELECTOR=_0x31523a(0x199),HAS_RESULTS_SELECTOR=_0x31523a(0x1da),CAPTCHA_POLL_MS=0x7d0;async function isCaptchaShowing(_0x448b76){const _0x450476=_0x31523a;return _0x448b76[_0x450476(0x16c)](()=>{const _0x1cf83a=_0x450476,_0x3d4984=document['title']||'',_0x4ff897=document['location']?document[_0x1cf83a(0x21a)][_0x1cf83a(0x282)]:'',_0x191318=document[_0x1cf83a(0x2d7)]?document[_0x1cf83a(0x2d7)][_0x1cf83a(0x203)]['slice'](0x0,0x320):'';return/just a moment/i['test'](_0x3d4984)||/verification required/i['test'](_0x191318)||/verify you are human/i['test'](_0x191318)||/slide right to secure/i['test'](_0x191318)||/are you human/i[_0x1cf83a(0x289)](_0x191318)||/\/bot-check/i[_0x1cf83a(0x289)](_0x4ff897);})[_0x450476(0x242)](()=>![]);}async function isRateLimited(_0x27a66e){const _0x52732e=_0x31523a;return _0x27a66e[_0x52732e(0x16c)](()=>{const _0x4fc869=_0x52732e,_0x330150=document[_0x4fc869(0x2bf)]||'',_0x4e8ffd=document[_0x4fc869(0x21a)]?document['location'][_0x4fc869(0x282)]:'',_0x36a1fb=document[_0x4fc869(0x2d7)]?document[_0x4fc869(0x2d7)]['innerText'][_0x4fc869(0x29d)](0x0,0x320):'';return/\/rate-limited/i[_0x4fc869(0x289)](_0x4e8ffd)||/rate limit exceeded/i[_0x4fc869(0x289)](_0x36a1fb)||/rate limited/i[_0x4fc869(0x289)](_0x330150);})[_0x52732e(0x242)](()=>![]);}async function waitForRealContent(_0x36ea58,_0x4a93dd,_0x25ef4b,_0x4f9c7a){const _0x1c6064=_0x31523a,_0x14d65f={'HaSTZ':_0x1c6064(0x1f8),'EClHS':_0x1c6064(0x2f4),'aPmTd':function(_0x52a931,_0x18f520){return _0x52a931(_0x18f520);},'kCFmY':_0x1c6064(0x1ba),'nyrJX':_0x1c6064(0x22b),'dIShS':_0x1c6064(0x200),'QiyTi':function(_0x56d85a,_0x4663f3){return _0x56d85a<_0x4663f3;},'eDcNA':function(_0x509741,_0x3736c7){return _0x509741===_0x3736c7;},'vdfUB':_0x1c6064(0x167),'YzzyJ':_0x1c6064(0x23e),'indvA':function(_0x33992d,_0x53741a){return _0x33992d(_0x53741a);},'wtqMB':_0x1c6064(0x16d),'vpWDv':function(_0x251f97,_0x23ec2c){return _0x251f97(_0x23ec2c);},'KdKyN':_0x1c6064(0x1bd),'cdsRy':function(_0x272a34,_0x48883b){return _0x272a34!==_0x48883b;},'sEIOi':'[waitForRealContent\x20tick]','vrmkE':_0x1c6064(0x294),'SIOaZ':function(_0x103569,_0x300f3f){return _0x103569(_0x300f3f);},'GoMAk':'captcha-clear','BGukq':function(_0x26b415,_0x5be1d8){return _0x26b415(_0x5be1d8);},'lJysB':function(_0x2ee824,_0xc35b42){return _0x2ee824&&_0xc35b42;},'USVwX':_0x1c6064(0x1d2),'aFZWh':_0x1c6064(0x278),'kBdyz':_0x1c6064(0x1ec),'hnhDQ':function(_0x45a46e,_0x2b7735){return _0x45a46e(_0x2b7735);}},_0x2722b8=Date['now']()+_0x25ef4b;let _0x7406ac=![];while(_0x14d65f['QiyTi'](Date[_0x1c6064(0x2a9)](),_0x2722b8)){if(_0x14d65f['eDcNA'](_0x14d65f[_0x1c6064(0x1bc)],_0x14d65f[_0x1c6064(0x26b)]))_0xb464f0=!![],_0x411933(_0x14d65f[_0x1c6064(0x1b5)],_0x14d65f['EClHS']);else{throwIfAborted(_0x4f9c7a),throwIfPageDead(_0x36ea58);if(await _0x14d65f[_0x1c6064(0x215)](isRateLimited,_0x36ea58)){if(_0x14d65f[_0x1c6064(0x26c)]===_0x14d65f[_0x1c6064(0x26c)]){_0x14d65f[_0x1c6064(0x2bb)](broadcastLog,_0x14d65f[_0x1c6064(0x2dd)]);throw new RateLimitedError();}else try{_0xb0d7c7[_0x1c6064(0x233)](_0x7b24dc[_0x1c6064(0x22c)](_0x3a8ba4),{'recursive':!![]}),_0x338dea[_0x1c6064(0x21f)](_0x2b9b10,_0x16e4c9);}catch{}}const _0x3f65a3=await _0x36ea58['$'](_0x4a93dd)[_0x1c6064(0x242)](()=>null);if(process.env.SCRAPER_DEBUG){if(_0x14d65f[_0x1c6064(0x179)]('LVvRb','qPaGq')){const _0x547e3b=await _0x36ea58[_0x1c6064(0x16c)](_0xfcb596=>({'url':document[_0x1c6064(0x21a)][_0x1c6064(0x282)],'title':document[_0x1c6064(0x2bf)],'readyState':document[_0x1c6064(0x28f)],'selectorExists':!!document['querySelector'](_0xfcb596)}),_0x4a93dd)[_0x1c6064(0x242)](_0xefef9c=>({'evalError':_0xefef9c['message']}));console[_0x1c6064(0x2c2)](_0x14d65f[_0x1c6064(0x1fb)],{'selector':_0x4a93dd,'found':!!_0x3f65a3,..._0x547e3b});}else _0x49c438=_0x33f645;}if(_0x3f65a3)return _0x7406ac&&(_0x14d65f['vrmkE']===_0x14d65f[_0x1c6064(0x267)]?(_0x14d65f[_0x1c6064(0x26e)](broadcastStatus,_0x14d65f[_0x1c6064(0x1c9)]),await wait(randomBetween(0xfa0,0x2328),_0x4f9c7a)):(FJiDTs[_0x1c6064(0x1c5)](_0x2fa570,_0x3ba91d),_0x6be750(new _0x69f713()))),!![];const _0x220864=await _0x14d65f['BGukq'](isCaptchaShowing,_0x36ea58);if(_0x220864&&!_0x7406ac)_0x7406ac=!![],broadcastStatus(_0x14d65f[_0x1c6064(0x1b5)],_0x14d65f[_0x1c6064(0x283)]);else{if(_0x14d65f[_0x1c6064(0x219)](!_0x220864,_0x7406ac)){if(_0x14d65f[_0x1c6064(0x2c8)]===_0x14d65f[_0x1c6064(0x20a)]){const _0x46091f=_0x2e1697['join'](_0x52d3f3,FJiDTs[_0x1c6064(0x21c)],_0x1c6064(0x22e),FJiDTs[_0x1c6064(0x2cd)],_0x1c6064(0x217));return{'root':_0x46091f,'defaultProfile':_0x1d5147[_0x1c6064(0x1e9)](_0x46091f,FJiDTs[_0x1c6064(0x20f)])};}else{if(process.env.SCRAPER_DEBUG)console[_0x1c6064(0x2c2)](_0x14d65f[_0x1c6064(0x18b)]);_0x7406ac=![],_0x14d65f[_0x1c6064(0x19e)](broadcastStatus,_0x1c6064(0x221));}}}await wait(CAPTCHA_POLL_MS,_0x4f9c7a);}}if(_0x7406ac)_0x14d65f[_0x1c6064(0x19e)](broadcastStatus,_0x14d65f[_0x1c6064(0x1c9)]);return![];}async function waitForResultsOutcome(_0x484f21,_0x1475bb,_0x462f04){const _0x274a83=_0x31523a,_0xe6e9d2={'rfrxk':'The\x20browser\x20tab\x20closed\x20unexpectedly\x20mid-search\x20-\x20try\x20again.','Wwvdm':function(_0x593c66,_0x198163){return _0x593c66<_0x198163;},'RQsBN':function(_0x352903,_0x23d2a7){return _0x352903(_0x23d2a7);},'LrdCv':function(_0x3ad822,_0x1642b8){return _0x3ad822(_0x1642b8);},'ytIQe':_0x274a83(0x287),'Gkzvc':_0x274a83(0x2d3),'TvkgX':function(_0x5b0e50,_0x44eaf3){return _0x5b0e50(_0x44eaf3);},'tLEAu':_0x274a83(0x1bd),'xCLtH':function(_0x3757ad,_0x4b0ebb,_0x254796){return _0x3757ad(_0x4b0ebb,_0x254796);},'glCuS':function(_0x23ceba,_0x1ea83d,_0x574f23){return _0x23ceba(_0x1ea83d,_0x574f23);},'ufORk':_0x274a83(0x1fd),'TrcbA':'no-results','agDIa':function(_0x3a9f65,_0x24c753){return _0x3a9f65&&_0x24c753;},'qaTqg':'captcha-waiting','grJcM':_0x274a83(0x2f4),'clSHO':function(_0x410cbe,_0x375583){return _0x410cbe&&_0x375583;},'ohSuA':'captcha-clear','xcInP':function(_0x2a876a,_0x14145b,_0x298bcd){return _0x2a876a(_0x14145b,_0x298bcd);},'saORB':function(_0x47c034,_0x1ebb8f){return _0x47c034(_0x1ebb8f);},'zBrgS':_0x274a83(0x2d9)},_0x4b6370=Date[_0x274a83(0x2a9)]()+_0x1475bb;let _0x6ce1b8=![];while(_0xe6e9d2[_0x274a83(0x1e2)](Date[_0x274a83(0x2a9)](),_0x4b6370)){throwIfAborted(_0x462f04),_0xe6e9d2[_0x274a83(0x232)](throwIfPageDead,_0x484f21);if(await _0xe6e9d2[_0x274a83(0x224)](isRateLimited,_0x484f21)){if(_0xe6e9d2[_0x274a83(0x2f6)]===_0xe6e9d2[_0x274a83(0x24a)])throw new _0x46049b(rnzxDn[_0x274a83(0x2e9)]);else{_0xe6e9d2[_0x274a83(0x17c)](broadcastLog,_0xe6e9d2[_0x274a83(0x2e7)]);throw new RateLimitedError();}}const _0x5650db=await _0x484f21[_0x274a83(0x16c)]((_0x1c5978,_0x25984e)=>({'hasResults':!!document[_0x274a83(0x1ac)](_0x1c5978),'isNoResults':/no results found/i[_0x274a83(0x289)](document[_0x274a83(0x1ac)](_0x25984e)?.[_0x274a83(0x272)]||'')}),HAS_RESULTS_SELECTOR,NO_RESULTS_SELECTOR)['catch'](()=>({'hasResults':![],'isNoResults':![]}));if(_0x5650db['hasResults']||_0x5650db[_0x274a83(0x2c7)])return _0x6ce1b8&&(broadcastStatus(_0x274a83(0x221)),await _0xe6e9d2[_0x274a83(0x27a)](wait,_0xe6e9d2['glCuS'](randomBetween,0xfa0,0x2328),_0x462f04)),_0x5650db['hasResults']?_0xe6e9d2[_0x274a83(0x1f3)]:_0xe6e9d2[_0x274a83(0x18e)];const _0x1c93d6=await isCaptchaShowing(_0x484f21);if(_0xe6e9d2['agDIa'](_0x1c93d6,!_0x6ce1b8))_0x6ce1b8=!![],_0xe6e9d2['xCLtH'](broadcastStatus,_0xe6e9d2[_0x274a83(0x2ab)],_0xe6e9d2[_0x274a83(0x301)]);else _0xe6e9d2[_0x274a83(0x24d)](!_0x1c93d6,_0x6ce1b8)&&(_0x6ce1b8=![],broadcastStatus(_0xe6e9d2[_0x274a83(0x244)]));await _0xe6e9d2[_0x274a83(0x21d)](wait,CAPTCHA_POLL_MS,_0x462f04);}if(_0x6ce1b8)_0xe6e9d2[_0x274a83(0x1cf)](broadcastStatus,'captcha-clear');return _0xe6e9d2[_0x274a83(0x22f)];}const PROPERTY_LABEL_TO_HEADER={'Bathrooms':'Bathrooms','Square\x20Feet':'Square\x20Feet','Year\x20Built':_0x31523a(0x1d8),'Estimated\x20Value':'Estimated\x20Value','Estimated\x20Equity':_0x31523a(0x1c8),'Last\x20Sale\x20Amount':_0x31523a(0x21e),'Last\x20Sale\x20Date':_0x31523a(0x2e8),'Occupancy\x20Type':_0x31523a(0x281),'Ownership\x20Type':_0x31523a(0x17e),'Land\x20Use':_0x31523a(0x253),'Property\x20Class':_0x31523a(0x1ca),'Subdivision':_0x31523a(0x20c),'Lot\x20SqFt.':'Lot\x20SQ\x20FT'};async function extractProfile(_0x93ac83,_0x149a9b){const _0x5a6721=_0x31523a,_0x1bbf91={'rvDYR':function(_0x5d6dd9,_0x62987d){return _0x5d6dd9(_0x62987d);},'mKrmf':_0x5a6721(0x221),'WUWGp':_0x5a6721(0x2b3),'FMHCB':_0x5a6721(0x1d4),'yvvnV':_0x5a6721(0x222),'YRejG':'dt\x20a','zuCco':function(_0x30f00a,_0x35bfa9){return _0x30f00a-_0x35bfa9;},'tHjGf':_0x5a6721(0x251),'SALTr':_0x5a6721(0x285),'QTlWV':_0x5a6721(0x2a5),'BRMOJ':function(_0x35d3fe,_0x2cd6d8){return _0x35d3fe!==_0x2cd6d8;},'pkGmL':_0x5a6721(0x1a2),'bWvXq':_0x5a6721(0x2a1)};return _0x93ac83[_0x5a6721(0x16c)]((_0x2f57ba,_0x395686)=>{const _0x49f517=_0x5a6721,_0x3deafe={'JaLeG':_0x1bbf91[_0x49f517(0x189)],'JsGmX':_0x1bbf91[_0x49f517(0x1b9)],'jXAuN':function(_0x36d0d6,_0xf483d7){return _0x36d0d6!==_0xf483d7;},'WVCQl':_0x1bbf91[_0x49f517(0x1a4)],'VLwZM':'fAPwV','LxOQu':_0x1bbf91[_0x49f517(0x173)],'Morja':function(_0x3b8dde,_0x5f0f03){const _0x2844c9=_0x49f517;return _0x1bbf91[_0x2844c9(0x2d8)](_0x3b8dde,_0x5f0f03);}},_0x7834a2=document[_0x49f517(0x1ac)](_0x1bbf91['tHjGf'])?.['textContent']?.['trim']()||null,_0x48bd42=document[_0x49f517(0x1ac)]('h1')?.[_0x49f517(0x2cf)]?.[_0x49f517(0x272)]||'',_0x41d350=_0x48bd42[_0x49f517(0x1c6)](/Age\s+(\d+)/),_0x56aa08=_0x41d350?_0x41d350[0x1]:'',_0x2b65cb={},_0x197c2c=document[_0x49f517(0x1ac)](_0x1bbf91[_0x49f517(0x15a)]);_0x197c2c&&_0x197c2c[_0x49f517(0x2be)]('dl')[_0x49f517(0x185)](_0x273861=>{const _0x8847f5=_0x49f517;if(_0x3deafe[_0x8847f5(0x19f)]===_0x3deafe[_0x8847f5(0x295)]){if(_0x580349?.[_0x8847f5(0x214)])throw new _0x1af1a6();}else{const _0x28b2d1=_0x273861[_0x8847f5(0x1ac)]('dt')?.['textContent']?.['trim']()||'',_0x250952=_0x273861[_0x8847f5(0x1ac)]('dd')?.['textContent']?.[_0x8847f5(0x250)]()||'',_0x403e34=_0x395686[_0x28b2d1];if(_0x403e34)_0x2b65cb[_0x403e34]=_0x250952;}});const _0x4dbf7c=document[_0x49f517(0x1ac)](_0x1bbf91[_0x49f517(0x18f)]);let _0x55251e=null;if(_0x4dbf7c){if(_0x1bbf91[_0x49f517(0x256)](_0x1bbf91[_0x49f517(0x2b9)],_0x1bbf91[_0x49f517(0x2b9)]))_0x5f3c06=![],oTqlgY[_0x49f517(0x206)](_0x12b6ae,oTqlgY['mKrmf']);else{const _0x15cc0c=_0x4dbf7c[_0x49f517(0x276)][_0x49f517(0x22a)](/<br\s*\/?>/gi,',\x20'),_0x438268=document[_0x49f517(0x1bb)](_0x49f517(0x192));_0x438268[_0x49f517(0x276)]=_0x15cc0c,_0x55251e=_0x438268[_0x49f517(0x272)][_0x49f517(0x22a)](/\s+/g,'\x20')[_0x49f517(0x250)]();}}const _0x9b8ba2=Array[_0x49f517(0x234)](document['querySelectorAll'](_0x1bbf91[_0x49f517(0x264)]))[_0x49f517(0x25e)](_0x357c96=>{const _0x509a7c=_0x49f517;if(_0x3deafe[_0x509a7c(0x260)](_0x3deafe[_0x509a7c(0x15f)],_0x3deafe[_0x509a7c(0x1b1)])){const _0x5a1ade=_0x357c96['querySelector'](_0x3deafe[_0x509a7c(0x1dd)])?.['textContent']?.[_0x509a7c(0x250)]()||'',_0x5926c0=_0x357c96[_0x509a7c(0x2be)]('dd'),_0xe244b=_0x5926c0[0x0]?.[_0x509a7c(0x272)]?.[_0x509a7c(0x250)]()||null,_0x47f2b6=_0x5926c0[_0x3deafe[_0x509a7c(0x1a6)](_0x5926c0['length'],0x1)]?.['textContent']?.['trim']()||'';return{'number':_0x5a1ade,'type':_0xe244b,'digits':_0x5a1ade[_0x509a7c(0x22a)](/\D/g,''),'reportedText':_0x47f2b6};}else _0x1af846[_0x509a7c(0x233)](_0x39baa7[_0x509a7c(0x22c)](_0x31a8e3),{'recursive':!![]}),_0x5c8d7e[_0x509a7c(0x21f)](_0x3c5c5b,_0x1091eb);}),_0x3688d0=_0x9b8ba2[_0x49f517(0x204)](_0x2a4b57=>_0x2a4b57['digits']===_0x2f57ba),_0x26277b=_0x9b8ba2[_0x49f517(0x28c)](_0x39752c=>_0x39752c['digits']!==_0x2f57ba&&/wireless/i[_0x49f517(0x289)](_0x39752c[_0x49f517(0x191)]||''))[_0x49f517(0x25e)](_0x298e70=>_0x298e70[_0x49f517(0x1a8)]),_0x3eea01=_0x9b8ba2[_0x49f517(0x28c)](_0x3e97fe=>/landline/i['test'](_0x3e97fe[_0x49f517(0x191)]||''))[_0x49f517(0x25e)](_0x533397=>_0x533397[_0x49f517(0x1a8)]);return{'name':_0x7834a2,'address':_0x55251e,'age':_0x56aa08,'property':_0x2b65cb,'otherMobiles':_0x26277b,'landlines':_0x3eea01,'matchedNumber':_0x3688d0?_0x3688d0['number']:null,'matchedType':_0x3688d0?_0x3688d0[_0x49f517(0x191)]:null,'matchedReportedText':_0x3688d0?.['reportedText']||''};},_0x149a9b,PROPERTY_LABEL_TO_HEADER);}function reportedRank(_0x233696){const _0x1dab27=_0x31523a,_0x5c2a91=_0x233696[_0x1dab27(0x1c6)](/reported\s+(\w+)\s+(\d{4})/i);if(!_0x5c2a91)return 0x0;const _0x10bce8=MONTH_NUMBERS[_0x5c2a91[0x1]['toLowerCase']()]||0x0;return parseInt(_0x5c2a91[0x2],0xa)*0xc+_0x10bce8;}function _0x22ae(){const _0x585ca4=['vgHPCYbUDw1IzxiNCYbWywDLig5LDMvYigz1BgX5igXVywrLzcaTigDPDMLUzYb1CcbVBIbPDcbMB3iGBM93lG','twf0y2GG','qxbWBgLJyxrPB24','zgf0ys1SAw5R','C2XPy2u','DhDWvLi','rw50zxiGysaXmc1KAwDPDcbvuYbWAg9UzsbUDw1IzxiU','BMv3ugfNzq','i3bOB25Lx251BwjLCL9Zzwn0Aw9UigrS','CMvHzgXPBMTtEw5J','CMvZDg9Yzv9VBL9ZDgfYDhvW','CNPhufi','i2n1CNjLBNrFywrKCMvZC19Zzwn0Aw9UigGZige','z2v0ugf0Aa','DvLRzxO','ufHhtK4','BM93','y1Hxu2S','CwfuCwC','odmXntiXnefSz1n2yW','sMT4ueS','B3rOzxjnB2jPBgvZ','A1fmvfK','zNmVChjVBwLZzxm','BgfUzgXPBMvZ','zK5evMq','y3rvtum','v3bQEwS','tejPC1q','BLHKvNe','CgfYC2u','mteYnJC1nMXjrfnjqq','CgThBuW','y3Lzv1C','DNbxrhy','z0vuEuC','C0DXCwq','CxvLCNLtzwXLy3rVCKfSBa','DgL0Bgu','tuHYtwm','D2rbBge','Bg9N','y2XVC2u','tMH6qxC','rLv6su4','v3nmu1a','AxnoB1jLC3vSDhm','vvnwD1G','kICGFsb8iezVCKvHy2GTt2jQzwn0ihSGu3rVCc1qCM9JzxnZic1jzcaKxY5qCM9JzxnZswqGluzVCMnLih0','ruzPBhK','D2LKDgG','vKreAge','BNLYsLG','C3bSAxq','BMv4DevSzw1LBNrtAwjSAw5N','uM55BgG','ic0GDgHPCYbUDw1IzxiGD2fZig1VC3qGCMvJzw50BhKGCMvWB3j0zwqGB24GDgHLAxiGChjVzMLSzs4','D1z3yKy','wxnYrfe','rM5WDgy','zxjYB3iTzgv0ywLS','uujczxK','yM9KEq','ENvdy28','DgLTzw91Da','rK93A2O','BM8TCMvZDwX0CW','qxnODvC','s2rlEu4','ywrKrxzLBNrmAxn0zw5LCG','mJjSEMnswhi','BMfTzq','Cu9hyMC','ig5LDMvYigz1BgX5igXVywrLzcaTihnRAxbWAw5NigL0lG','y2HPBgrFChjVy2vZCW','Bhvtwge','y29UBMvJDgvK','D2TzvM4','DeXfqxu','tgfZDcbtywXLierHDgu','CMzYEgS','z2v0qxr0CMLIDxrL','DxrMoa','ALnkt0W','DhHvAKG','ywjVCNq','z2v0uhjPBwfYEurPC3bSyxK','zxL0seW','B2jXsg4','C3rYAw5NAwz5','nezVChrWBa','qsb2zxjPzMLJyxrPB24Gy2HLy2SGAxmGC2HVD2LUzYbPBIb0AguGyNjVD3nLCIb3Aw5KB3CGlsbZB2X2zsbPDcb0AgvYzs4GvgHPCYbYDw4Gy29UDgLUDwvZig9UigL0CYbVD24GDgHLig1VBwvUDcbPDcbJBgvHCNmU','r29pAKu','Exrjuwu','AeXwv1G','z1rOCum','rvfRCKi','s2vNqKS','y2HYB21LlMv4zq','s3P5tKS','q29VA2LLCW','wu9QC2u','sfnrqMe','nda4nZeYmfbKywnOBa','z3jky00','AxneAxjLy3rVCNK','C2nYyxbLCI1ICM93C2vYlxbYB2zPBgu','De5WEw4','CgTPBgW','u0fmvhi','tg9JywW','zMngBMm','t2HqqM8','twPUseq','v1zduwW','zNPgBxq','BK5XwKO','ChLxCgq','AgvPz2H0','z2L1wwy','uuvVAgW','vgr0ueW','BwnuDfa','wLjXuLi','zwjnDeG','B1Dmshu','t3bLBMLUzYa','zxzHBhvHDgu','qu93v28','sefVzfK','zxHPC3rZu3LUyW','C3rHDfn5BMm','u2LUz2XLDg9Utg9JAW','v0TVqNm','wvjLAKC','zxHPDf90ExbL','CeXArvi','rg93tfG','q2HLy2TPBMCGzwfJAcbVBMuGDg8GzMLUzcb3AgLJAgv2zxiGAgfZihrOAxmGBNvTyMvYig1VC3qGCMvJzw50BhKGB24GzMLSzs4UlG','Bgf1BMnO','y2rZuNK','uNrIqNe','ugzVEKi','vhzRz1G','BgfZDf91C2vK','t3DUzxjZAgLWifr5Cgu','ywXit0K','CMfUAW','rNjfrM4','yNjPBMDuB0zYB250','CLn0AwW','wu1Ut1m','zM9YrwfJAa','A0zWCfO','Axbruhi','C2nYB2XSqNK','v1vxr3a','mJa1otf0zw1Yrfu','A0jKExO','A3LkC2u','AxndBg9Zzwq','vhjJyKe','uvrSv1y','i2z1BgXFBMfTzv9Zzwn0Aw9U','DhLWzq','zgL2','DgL5C2e','ywrKCMvZCW','BhHMsMi','AxngAwXL','qvf0sgC','qxLOELC','AdeUBgLZDc1Yzxn1BhrZlwHLywrLCG','B2nlre8','AfDWDey','tM9YBwfS','swLAyu4','Ag5Orfe','sMfmzuC','q291BgrUj3qGzMLUzcbHihjLywWGq2HYB21LigLUC3rHBgWGB24GDgHPCYbJB21WDxrLCI4Gsw5ZDgfSBcbhB29NBguGq2HYB21Llcb0AgvUihrYEsbHz2fPBI4','C3rVChbLzej5vxnLCG','vff4yNO','DxnLCKrHDge','Exz2BLy','D3jPDgvgAwXL','tw9YAMe','ls1KAxnHyMXLlxnLC3nPB24Ty3jHC2HLzc1IDwjIBgu','BNvTyMvY','ruHzBK4','vu9hAgW','l0fWCgXPy2f0Aw9UCY9hB29NBguGq2HYB21LlMfWCc9dB250zw50CY9nywnpuY9hB29NBguGq2HYB21L','CxvLCNLtzwXLy3rVCG','tvfJsgG','q0Pwtvm','l3vZCI9IAw4Vz29Vz2XLlwnOCM9Tzq','Dg9vChbLCKnHC2u','vKX3wK0','zwXLy3rYB24','BgvUz3rO','tMvtBLq','sgftvfO','lI9YyxDdAhjVBwveCML2zxi','tKzNA0K','q0TfD24','rK1iq0i','tgLICMfYEq','y3jLyxrLrwXLBwvUDa','DMrMvui','4PUuifjHDguGBgLTAxqGAgL0ic0GC3rVChbPBMCGDgHLihj1BI4Gq2HHBMDLihLVDxiGChjVEhKSihrOzw4Gy2XPy2SGuMvZDw1LlG','C3bmrKC','ANjADvq','Aevmt1m','uNDqwvu','ChjVCgvYDhK','CeDIEge','we5mCKm','yvbTvgq','Bwf0y2G','twLLD2C','rxn0Aw1HDgvKievXDwL0Eq','r29nqwS','uhjVCgvYDhKGq2XHC3m','tuPNsfy','B2fhD3e','sunwq2W','ls13Aw5KB3CTC2L6zt0','C2fpuKi','qKXfweK','qZPCuhjVz3jHBsbgAwXLCW','s1nxvK4','D2LUmZi','rMT2BK4','B01TwMq','twf0y2G6ia','uxfhz1O','wwvHCIbcDwLSDa','BgfZDf9Hy3rPDMvFChjVzMLSzxm','lMnHCMrBzgf0ys1SAw5Rxq','sLHXu3u','z29Vz2XLlwnOCM9Tzq','thHpuxu','zgfYD2LU','Bwf0y2HLzfjLCg9YDgvKvgv4Da','sgLZDg9YEs1QB3vYBMfS','CgfNzxm','v3D2zg0','Ag9TzwrPCG','qMfQAu0','BevIBgG','C2vZC2LVBG','vvvIzhq','yMDtrMu','AM9PBG','wLvYB1i','y2XQz3u','w3DHAxrgB3jszwfSq29UDgvUDf0Gy2fWDgnOys1JBgvHCIbICMfUy2GGkhrYyw5ZAxrPB25HBcaTihnLBgvJDg9Yig5VDcbMB3vUzcb5zxqP','ignHBMrPzgf0zsbWCM9MAwXLkhmPigzVCIb0AgLZig51BwjLCIWGyNv0ig5VBMuGB2yGDgHLAxiGCgfNzxmGzNvSBhKGBg9HzgvKicHTyxKGC3rPBgWGyMuGC2HVD2LUzYbHihzLCMLMAwnHDgLVBIbJAgvJAYKGlsb0CNKGywDHAw4U','C0TWAhy','q2HLy2TPBMCGBwf0y2GG','wKTPwNG','u2vHCMnOAw5NiezHC3rqzw9WBgvtzwfYy2GGzM9Yia','CMrlAxa','DwzpuMS','A05oshm','BLjPrKW','A3zgu0q','lunVBw1HBMq','y2fWDgnOys13ywL0Aw5N','CMvHzezPBgu','lMnVBMzPzW','C0vjt2K','CNvUugHVBMvtzwfYy2GO','AgfZlxjLC3vSDhm','igzVCIb0AgLZig51BwjLCI4','ndq1mM9WsxPfyW','rgvMyxvSDa','vwD3tgi','EhnSu0W','Aw5UzxjuzxH0','zMLUza','vvbpzuq','CNzewvi','uhjLzMvYzw5Jzxm','svr0wwC','CgXHDgzVCM0','yuzAv2G','sNDwrg8','u3vIzgL2AxnPB24','Bwf0y2HLze51BwjLCG','s0Pwuum','zeLtAfm','wxzowLO','CMvHzgrPCLn5BMm','u2LUz2XLDg9Uq29VA2LL','z0rzqxm','ywjVCNrLza','Aw5KDKe','wKPntxe','q2HYB21L','m0jPAgDzvG','BeP5C0i','Bg9JyxrPB24','DMLLD3bVCNq','A0ngBvK','EgnjBLa','tgfZDcbtywXLiefTB3vUDa','y29WEuzPBgvtEw5J','CM91BMq','y2fWDgnOys1JBgvHCG','BvP5sKC','BhbRCxe','thjKq3y','u2zWueK','mtaZmJHgzNnOrhy','iL0GAdmUy2fYzc10AxrSzsbH','Bw92zq','vgHLigjYB3DZzxiGDgfIignSB3nLzcb1BMv4CgvJDgvKBhKGBwLKlxnLyxjJAcaTihrYEsbHz2fPBI4','CMvWBgfJzq','r29Vz2XL','zgLYBMfTzq','vLn6v0W','qxbWBgLJyxrPB24Gu3vWCg9YDa','EKjYz1m','wwHSuKS','r2v0lunPBuLUC3rHBMnLifDPBJmYx1bYB2nLC3mGFcbxAgvYzs1pyMPLy3qGEYaKxY5dB21Tyw5KtgLUzsaTBgLRzsaNkG','uLfZqK4','BwTKAxjtEw5J','zNjVBq','oun6tvvsCG','qvnyqMm','Ahr0Chm6lY93D3CUzMfZDhbLB3bSzxnLyxjJAc5JB20V','kcGOlISPkYKRksSK','Aw5MB19JywnOzq','wxzKuKO','rengsLi','CMf0zuXPBwL0zwq','ls13Aw5KB3CTCg9ZAxrPB249','vuHuDg8','rhP4whe','ihbVC3nPyMXLig1HDgnOzxmGlsbJAgvJA2LUzYb0AguGzMLYC3qG','quLuAem','y2f0y2G','mtmXmteZnJHOEeDVAKS','B2HtDue','z290BW','Bwf0y2HLzfr5Cgu','t1bnr1y','ChjVzMLSzq','C25lAvm','r2T6DMm','zKLgCxe','C1fNrMC','y2Xtse8','qurtrgW','q29VA2LLCY1QB3vYBMfS','DhjPBq','i2z1BgXFBMfTzv9Zzwn0Aw9Uic5MDwXSBMfTzq','B2XWz0K','tgfUzcbvC2u','BKzsreu','z3j3Exy','qLjnt0O','CeXpDxC','CMfUzg9T','yMfJAW','swTZwxu','rKn1t2m','lI4U','tef5qxi','BwfW','DgflugG','ALHbDu4','C3LHwwi','rM91BMqG','lMnHCMrBzgf0ys1SAw5Rpsi','yLD2whe','zg9Ty29UDgvUDgXVywrLza','Cg9W','DNjTA0u','ChjVzMLSzxnFB3jKzxi','tNfUyvy','tvnbzvq','wxP6EuO','D3rXtui','swPIruG','u0LpyvO','uvH6z2S','yxbWBhK','DezLDhq','Dgv4DenVBNrLBNq','zxHPDgvKx2nSzwfUBhK','Dg9tDhjPBMC','uhncq2m','Aw5Uzxjive1m','EffjyuS','q2HxyuW','y2XPy2S','EenmDeG','mtiXmdG3mtbztKLYBLe','rvHoEeq','l3vZCI9IAw4Vz29Vz2XLlwnOCM9Tzs1ZDgfIBgu','D1rYtu8','v0L3EM8','j3mGChjVzMLSzs4UlG','t2nJDxbHBMn5ifr5Cgu','AhjLzG','runSsfm','Ahr0Chm6lY93D3CUzMfZDhbLB3bSzxnLyxjJAc5JB20','i2n1CNjLBNqTywrKCMvZC2vZlxbYB3bLCNr5','EKXewKm','ENvAuK4','uMf0zsbSAw1PDgvKic0Gy2HHBMDLihLVDxiGChjVEhKSihrOzw4GuMvZDw1LlG','DgvZDa','txnTyu4','yvzHy2m','zMLSDgvY','sgLZDg9YEq','r1bOweq','CMvHzhLtDgf0zq','qKfqrgq','u3rVChbLzcbIEsb1C2vYlG','zwXHC3i','Aw1mtfe','vMvhCNK','sNnhBvG','tM8GCMvZDwX0CYbMB3vUzcbMB3iGDgHPCYbUDw1IzxiU','C2vHCMnO','t1jJsLa'];_0x22ae=function(){return _0x585ca4;};return _0x22ae();}async function runPhoneSearch(_0x20d2d4){const _0x3e7bb0=_0x31523a,_0x58af86={'gFVfi':function(_0x2ad950,_0x4a1a48,_0x235123){return _0x2ad950(_0x4a1a48,_0x235123);},'inPXC':function(_0x5e9855,_0x5d821e,_0x472de0){return _0x5e9855(_0x5d821e,_0x472de0);},'YJCCv':_0x3e7bb0(0x1da),'olpgI':_0x3e7bb0(0x229),'EqGbp':_0x3e7bb0(0x1a3),'tNpyn':function(_0x5b15fd,_0xdf51e8){return _0x5b15fd(_0xdf51e8);},'oaGwq':_0x3e7bb0(0x1bd),'kFppZ':function(_0x5a38e4,_0x339907){return _0x5a38e4(_0x339907);},'oWLHu':'This\x20number\x27s\x20page\x20never\x20fully\x20loaded\x20(may\x20still\x20be\x20showing\x20a\x20verification\x20check)\x20-\x20try\x20again.','giuYf':function(_0x2e9b9b,_0x3ca70d){return _0x2e9b9b!==_0x3ca70d;},'ZUroR':_0x3e7bb0(0x28e),'ugtac':_0x3e7bb0(0x1c0),'spLFG':_0x3e7bb0(0x29f),'xQIaK':function(_0x41381a,_0x53ddeb){return _0x41381a===_0x53ddeb;},'ORcJP':_0x3e7bb0(0x2f1),'PqJrq':function(_0x2a702d){return _0x2a702d();},'xKhtZ':_0x3e7bb0(0x2db),'wkYVn':_0x3e7bb0(0x296),'SfpPI':function(_0x11d8b1,_0x3062c7,_0x423ae7){return _0x11d8b1(_0x3062c7,_0x423ae7);},'ebMtH':_0x3e7bb0(0x1b8),'nFRDE':'This\x20number\x27s\x20results\x20page\x20loaded\x20in\x20an\x20unexpected\x20state\x20-\x20try\x20again.','TrGyA':function(_0x2cf7dc,_0x2f3488){return _0x2cf7dc(_0x2f3488);},'OhPBo':function(_0x438fef,_0x3ebf25){return _0x438fef>_0x3ebf25;},'syaYb':function(_0x5b1568,_0x40263d){return _0x5b1568!==_0x40263d;},'zBiOk':'hhFxQ','WKoBs':_0x3e7bb0(0x183),'JdFeO':_0x3e7bb0(0x177),'JXqSu':function(_0x512708,_0x39055b){return _0x512708<_0x39055b;},'fzFmt':function(_0x2f096a,_0x2ac2ce){return _0x2f096a(_0x2ac2ce);},'UJqZK':_0x3e7bb0(0x2cc),'QEohl':_0x3e7bb0(0x24b),'YMnOS':function(_0x4c0712,_0x3ddaa8,_0x1f43ea){return _0x4c0712(_0x3ddaa8,_0x1f43ea);},'UUbdt':function(_0x176da3,_0x422a1e,_0x1f9735){return _0x176da3(_0x422a1e,_0x1f9735);},'imLLQ':function(_0x5633a6,_0x21ba22){return _0x5633a6(_0x21ba22);},'YhlRK':function(_0x315b00,_0x221ae3){return _0x315b00(_0x221ae3);},'EFily':_0x3e7bb0(0x265),'DzxXq':function(_0x287676,_0x45ddb0,_0x51df4,_0x3d40fe,_0xdb8fbf){return _0x287676(_0x45ddb0,_0x51df4,_0x3d40fe,_0xdb8fbf);},'oezQW':_0x3e7bb0(0x190),'luSXa':function(_0x45867e,_0x5d1289){return _0x45867e+_0x5d1289;},'MsmaN':function(_0x51684c,_0x10580f,_0x121cbb){return _0x51684c(_0x10580f,_0x121cbb);},'DCFJR':function(_0x57a9be,_0x3d5798,_0x50178d){return _0x57a9be(_0x3d5798,_0x50178d);},'quvYk':function(_0x1de4b8,_0xf6f140){return _0x1de4b8-_0xf6f140;},'NeSnT':_0x3e7bb0(0x2fc),'ASXBc':_0x3e7bb0(0x2e1),'Elrri':function(_0x533496,_0x1afc3b){return _0x533496 instanceof _0x1afc3b;},'FvHGB':_0x3e7bb0(0x2c6),'wVwbF':function(_0x143f99,_0x2729c1,_0xf16602){return _0x143f99(_0x2729c1,_0xf16602);},'BbhdF':_0x3e7bb0(0x2d5),'JwVDo':function(_0x27bfce,_0x26a4de){return _0x27bfce||_0x26a4de;},'Rnylh':function(_0x4bf639,_0x24a235){return _0x4bf639===_0x24a235;},'YOjse':'kXyCp'},_0x560188=String(_0x20d2d4)[_0x3e7bb0(0x22a)](/\D/g,'');if(_0x58af86[_0x3e7bb0(0x164)](_0x560188[_0x3e7bb0(0x1b3)],0xa)){if(_0x58af86[_0x3e7bb0(0x1ea)]!==_0x58af86['ugtac'])throw new Error(_0x58af86[_0x3e7bb0(0x1be)]);else{const _0x18d5a8=_0x37a5c3[_0x3e7bb0(0x1e9)](_0x58ffc0,_0x554cb3[_0x3e7bb0(0x2e0)]),_0x394d4c=_0x418a07[_0x3e7bb0(0x1e9)](_0x1a51f9,_0x53a9db[_0x3e7bb0(0x2e0)]);if(_0x1ae0bd['isDirectory']())WKNnJo['gFVfi'](_0x3d628b,_0x18d5a8,_0x394d4c);else{if(_0x48399b[_0x3e7bb0(0x196)]())WKNnJo['inPXC'](_0x5564a5,_0x18d5a8,_0x394d4c);}}}const _0xe1569e=_0x560188[_0x3e7bb0(0x29d)](0x0,0x3)+'-'+_0x560188['slice'](0x3,0x6)+'-'+_0x560188[_0x3e7bb0(0x29d)](0x6);currentAbortController=new AbortController();const _0x27ce72=currentAbortController['signal'];let _0x56a574=null,_0xff685f;try{if(_0x58af86['xQIaK'](_0x58af86['ORcJP'],_0x58af86[_0x3e7bb0(0x298)])){_0xff685f=await _0x58af86['PqJrq'](ensurePage),await _0xff685f[_0x3e7bb0(0x182)](),_0x58af86[_0x3e7bb0(0x158)](throwIfAborted,_0x27ce72),_0x58af86[_0x3e7bb0(0x186)](broadcastLog,_0x3e7bb0(0x1f1)+_0xe1569e+'...'),await _0xff685f[_0x3e7bb0(0x245)](_0x3e7bb0(0x237)+_0xe1569e,{'waitUntil':'domcontentloaded'}),_0x56a574=_0x3e7bb0(0x237)+_0xe1569e;const _0x432fc4=await waitForResultsOutcome(_0xff685f,RESULTS_WAIT_MS,_0x27ce72);if(_0x432fc4===_0x58af86['xKhtZ'])return broadcastLog(_0x58af86[_0x3e7bb0(0x2e6)]),{'found':![]};if(_0x432fc4==='timeout'){_0x58af86[_0x3e7bb0(0x186)](broadcastLog,_0x3e7bb0(0x299));throw new Error(_0x58af86['oWLHu']);}try{await _0x58af86[_0x3e7bb0(0x225)](actLikeSomeoneBrowsing,_0xff685f,_0x27ce72);}catch(_0x4ed263){if(_0x4ed263 instanceof StoppedByUserError)throw _0x4ed263;}const _0x3df673=await _0xff685f[_0x3e7bb0(0x16c)](()=>{const _0x5d0544=_0x3e7bb0,_0x4c20bf=Array[_0x5d0544(0x234)](document['querySelectorAll'](_0x58af86['YJCCv']))[_0x5d0544(0x25e)](_0x5042fa=>_0x5042fa[_0x5d0544(0x2ea)](_0x5d0544(0x29c)))['filter'](Boolean);return Array[_0x5d0544(0x234)](new Set(_0x4c20bf));})[_0x3e7bb0(0x242)](()=>[]);if(_0x58af86[_0x3e7bb0(0x277)](_0x3df673['length'],0x0)){if(_0x58af86[_0x3e7bb0(0x277)](_0x58af86[_0x3e7bb0(0x169)],_0x58af86[_0x3e7bb0(0x169)]))throw new Error(_0x58af86[_0x3e7bb0(0x254)]);else{const _0x56a21d=_0x4b99ba['title']||'',_0x3cf90a=_0x68ca22[_0x3e7bb0(0x21a)]?_0x542c47[_0x3e7bb0(0x21a)][_0x3e7bb0(0x282)]:'',_0x226561=_0x493094['body']?_0x42a064[_0x3e7bb0(0x2d7)][_0x3e7bb0(0x203)][_0x3e7bb0(0x29d)](0x0,0x320):'';return/\/rate-limited/i[_0x3e7bb0(0x289)](_0x3cf90a)||/rate limit exceeded/i['test'](_0x226561)||/rate limited/i[_0x3e7bb0(0x289)](_0x56a21d);}}const _0x16796a=_0x3df673[_0x3e7bb0(0x29d)](0x0,MAX_PHONE_CANDIDATES);_0x58af86['TrGyA'](broadcastLog,_0x3df673[_0x3e7bb0(0x1b3)]>_0x16796a[_0x3e7bb0(0x1b3)]?_0x3e7bb0(0x262)+_0x3df673[_0x3e7bb0(0x1b3)]+_0x3e7bb0(0x240)+_0x16796a[_0x3e7bb0(0x1b3)]+'.':'Found\x20'+_0x16796a[_0x3e7bb0(0x1b3)]+'\x20possible\x20match'+(_0x58af86[_0x3e7bb0(0x277)](_0x16796a[_0x3e7bb0(0x1b3)],0x1)?'':'es')+_0x3e7bb0(0x1fe));if(_0x58af86['OhPBo'](_0x16796a[_0x3e7bb0(0x1b3)],0x1)){if(_0x58af86[_0x3e7bb0(0x261)](_0x58af86['zBiOk'],_0x58af86[_0x3e7bb0(0x172)]))_0x58af86[_0x3e7bb0(0x186)](broadcastLog,_0x58af86['JdFeO']);else{const _0x587cb2=_0x26552c['title']||'',_0xa9cf5e=_0x2ac7e5[_0x3e7bb0(0x21a)]?_0x4dd3d3[_0x3e7bb0(0x21a)][_0x3e7bb0(0x282)]:'',_0x4a8cf6=_0x22dc31[_0x3e7bb0(0x2d7)]?_0xbd1eb8[_0x3e7bb0(0x2d7)][_0x3e7bb0(0x203)][_0x3e7bb0(0x29d)](0x0,0x320):'';return/just a moment/i[_0x3e7bb0(0x289)](_0x587cb2)||/verification required/i[_0x3e7bb0(0x289)](_0x4a8cf6)||/verify you are human/i[_0x3e7bb0(0x289)](_0x4a8cf6)||/slide right to secure/i[_0x3e7bb0(0x289)](_0x4a8cf6)||/are you human/i[_0x3e7bb0(0x289)](_0x4a8cf6)||/\/bot-check/i[_0x3e7bb0(0x289)](_0xa9cf5e);}}const _0x8de2c2=[];for(let _0xc05957=0x0;_0x58af86[_0x3e7bb0(0x1db)](_0xc05957,_0x16796a[_0x3e7bb0(0x1b3)]);_0xc05957++){_0x58af86[_0x3e7bb0(0x160)](throwIfAborted,_0x27ce72);if(_0xc05957>0x0){if(_0x58af86['UJqZK']===_0x58af86[_0x3e7bb0(0x165)]){if(_0x42956a[_0x3e7bb0(0x18d)]())throw new _0x242e03(WKNnJo[_0x3e7bb0(0x252)]);}else await _0x58af86[_0x3e7bb0(0x184)](wait,_0x58af86[_0x3e7bb0(0x1e7)](randomBetween,0x5dc,0xdac),_0x27ce72);}_0x58af86[_0x3e7bb0(0x293)](broadcastLog,_0x58af86[_0x3e7bb0(0x15d)](_0x16796a[_0x3e7bb0(0x1b3)],0x1)?_0x3e7bb0(0x1ef)+(_0xc05957+0x1)+'\x20of\x20'+_0x16796a[_0x3e7bb0(0x1b3)]+':\x20'+nameFromCandidateHref(_0x16796a[_0xc05957])+_0x3e7bb0(0x25c):_0x3e7bb0(0x16b)+_0x58af86[_0x3e7bb0(0x230)](nameFromCandidateHref,_0x16796a[_0xc05957])+_0x3e7bb0(0x280));try{await _0xff685f[_0x3e7bb0(0x279)](_0x3e7bb0(0x263)+_0x16796a[_0xc05957]+_0x3e7bb0(0x227));}catch{await _0xff685f['goto'](_0x3e7bb0(0x284)+_0x16796a[_0xc05957],{'waitUntil':_0x58af86[_0x3e7bb0(0x2ca)]});}const _0x1f9513=await _0x58af86['DzxXq'](waitForRealContent,_0xff685f,_0x58af86['oezQW'],PROFILE_WAIT_MS,_0x27ce72);if(!_0x1f9513){broadcastLog(_0x3e7bb0(0x29a)+_0x58af86[_0x3e7bb0(0x2e4)](_0xc05957,0x1)+_0x3e7bb0(0x2e2));continue;}_0x56a574=_0x3e7bb0(0x284)+_0x16796a[_0xc05957];try{await _0x58af86[_0x3e7bb0(0x28a)](actLikeSomeoneBrowsing,_0xff685f,_0x27ce72);}catch(_0x3a8680){if(_0x3a8680 instanceof StoppedByUserError)throw _0x3a8680;}const _0x14b45d=await _0x58af86[_0x3e7bb0(0x23b)](extractProfile,_0xff685f,_0x560188);_0x8de2c2['push']({..._0x14b45d,'rank':_0x58af86[_0x3e7bb0(0x293)](reportedRank,_0x14b45d[_0x3e7bb0(0x1df)])});if(_0x58af86['JXqSu'](_0xc05957,_0x58af86['quvYk'](_0x16796a[_0x3e7bb0(0x1b3)],0x1))){if(_0x58af86[_0x3e7bb0(0x277)](_0x58af86[_0x3e7bb0(0x1b4)],_0x58af86['NeSnT'])){await _0xff685f[_0x3e7bb0(0x16c)](()=>{const _0x147f16=_0x3e7bb0;history[_0x147f16(0x259)]();});const _0x453ff2=await _0x58af86[_0x3e7bb0(0x23f)](waitForRealContent,_0xff685f,HAS_RESULTS_SELECTOR,RESULTS_WAIT_MS,_0x27ce72);!_0x453ff2&&(await _0xff685f[_0x3e7bb0(0x245)](_0x3e7bb0(0x237)+_0xe1569e,{'waitUntil':_0x3e7bb0(0x265)}),await _0x58af86[_0x3e7bb0(0x23f)](waitForRealContent,_0xff685f,HAS_RESULTS_SELECTOR,RESULTS_WAIT_MS,_0x27ce72));}else throw new _0x564d41(_0x3e7bb0(0x262)+_0x789109[_0x3e7bb0(0x1b3)]+_0x3e7bb0(0x1ed));}}if(_0x58af86['xQIaK'](_0x8de2c2[_0x3e7bb0(0x1b3)],0x0)){if(_0x58af86[_0x3e7bb0(0x261)](_0x58af86[_0x3e7bb0(0x236)],_0x58af86[_0x3e7bb0(0x236)]))return _0x292418[_0x3e7bb0(0x1e9)](_0x416b2e[_0x3e7bb0(0x2a6)](WKNnJo['EqGbp']),_0x3e7bb0(0x157));else throw new Error('Found\x20'+_0x16796a[_0x3e7bb0(0x1b3)]+_0x3e7bb0(0x1ed));}const _0x1490ae=_0x8de2c2['reduce']((_0xfbd949,_0xf23943)=>!_0xfbd949||_0xf23943['rank']>_0xfbd949[_0x3e7bb0(0x180)]?_0xf23943:_0xfbd949,null);return _0x58af86[_0x3e7bb0(0x230)](broadcastLog,_0x58af86[_0x3e7bb0(0x15d)](_0x8de2c2[_0x3e7bb0(0x1b3)],0x1)?'Best\x20match:\x20'+_0x1490ae[_0x3e7bb0(0x2e0)]+_0x3e7bb0(0x2d1):_0x3e7bb0(0x1d6)+_0x1490ae[_0x3e7bb0(0x2e0)]+'.'),{'found':!![],'name':_0x1490ae[_0x3e7bb0(0x2e0)],'address':_0x1490ae[_0x3e7bb0(0x194)],'age':_0x1490ae['age'],'property':_0x1490ae[_0x3e7bb0(0x1c2)],'phone':_0x1490ae[_0x3e7bb0(0x20d)],'phoneType':_0x1490ae[_0x3e7bb0(0x246)],'otherMobiles':_0x1490ae[_0x3e7bb0(0x2ae)],'landlines':_0x1490ae[_0x3e7bb0(0x2b1)],'candidatesChecked':_0x8de2c2['length']};}else{WKNnJo[_0x3e7bb0(0x158)](_0x33277,WKNnJo[_0x3e7bb0(0x1cc)]);throw new _0x2446b7();}}catch(_0x122311){if(!_0x58af86['Elrri'](_0x122311,StoppedByUserError)){if(_0x58af86[_0x3e7bb0(0x261)](_0x3e7bb0(0x187),_0x58af86['FvHGB'])){const _0xc83a12=await _0xff685f?.[_0x3e7bb0(0x16c)](()=>document[_0x3e7bb0(0x21a)][_0x3e7bb0(0x282)])[_0x3e7bb0(0x242)](()=>null);_0x58af86[_0x3e7bb0(0x2d2)](broadcastStatus,_0x58af86['BbhdF'],{'message':_0x122311['message'],'url':_0x58af86[_0x3e7bb0(0x20b)](_0xc83a12,_0x56a574),'previousUrl':_0x56a574,'context':_0x3e7bb0(0x1fc)+_0xe1569e+')'});}else _0x42b3d6?.[_0x3e7bb0(0x2ee)]();}throw _0x122311;}finally{if(_0x58af86[_0x3e7bb0(0x2d0)](_0x58af86[_0x3e7bb0(0x2fe)],_0x58af86[_0x3e7bb0(0x2fe)]))currentAbortController=null;else{_0x58af86[_0x3e7bb0(0x186)](_0x5c2c58,'This\x20number\x27s\x20page\x20never\x20fully\x20loaded\x20-\x20giving\x20up\x20on\x20it\x20for\x20now.');throw new _0xdc1306(_0x58af86[_0x3e7bb0(0x16a)]);}}}module['exports']={'runPhoneSearch':runPhoneSearch,'resetCookies':resetCookies,'requestStop':requestStop,'onStatus':onStatus,'closeBrowser':closeBrowser,'prepareBrowserForRun':prepareBrowserForRun};
+const path = require("path");
+const os = require("os");
+const fs = require("fs");
+const { app, screen } = require("electron");
+const rawChrome = require("./rawChromeDriver");
+
+// 2026-08-11 (found via real research, after a stealth-plugin build and a
+// CDP-leak-patched build both still lost to the same verification wall
+// even with Mohsin solving it by hand): the wall wasn't reacting to
+// anything a page's own JavaScript reports about itself - stealth patches
+// operate at exactly that level, which is why neither one changed
+// anything. It was reacting to the startup handshake automation
+// frameworks send the moment they attach to a browser, before any page
+// even loads. Puppeteer - stealth-patched or not - always sends that
+// handshake, because it's baked into how the framework tracks pages
+// internally, not something a plugin can opt out of. rawChromeDriver.js
+// replaces it with a much thinner layer that only ever sends the exact
+// commands each action needs, and never that handshake - full reasoning
+// lives in that file's own notes.
+
+// Never touches Mohsin's/Wasim's team's actual live Chrome (2026-08-11,
+// final call after trying the alternative - driving the real Chrome
+// directly meant asking to close it before every single run, and even
+// with that handled properly, the underlying "only one process per
+// profile" conflict kept resurfacing in new ways). Back to a completely
+// separate, disposable browser this app owns outright - real cookies and
+// history copied in once for trust, real Chrome never opened, quit, or
+// depended on being closed at any point.
+
+// A real saved Chrome profile on disk (not an in-memory session) - this is
+// what makes the browser keep its cookies and sign-in state across every
+// run and every app restart, the same way a real person's everyday browser
+// does. Loaded automatically the moment a session starts; wiped only when
+// "Reset cookies" is used on purpose.
+function profileDir() {
+  return path.join(app.getPath("userData"), "scraper-browser-profile");
+}
+
+// Where each OS actually keeps a person's real, everyday Chrome profile -
+// used only to seed this app's own separate copy, never pointed at
+// directly.
+function realChromeProfilePaths() {
+  const home = os.homedir();
+  if (process.platform === "darwin") {
+    const root = path.join(home, "Library", "Application Support", "Google", "Chrome");
+    return { root, defaultProfile: path.join(root, "Default") };
+  }
+  if (process.platform === "win32") {
+    const localAppData = process.env.LOCALAPPDATA || path.join(home, "AppData", "Local");
+    const root = path.join(localAppData, "Google", "Chrome", "User Data");
+    return { root, defaultProfile: path.join(root, "Default") };
+  }
+  const root = path.join(home, ".config", "google-chrome");
+  return { root, defaultProfile: path.join(root, "Default") };
+}
+
+// The real, installed Chrome application - not Puppeteer's own bundled
+// "Chrome for Testing" binary. Used to launch this app's own separate
+// profile (see above), so the automated window is genuinely real Chrome,
+// not a build a site can recognize as a testing binary. Falls back to
+// Puppeteer's bundled Chromium if real Chrome isn't installed, rather
+// than blocking the app from working at all.
+function realChromeExecutablePath() {
+  let candidate;
+  if (process.platform === "darwin") {
+    candidate = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
+  } else if (process.platform === "win32") {
+    const programFiles = process.env["ProgramFiles"] || "C:\\Program Files";
+    const programFilesX86 = process.env["ProgramFiles(x86)"] || "C:\\Program Files (x86)";
+    candidate = [
+      path.join(programFiles, "Google", "Chrome", "Application", "chrome.exe"),
+      path.join(programFilesX86, "Google", "Chrome", "Application", "chrome.exe"),
+    ].find((p) => fs.existsSync(p));
+  } else {
+    candidate = ["/usr/bin/google-chrome", "/usr/bin/google-chrome-stable"].find((p) => fs.existsSync(p));
+  }
+  return candidate && fs.existsSync(candidate) ? candidate : undefined;
+}
+
+// Chrome's own standard marker for "a copy of me is currently running
+// against this profile" - present the same way across Mac/Windows/Linux.
+// Only ever checked here against the REAL Chrome profile, and only at the
+// one moment that matters - right before copying from it - so a live copy
+// never gets read out from under it (this is what corrupted things once
+// already; see the note on the clone function below).
+//
+// SingletonLock is a symlink, and its "target" isn't a real file path -
+// it's just an identifier string (hostname-PID). fs.existsSync() follows
+// symlinks and checks whether THAT resolves to something real, which
+// silently reports "not running" even while Chrome genuinely holds the
+// lock (confirmed live 2026-08-11 against Mohsin's own machine). Reading
+// the symlink instead of resolving it is what actually proves whether the
+// lock exists, regardless of what its target text points to.
+function realChromeIsRunning(root) {
+  try {
+    fs.readlinkSync(path.join(root, "SingletonLock"));
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function copyFileBestEffort(src, dest) {
+  try {
+    fs.mkdirSync(path.dirname(dest), { recursive: true });
+    fs.copyFileSync(src, dest);
+  } catch {
+    // Locked, permission denied, or a transient OS quirk - skip just this
+    // one file rather than aborting the whole clone. Cookies is the file
+    // that actually matters here; losing a journal/lock file alongside it
+    // costs nothing real.
+  }
+}
+
+function copyDirBestEffort(srcDir, destDir) {
+  let entries;
+  try {
+    entries = fs.readdirSync(srcDir, { withFileTypes: true });
+  } catch {
+    return;
+  }
+  for (const entry of entries) {
+    const srcPath = path.join(srcDir, entry.name);
+    const destPath = path.join(destDir, entry.name);
+    if (entry.isDirectory()) copyDirBestEffort(srcPath, destPath);
+    else if (entry.isFile()) copyFileBestEffort(srcPath, destPath);
+  }
+}
+
+// Deliberately narrow - real cookies, browsing history, and profile
+// preferences are what actually make a browser look aged and trusted to a
+// site's bot check (confirmed live 2026-08-11: the exact page that kept
+// failing here cleared instantly in Mohsin's own everyday Chrome, same
+// URL). Saved passwords and autofill/payment data are left out on
+// purpose - no trust benefit for a scraper that only ever visits
+// FastPeopleSearch, and copying them into an automation-driven profile
+// would be a real, unnecessary risk. Heavy, trust-irrelevant folders
+// (Cache, Extensions, Service Worker storage, etc.) are left out too.
+// Local Storage is left out on purpose too (2026-08-11, live incident):
+// it's a LevelDB directory, not a single self-contained file, and copying
+// one out from under a real, open Chrome tore it badly enough to crash
+// the automated browser the moment a new tab touched it.
+const CLONE_ALLOWLIST = ["Cookies", "Cookies-journal", "Preferences", "History", "History-journal"];
+
+// One-time, first-launch-ever-on-this-machine step: seeds this app's own,
+// separate browser profile from whatever real Chrome profile is already
+// on this computer. Runs the same way for every person this app gets
+// installed for, on their own machine - not something special-cased for
+// Mohsin. Always a copy into this app's own folder, never the real
+// profile itself: their everyday Chrome is never opened, closed, or
+// depended on being in any particular state, before or after.
+//
+// Skips entirely - falls back to starting blank, same as if no real
+// Chrome existed at all - if their Chrome happens to be open at this
+// exact moment. A live, in-use profile isn't safe to copy from (the exact
+// crash above); simply not cloning this one time, with no prompt and no
+// attempt to close anything, is the right call - the next app restart
+// tries again on its own.
+function cloneRealChromeProfileIfFirstRun() {
+  if (fs.existsSync(profileDir())) return; // already has its own profile - not a first run
+
+  const { root, defaultProfile } = realChromeProfilePaths();
+  if (!fs.existsSync(defaultProfile)) return; // no real Chrome profile found on this machine
+  if (realChromeIsRunning(root)) return; // open right now - not safe to copy from, skip this time, no prompt
+
+  fs.mkdirSync(profileDir(), { recursive: true });
+
+  // Local State sits next to Default, not inside it - it's what Chrome
+  // needs to actually decrypt the cookies it's about to inherit.
+  copyFileBestEffort(path.join(root, "Local State"), path.join(profileDir(), "Local State"));
+
+  // Real bug, found live 2026-08-12 (Mohsin's report: the app's own
+  // browser kept showing a "choose a profile" screen even after he'd
+  // deleted every real Chrome profile on his machine entirely). Local
+  // State is Chrome's whole-installation profile registry - if someone's
+  // real Chrome has more than one profile, this file lists all of them,
+  // but only ONE profile's actual folder ever gets copied below
+  // ("Default" specifically). Copying Local State wholesale meant Chrome
+  // opened believing a second profile existed - because the registry
+  // said so - even though no data for it was ever actually copied in,
+  // which is exactly what triggers that picker screen. Stripping the
+  // registry down to just the one entry that genuinely has data removes
+  // the mismatch outright, rather than leaving it to "Reset cookies" to
+  // clean up after the fact.
+  try {
+    const localStatePath = path.join(profileDir(), "Local State");
+    const localState = JSON.parse(fs.readFileSync(localStatePath, "utf8"));
+    if (localState.profile) {
+      if (localState.profile.info_cache) {
+        localState.profile.info_cache = { Default: localState.profile.info_cache.Default || {} };
+      }
+      localState.profile.last_used = "Default";
+      localState.profile.last_active_profiles = ["Default"];
+      localState.profile.profiles_order = ["Default"];
+    }
+    fs.writeFileSync(localStatePath, JSON.stringify(localState));
+  } catch {
+    // No Local State copied (real Chrome not found, or unreadable) -
+    // nothing to strip down; Chrome starts a brand-new one on first
+    // launch either way, which is already a clean single-profile state.
+  }
+
+  const destDefault = path.join(profileDir(), "Default");
+  fs.mkdirSync(destDefault, { recursive: true });
+  for (const name of CLONE_ALLOWLIST) {
+    const srcPath = path.join(defaultProfile, name);
+    if (!fs.existsSync(srcPath)) continue;
+    const destPath = path.join(destDefault, name);
+    try {
+      if (fs.statSync(srcPath).isDirectory()) copyDirBestEffort(srcPath, destPath);
+      else copyFileBestEffort(srcPath, destPath);
+    } catch {
+      // Same reasoning as copyFileBestEffort - skip this one item, keep going.
+    }
+  }
+}
+
+// Chrome treats anything other than a clean previous shutdown as a
+// possible crash and can silently reopen whatever tab was last open on the
+// next launch - real risk here since the app doesn't always get a chance
+// to close the browser cleanly itself (a quit, a crash, dev-mode restart).
+// Stamping the profile as cleanly exited before every launch, and setting
+// its startup behavior to a plain blank tab, keeps Chrome from ever trying
+// to restore anything on its own. Safe to do here since this is the app's
+// own disposable profile, never a real person's actual settings.
+async function markProfileForCleanStart() {
+  const fsp = require("fs/promises");
+  const prefsPath = path.join(profileDir(), "Default", "Preferences");
+  try {
+    const raw = await fsp.readFile(prefsPath, "utf8");
+    const prefs = JSON.parse(raw);
+    prefs.profile = prefs.profile || {};
+    prefs.profile.exit_type = "Normal";
+    prefs.profile.exited_cleanly = true;
+    prefs.session = prefs.session || {};
+    prefs.session.restore_on_startup = 5; // 5 = plain new tab, never "continue where I left off"
+    await fsp.writeFile(prefsPath, JSON.stringify(prefs));
+  } catch {
+    // No profile yet (first run ever) or unreadable - nothing to patch,
+    // and a brand-new profile has nothing to restore anyway.
+  }
+}
+
+// Splits the actual screen this app is running on right down the middle -
+// app on the left half (see main.js's leftHalfBounds), this browser window
+// on the right half - computed fresh off the real display every launch
+// rather than a fixed pixel size, so it lands correctly on any screen.
+function rightHalfWindowArgs() {
+  const { workArea } = screen.getPrimaryDisplay();
+  const halfWidth = Math.floor(workArea.width / 2);
+  const x = workArea.x + halfWidth;
+  const y = workArea.y;
+  return [`--window-position=${x},${y}`, `--window-size=${halfWidth},${workArea.height}`];
+}
+
+// The one shared browser session for this app - opens as its own real
+// window, separate from the app's window and from the person's real
+// Chrome entirely, and stays open across multiple searches in a run
+// rather than relaunching per lookup.
+let browser = null;
+let page = null;
+
+// Kept as the one entry point the run screen calls before starting (same
+// name as the earlier live-Chrome approach), but there's nothing to ask
+// permission for anymore - just launches the browser.
+async function prepareBrowserForRun() {
+  await ensureBrowser();
+}
+
+// Recovery for a real reported case (2026-08-11): a run that looked stuck
+// got interrupted by Mohsin outside the app's own Stop button (closing
+// the browser window directly), which can leave Chrome's process alive
+// in the background holding this profile's lock even though this app's
+// own in-memory `browser` reference is gone - the next Start then
+// collided with that leftover process instead of launching a fresh one.
+// Safe to clean up unconditionally here in a way it would NOT be safe to
+// do against the person's real Chrome: profileDir() is always this app's
+// own separate, disposable folder, so anything holding its lock is
+// guaranteed to be a leftover copy of THIS app's own browser, never the
+// person's real one - matching only by this exact, uniquely-named folder
+// path is what makes that guarantee hold. Best-effort on purpose - if the
+// process-matching step fails or finds nothing, still clears the lock
+// files themselves so a stale, no-longer-real lock can never block a
+// fresh launch on its own.
+function clearStaleOwnProfileLock() {
+  const dir = profileDir();
+  try {
+    fs.readlinkSync(path.join(dir, "SingletonLock")); // throws if no lock present - nothing to recover from
+  } catch {
+    return;
+  }
+
+  try {
+    const { execFileSync } = require("child_process");
+    if (process.platform === "win32") {
+      execFileSync("powershell", [
+        "-NoProfile",
+        "-Command",
+        `Get-CimInstance Win32_Process | Where-Object { $_.CommandLine -like '*${dir}*' } | ForEach-Object { Stop-Process -Id $_.ProcessId -Force }`,
+      ]);
+    } else {
+      execFileSync("pkill", ["-f", dir]);
+    }
+  } catch {
+    // No matching process found, or the kill attempt itself failed - fall
+    // through to clearing the lock files regardless, below.
+  }
+
+  for (const name of ["SingletonLock", "SingletonSocket", "SingletonCookie"]) {
+    try {
+      fs.unlinkSync(path.join(dir, name));
+    } catch {
+      // Wasn't there, or already gone - fine either way.
+    }
+  }
+}
+
+async function ensureBrowser() {
+  if (browser && browser.connected) return browser;
+
+  clearStaleOwnProfileLock();
+  cloneRealChromeProfileIfFirstRun();
+  await markProfileForCleanStart();
+
+  const executablePath = realChromeExecutablePath();
+  if (!executablePath) {
+    throw new Error(
+      "Couldn't find a real Chrome install on this computer. Install Google Chrome, then try again."
+    );
+  }
+
+  browser = await rawChrome.launch({
+    executablePath,
+    userDataDir: profileDir(), // this app's own separate profile - never the person's real one
+    windowArgs: rightHalfWindowArgs(),
+    extraArgs: ["--hide-crash-restore-bubble", "--disable-session-crashed-bubble"],
+  });
+
+  browser.on("disconnected", () => {
+    browser = null;
+    page = null;
+  });
+
+  // Belt-and-braces on top of the preference patch above: whatever Chrome
+  // actually opened on launch (its own default tab, or - if it still
+  // decided to restore something - a leftover tab), close every one of
+  // them except a single fresh tab this app creates and controls itself.
+  // Safe here since this is the app's own disposable profile, never a
+  // real person's actual open tabs.
+  page = await browser.newPage();
+  const otherPages = (await browser.pages()).filter((p) => p !== page);
+  for (const p of otherPages) {
+    await p.close().catch(() => {});
+  }
+
+  return browser;
+}
+
+async function ensurePage() {
+  const b = await ensureBrowser();
+  if (page && !page.isClosed()) return page;
+  page = await b.newPage();
+  return page;
+}
+
+// Closing the browser properly (rather than letting the OS kill it when
+// the app quits) is what lets Chrome record a clean exit on its own next
+// time - the profile patch above is the safety net for when this doesn't
+// get the chance to run (a crash, a force-quit).
+app.on("before-quit", async () => {
+  if (browser && browser.connected) {
+    await browser.close().catch(() => {});
+  }
+});
+
+// Called once the run screen's Stop button has actually finished winding
+// the run down - closes the real browser window along with it, rather
+// than leaving it sitting open with nothing left to do. The next Start
+// launches a fresh window again automatically (same saved cookies, per
+// ensureBrowser above).
+async function closeBrowser() {
+  if (browser && browser.connected) {
+    await browser.close().catch(() => {});
+  }
+  browser = null;
+  page = null;
+  return true;
+}
+
+// Deletes this app's own saved profile - cookies, history, everything it
+// copied in - so the next launch re-seeds itself from the real Chrome
+// profile again, same as the very first time. Never touches the real
+// Chrome profile itself, only this app's own separate copy. Opt-in only,
+// never called automatically. Needs the browser closed first since the
+// profile folder is locked while it's in use.
+async function resetCookies() {
+  if (browser && browser.connected) {
+    await browser.close();
+    browser = null;
+    page = null;
+  }
+  const fsp = require("fs/promises");
+  // A closed browser doesn't always release its file handles on the
+  // profile folder instantly, especially on Windows - a delete attempted
+  // in that exact gap can fail with a real lock error. Retries a few
+  // times with a short pause rather than surfacing that as "reset
+  // failed" over what's really just bad timing.
+  let lastErr = null;
+  for (let attempt = 1; attempt <= 5; attempt++) {
+    try {
+      await fsp.rm(profileDir(), { recursive: true, force: true });
+      return true;
+    } catch (err) {
+      lastErr = err;
+      await new Promise((r) => setTimeout(r, 300 * attempt));
+    }
+  }
+  throw lastErr;
+}
+
+// --- Stop support ---
+// The run screen's Stop button needs to actually interrupt a lookup that's
+// mid-wait - and with the generous captcha-clearing timeouts below, that
+// wait can run several minutes. Every wait in this file is written to
+// check this signal and bail out immediately rather than only noticing
+// between numbers, which is what made Stop feel unresponsive before.
+let currentAbortController = null;
+function requestStop() {
+  currentAbortController?.abort();
+}
+
+class StoppedByUserError extends Error {
+  constructor() {
+    super("Stopped by user.");
+    this.stoppedByUser = true;
+  }
+}
+
+// Deliberately its own error class, not just another wait-timeout failure
+// (2026-08-12, Mohsin's call) - a rate-limit page needs a genuinely
+// different response than a captcha: this file can't just keep polling
+// and waiting for it to clear on its own, because nothing about a rate
+// limit clears with time the way a solved captcha does - it needs a
+// different IP. What the run screen actually does with this (pause in
+// place, leave the row untouched, wait for Mohsin to change his proxy and
+// click Resume) lives entirely on that side (MyScrapingPanel.jsx) - this
+// class only carries the signal across. The message text is matched
+// there via .includes(), not exact equality, since every error crossing
+// the IPC boundary arrives wrapped in Electron's own "Error invoking
+// remote method..." prefix - same reasoning as StoppedByUserError above,
+// which has the identical matching requirement on the other side.
+class RateLimitedError extends Error {
+  constructor() {
+    super("Rate limited - change your proxy, then Resume.");
+    this.rateLimited = true;
+  }
+}
+
+function throwIfAborted(signal) {
+  if (signal?.aborted) throw new StoppedByUserError();
+}
+
+// A real live case (2026-08-11): a Cloudflare-style redirect tore down
+// the tab's underlying connection entirely mid-wait, and every check
+// below was written to quietly swallow a failed read (so one flaky tick
+// doesn't take down an otherwise-fine wait) - which meant this exact
+// situation just sat silently until the full multi-minute timeout ran
+// out, looking exactly like the whole run had frozen. Called at the top
+// of every poll tick, right alongside the existing Stop check, so a truly
+// dead tab fails in seconds instead of minutes - the run loop's own
+// per-row try/catch (already there) turns this into a normal "Error" on
+// this one number and moves straight on to the next with a fresh tab,
+// same as any other failure.
+function throwIfPageDead(p) {
+  if (p.isClosed()) {
+    throw new Error("The browser tab closed unexpectedly mid-search - try again.");
+  }
+}
+
+// --- Status broadcast ---
+// Lets the run screen show what's actually happening inside the browser
+// window right now (a verification check is up and needs a human) instead
+// of just looking stuck. main.js wires this to the renderer.
+let statusBroadcaster = null;
+function onStatus(fn) {
+  statusBroadcaster = fn;
+}
+function broadcastStatus(status, detail) {
+  if (statusBroadcaster) statusBroadcaster({ status, detail, at: Date.now() });
+}
+
+// Plain narration lines for the docked terminal on the run screen
+// (2026-08-11, Mohsin's request) - separate from the status states above
+// (which drive actual UI behavior, like the captcha banner). This channel
+// only ever describes what's happening right now in plain words - every
+// call site below is a real step the engine is actually taking, not a
+// summary invented after the fact.
+function broadcastLog(message) {
+  broadcastStatus("log", message);
+}
+
+// FastPeopleSearch's own result-card links carry a readable name right in
+// the URL slug ("/reginald-sissons_id_G864...") - turning that into
+// "Reginald Sissons" lets the terminal say who's about to be checked
+// before that candidate's page has even loaded, rather than just an
+// index number.
+function nameFromCandidateHref(href) {
+  const slug = href.split("/").pop().split("_id_")[0] || "";
+  return slug
+    .split("-")
+    .filter(Boolean)
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ") || "this profile";
+}
+
+// --- Human-paced browsing ---
+// A page that jumps straight from "loaded" to "read" every single time, at
+// identical speed, is itself a tell. These helpers add the small, varied
+// pauses and movements a real person makes without thinking about it -
+// reading for a moment, drifting the mouse, scrolling to see more - so no
+// two runs look exactly alike. Used between page loads and before reading,
+// never anywhere that would affect what gets extracted.
+
+function randomBetween(minMs, maxMs) {
+  return Math.round(minMs + Math.random() * (maxMs - minMs));
+}
+
+// Abort-aware sleep - rejects immediately (rather than after the full
+// delay) the moment Stop is requested.
+function wait(ms, signal) {
+  return new Promise((resolve, reject) => {
+    if (signal?.aborted) return reject(new StoppedByUserError());
+    const timer = setTimeout(resolve, ms);
+    signal?.addEventListener(
+      "abort",
+      () => {
+        clearTimeout(timer);
+        reject(new StoppedByUserError());
+      },
+      { once: true }
+    );
+  });
+}
+
+// A believable "just landed, glancing at the page" pause before doing
+// anything else. Trimmed a little 2026-08-12 (Mohsin's "make it a tad
+// faster" ask) - still a real, varied pause, just not as generous as the
+// original range.
+async function humanPause(signal, minMs = 400, maxMs = 1200) {
+  await wait(randomBetween(minMs, maxMs), signal);
+}
+
+// Drifts the cursor across a handful of random points, each with its own
+// short pause, rather than snapping straight to whatever gets clicked next.
+// Worth noting plainly: these are real Input-layer events the PAGE
+// genuinely receives (real mousemove events fire, :hover states genuinely
+// change) - that's what matters for not reading as automated. They do
+// NOT move the actual, visible system cursor on screen though - Chrome
+// doesn't warp the real OS pointer for CDP-dispatched input in normal
+// windowed mode, so watching the browser won't show a moving arrow the
+// way watching a person drive the mouse would. That's a real limit of
+// this technique, not something tunable away.
+//
+// Fixed 2026-08-12 (Mohsin's report - looked like it was "flickering" or
+// "wiggling in place"): every random point used to be picked completely
+// independently, with nothing stopping two picks in a row from landing
+// close together by chance - a real hand covers real distance when it
+// moves, it doesn't twitch a few pixels and call that a move. Each new
+// point is now rejected and re-picked until it's meaningfully far from
+// the last one, so every hop is a real, visible-if-you-could-see-it
+// movement across the page, not a cluster of near-identical spots.
+// Step/wait ranges trimmed a little 2026-08-12 (Mohsin's "make it a tad
+// faster" ask) - same real, varied movement, just fewer hops and shorter
+// pauses between them.
+async function humanMouseWander(p, signal, steps = randomBetween(2, 4)) {
+  const viewport = p.viewport() || { width: 1280, height: 800 };
+  const minHopDistance = Math.min(viewport.width, viewport.height) * 0.25;
+  let last = null;
+  for (let i = 0; i < steps; i++) {
+    throwIfAborted(signal);
+    let x, y;
+    let attempts = 0;
+    do {
+      x = randomBetween(60, viewport.width - 60);
+      y = randomBetween(60, viewport.height - 60);
+      attempts += 1;
+    } while (last && Math.hypot(x - last.x, y - last.y) < minHopDistance && attempts < 10);
+    last = { x, y };
+    await p.mouse.move(x, y, { steps: randomBetween(15, 30) });
+    await wait(randomBetween(100, 350), signal);
+  }
+}
+
+// Scrolls down the page in a few real down-movements - and, per Mohsin's
+// exact example (2026-08-12), a real chance after each one of scrolling
+// back up a little before continuing further down, the way someone
+// re-reading a line they just passed does, rather than one rare isolated
+// flip somewhere in the whole sequence.
+// Passes/wait ranges trimmed a little 2026-08-12 (Mohsin's "make it a tad
+// faster" ask) - same real scrolling-with-an-occasional-re-read pattern,
+// just fewer passes and shorter pauses between them.
+async function humanScroll(p, signal, passes = randomBetween(2, 4)) {
+  for (let i = 0; i < passes; i++) {
+    throwIfAborted(signal);
+    const down = randomBetween(250, 700);
+    await p.evaluate((y) => window.scrollBy(0, y), down);
+    await wait(randomBetween(250, 700), signal);
+
+    if (Math.random() < 0.4) {
+      const back = randomBetween(80, 250);
+      await p.evaluate((y) => window.scrollBy(0, y), -back);
+      await wait(randomBetween(200, 450), signal);
+    }
+  }
+}
+
+// Bundles the above into one "arrived on a page, taking it in" beat - call
+// after every navigation, before reading anything off the page.
+async function actLikeSomeoneBrowsing(p, signal) {
+  await humanPause(signal);
+  await humanMouseWander(p, signal);
+  await humanScroll(p, signal);
+}
+
+// A shared number can belong to several people - the same disambiguation
+// rule the old tool used elsewhere (Skip Trace): check up to this many
+// candidate profiles rather than assuming the first one is right.
+const MAX_PHONE_CANDIDATES = 5;
+
+const MONTH_NUMBERS = {
+  january: 1, february: 2, march: 3, april: 4, may: 5, june: 6,
+  july: 7, august: 8, september: 9, october: 10, november: 11, december: 12,
+};
+
+// FastPeopleSearch sometimes stacks a second, separate verification widget
+// (a "slide right to secure your access" puzzle, in its own embedded
+// frame) right on top of Cloudflare's own check - confirmed live
+// 2026-08-11. Real content can sit behind one wall, both, or neither, and
+// there's no way to know in advance.
+//
+// RESULTS_WAIT_MS trimmed from 4 minutes to 1 (2026-08-12, Mohsin's call,
+// live during real Windows testing - an ad-heavy results page was slow
+// enough to sit at this wait for its full length before the app finally
+// gave up and asked to skip/stop). Trade-off worth knowing: if a real
+// captcha shows up and nobody notices it within a minute, this now gives
+// up and asks sooner than before - not a big cost, since Skip/Stop just
+// re-offers the same number to try again, but it does mean this can fire
+// a little more eagerly than the old 4-minute version did.
+const RESULTS_WAIT_MS = 60000; // 1 minute
+const PROFILE_WAIT_MS = 60000; // 1 minute - trimmed to match, same reasoning as RESULTS_WAIT_MS above
+
+// The genuine "nothing on file for this number" page is its own real,
+// distinct heading (confirmed live against fastpeoplesearch.com,
+// 2026-08-11) - not just "the results card never showed up." Checking for
+// this specifically is what stops a still-stuck verification wall from
+// ever being silently reported as "no record found": a timeout with
+// neither signal present is treated as a real failure to load, not a
+// negative result.
+const NO_RESULTS_SELECTOR = "h1.list-results-header";
+const HAS_RESULTS_SELECTOR = ".card[data-link]";
+
+const CAPTCHA_POLL_MS = 2000; // trimmed a little 2026-08-12, Mohsin's "a tad faster" ask
+
+// Recognizes the page states seen live so far (Cloudflare's own
+// interstitial, the slide-to-verify widget, and - added 2026-08-11 after
+// a live run hit it and the run screen never noticed - a third, separate
+// "Are you human?" page of its own at /bot-check, with its own re-CAPTCHA
+// widget) by title/URL/body text rather than a specific selector - new
+// wording or a new provider still gets caught by these generic phrases
+// without needing a code change.
+async function isCaptchaShowing(p) {
+  return p
+    .evaluate(() => {
+      const title = document.title || "";
+      const url = document.location ? document.location.href : "";
+      const text = document.body ? document.body.innerText.slice(0, 800) : "";
+      return (
+        /just a moment/i.test(title) ||
+        /verification required/i.test(text) ||
+        /verify you are human/i.test(text) ||
+        /slide right to secure/i.test(text) ||
+        /are you human/i.test(text) ||
+        /\/bot-check/i.test(url)
+      );
+    })
+    .catch(() => false);
+}
+
+// A genuinely different page from any of the captcha states above
+// (confirmed live 2026-08-12 - real title "Rate Limited - FastPeopleSearch.com",
+// real URL fastpeoplesearch.com/rate-limited, real heading "Rate Limit
+// Exceeded"): this one isn't a check to solve, it's the site declining to
+// serve this IP any more requests for a while. No amount of waiting on
+// this page changes that - see RateLimitedError above for what happens
+// once this is detected.
+async function isRateLimited(p) {
+  return p
+    .evaluate(() => {
+      const title = document.title || "";
+      const url = document.location ? document.location.href : "";
+      const text = document.body ? document.body.innerText.slice(0, 800) : "";
+      return /\/rate-limited/i.test(url) || /rate limit exceeded/i.test(text) || /rate limited/i.test(title);
+    })
+    .catch(() => false);
+}
+
+// Polls for the real target selector instead of a single blind wait, so a
+// captcha showing up mid-wait can be surfaced to the run screen the moment
+// it appears, and cleared the moment it's gone - the same wait just keeps
+// going and picks up the real content on its own once a person clears it,
+// no manual resume needed. Also the one place Stop actually interrupts a
+// long wait quickly rather than only being noticed between numbers.
+async function waitForRealContent(p, selector, timeoutMs, signal) {
+  const deadline = Date.now() + timeoutMs;
+  let sawCaptcha = false;
+  while (Date.now() < deadline) {
+    throwIfAborted(signal);
+    throwIfPageDead(p);
+    if (await isRateLimited(p)) {
+      broadcastLog("⛔ Rate limit hit - stopping the run. Change your proxy, then click Resume.");
+      throw new RateLimitedError();
+    }
+
+    const found = await p.$(selector).catch(() => null);
+
+    // TEMPORARY DIAGNOSTIC (2026-08-12) - investigating a live, repeated
+    // "verification cleared, then nothing" report. Logs the exact page
+    // state on every single poll tick so the real cause is observed
+    // directly instead of guessed at again - remove once confirmed fixed.
+    if (process.env.SCRAPER_DEBUG) {
+      const debugState = await p
+        .evaluate((sel) => ({ url: document.location.href, title: document.title, readyState: document.readyState, selectorExists: !!document.querySelector(sel) }), selector)
+        .catch((err) => ({ evalError: err.message }));
+      console.log("[waitForRealContent tick]", { selector, found: !!found, ...debugState });
+    }
+
+    if (found) {
+      if (sawCaptcha) {
+        broadcastStatus("captcha-clear");
+        // A real person doesn't solve a puzzle and immediately start
+        // clicking around at full speed again - going straight back to
+        // rapid browsing right after clearing a check is itself the kind
+        // of pattern that gets a network/IP flagged as automated (exactly
+        // what FastPeopleSearch's own verification page says it's
+        // watching for). A longer breather here, before anything else
+        // happens on the page, is deliberate.
+        await wait(randomBetween(4000, 9000), signal);
+      }
+      return true;
+    }
+
+    const captchaNow = await isCaptchaShowing(p);
+    if (captchaNow && !sawCaptcha) {
+      sawCaptcha = true;
+      broadcastStatus(
+        "captcha-waiting",
+        "A verification check is showing in the browser window - solve it there. This run continues on its own the moment it clears."
+      );
+    } else if (!captchaNow && sawCaptcha) {
+      if (process.env.SCRAPER_DEBUG) console.log("[waitForRealContent] captcha-clear branch (transitional - selector not found yet)");
+      sawCaptcha = false;
+      broadcastStatus("captcha-clear");
+    }
+
+    await wait(CAPTCHA_POLL_MS, signal);
+  }
+
+  if (sawCaptcha) broadcastStatus("captcha-clear");
+  return false;
+}
+
+// The results-page-specific version of the wait above (2026-08-11, real
+// live bug fix - Mohsin reported a genuine "no results" number looking
+// completely frozen). waitForRealContent only ever checked for a
+// negative once its full timeout had already run out - fine for
+// correctness, but it meant every single true no-results number sat
+// through the entire multi-minute wait before ever reporting anything,
+// even when the real page had already loaded and settled seconds in.
+// Confirmed live against both a real no-results page and a real hit
+// (2026-08-11): NO_RESULTS_SELECTOR exists on every results page
+// regardless of outcome, same as before, but its actual TEXT only ever
+// reads "No results found..." on a genuine negative - a real hit's
+// version of the same heading reads completely differently ("Who Owns
+// The Phone Number..."). That's what makes it safe to check the negative
+// on every single poll tick, right alongside the positive one, instead
+// of only after giving up - a real hit's heading text can never
+// accidentally match the negative phrase, so there's no race to
+// reintroduce here even though both signals share one polling loop.
+async function waitForResultsOutcome(p, timeoutMs, signal) {
+  const deadline = Date.now() + timeoutMs;
+  let sawCaptcha = false;
+  while (Date.now() < deadline) {
+    throwIfAborted(signal);
+    throwIfPageDead(p);
+    if (await isRateLimited(p)) {
+      broadcastLog("⛔ Rate limit hit - stopping the run. Change your proxy, then click Resume.");
+      throw new RateLimitedError();
+    }
+
+    const state = await p
+      .evaluate(
+        (hasSel, noSel) => ({
+          hasResults: !!document.querySelector(hasSel),
+          isNoResults: /no results found/i.test(document.querySelector(noSel)?.textContent || ""),
+        }),
+        HAS_RESULTS_SELECTOR,
+        NO_RESULTS_SELECTOR
+      )
+      .catch(() => ({ hasResults: false, isNoResults: false }));
+
+    if (state.hasResults || state.isNoResults) {
+      if (sawCaptcha) {
+        broadcastStatus("captcha-clear");
+        await wait(randomBetween(4000, 9000), signal);
+      }
+      return state.hasResults ? "has-results" : "no-results";
+    }
+
+    const captchaNow = await isCaptchaShowing(p);
+    if (captchaNow && !sawCaptcha) {
+      sawCaptcha = true;
+      broadcastStatus(
+        "captcha-waiting",
+        "A verification check is showing in the browser window - solve it there. This run continues on its own the moment it clears."
+      );
+    } else if (!captchaNow && sawCaptcha) {
+      sawCaptcha = false;
+      broadcastStatus("captcha-clear");
+    }
+
+    await wait(CAPTCHA_POLL_MS, signal);
+  }
+
+  if (sawCaptcha) broadcastStatus("captcha-clear");
+  return "timeout";
+}
+
+// Reads name/address off a person's profile page, plus - matching the old
+// tool's exact disambiguation rule - how recently the SPECIFIC searched
+// number was reported on file for this particular person. That recency is
+// what decides which candidate is the real match when a number is shared,
+// not just whichever profile came up first.
+//
+// Every phone number on the page is still read here (has to be, to find
+// the searched one and rank candidates against each other) - but per a
+// client scope change (2026-08-11, phone mode only): what actually gets
+// returned to the caller is just that one searched number, never the rest
+// of what's on the profile. Address/Name/Skip Trace modes are untouched by
+// this - they don't exist yet, and whatever they eventually surface is a
+// separate decision for whenever they're built, not something this rule
+// should quietly reach into.
+// The 14 property-detail fields confirmed live 2026-08-11 as genuinely
+// available on FastPeopleSearch's own profile page (not just the
+// cyberbackgroundchecks.com site the old tool used) - Age comes from the
+// short bio line right under the page's name heading ("Age 84, Born June
+// 1942..."), the other 13 from a clearly-labeled "Current Address
+// Property Details" box further down. Mapped label -> master-file column
+// name here once, so both extractProfile (below) and any future mode
+// reading this same page agree on the exact same mapping. "Lot SqFt." is
+// the one label that doesn't match its column name verbatim (the master
+// file's own header is "Lot SQ FT," matching the extension's real
+// schema) - every other label is already an exact match.
+const PROPERTY_LABEL_TO_HEADER = {
+  Bathrooms: "Bathrooms",
+  "Square Feet": "Square Feet",
+  "Year Built": "Year Built",
+  "Estimated Value": "Estimated Value",
+  "Estimated Equity": "Estimated Equity",
+  "Last Sale Amount": "Last Sale Amount",
+  "Last Sale Date": "Last Sale Date",
+  "Occupancy Type": "Occupancy Type",
+  "Ownership Type": "Ownership Type",
+  "Land Use": "Land Use",
+  "Property Class": "Property Class",
+  Subdivision: "Subdivision",
+  "Lot SqFt.": "Lot SQ FT",
+};
+
+async function extractProfile(p, searchedDigits) {
+  return p.evaluate((digits, labelToHeader) => {
+    const name = document.querySelector("#full_name_section .fullname")?.textContent?.trim() || null;
+
+    // Confirmed live 2026-08-11: the page's <h1> (person + city/state) is
+    // always immediately followed by a short bio <p> - "Age 84, Born June
+    // 1942 / Lives in Surprise, AZ / (623) 544-2939" - on every real
+    // profile checked. Age is pulled out of that line with a plain regex
+    // rather than a dedicated selector, since the page doesn't give Age
+    // its own element anywhere.
+    const bioText = document.querySelector("h1")?.nextElementSibling?.textContent || "";
+    const ageMatch = bioText.match(/Age\s+(\d+)/);
+    const age = ageMatch ? ageMatch[1] : "";
+
+    // "Current Address Property Details" - present on every real profile
+    // checked live, a plain set of label/value pairs, matched by the real
+    // column name via labelToHeader above rather than by position (so a
+    // profile missing one particular field, e.g. no Subdivision on
+    // record, just leaves that one column blank instead of shifting every
+    // field after it out of place).
+    const property = {};
+    const propertySection = document.querySelector("#current-addresses-property");
+    if (propertySection) {
+      propertySection.querySelectorAll("dl").forEach((dl) => {
+        const label = dl.querySelector("dt")?.textContent?.trim() || "";
+        const value = dl.querySelector("dd")?.textContent?.trim() || "";
+        const header = labelToHeader[label];
+        if (header) property[header] = value;
+      });
+    }
+
+    // Confirmed live 2026-08-11 against the real page (not assumed): the
+    // street and city/state/zip here are two separate lines joined by a
+    // plain <br>, never a comma - "16275 W Boulder Dr<br>Surprise AZ
+    // 85374", not "16275 W Boulder Dr, Surprise AZ 85374". Reading this
+    // via plain .textContent (as the earlier version of this file did)
+    // collapses that line break into just whitespace, losing the one
+    // signal that marks where the street ends and the region begins -
+    // that's exactly what left every saved lead's Region blank and its
+    // Street holding the whole merged address. Turning the <br> into a
+    // real comma before flattening to text is what lets the master
+    // file's own Street/Region split (which does expect a comma, matching
+    // every other address source this file handles) work correctly here
+    // too, without needing two different splitting rules for two sources.
+    const addressLink = document.querySelector("#current_address_section h3 a");
+    let address = null;
+    if (addressLink) {
+      const withCommaBreak = addressLink.innerHTML.replace(/<br\s*\/?>/gi, ", ");
+      const scratch = document.createElement("div");
+      scratch.innerHTML = withCommaBreak;
+      address = scratch.textContent.replace(/\s+/g, " ").trim();
+    }
+
+    const phones = Array.from(document.querySelectorAll("#phone_number_section dl")).map((dl) => {
+      const number = dl.querySelector("dt a")?.textContent?.trim() || "";
+      const dds = dl.querySelectorAll("dd");
+      const type = dds[0]?.textContent?.trim() || null;
+      const reportedText = dds[dds.length - 1]?.textContent?.trim() || "";
+      return { number, type, digits: number.replace(/\D/g, ""), reportedText };
+    });
+
+    const matched = phones.find((entry) => entry.digits === digits);
+
+    // Record-keeping addition (2026-08-11, Mohsin's call) - separate from
+    // and does not relax the client-facing scope rule above: every OTHER
+    // number this profile has, beyond the one that was actually searched,
+    // still never becomes its own lead, still never goes to the client -
+    // this is purely extra context saved alongside the real lead in the
+    // master file, for Mohsin/Wasim's own records. The searched number
+    // itself is excluded here (it's already the lead's Mobile 1, handled
+    // separately) so it's never duplicated into this list.
+    const otherMobiles = phones
+      .filter((entry) => entry.digits !== digits && /wireless/i.test(entry.type || ""))
+      .map((entry) => entry.number);
+    const landlines = phones.filter((entry) => /landline/i.test(entry.type || "")).map((entry) => entry.number);
+
+    return {
+      name,
+      address,
+      age,
+      property,
+      otherMobiles,
+      landlines,
+      matchedNumber: matched ? matched.number : null,
+      matchedType: matched ? matched.type : null,
+      matchedReportedText: matched?.reportedText || "",
+    };
+  }, searchedDigits, PROPERTY_LABEL_TO_HEADER);
+}
+
+// "First reported December 2019" -> a plain sortable integer (year*12 +
+// month), same shape the old tool used for its own "last reported" text -
+// 0 if the searched number isn't listed on this profile at all (loses
+// every real comparison rather than crashing).
+function reportedRank(reportedText) {
+  const match = reportedText.match(/reported\s+(\w+)\s+(\d{4})/i);
+  if (!match) return 0;
+  const month = MONTH_NUMBERS[match[1].toLowerCase()] || 0;
+  return parseInt(match[2], 10) * 12 + month;
+}
+
+// Looks up a phone number on FastPeopleSearch and reads the real lead
+// details off the matching person's page - name, address, and that one
+// searched number's own type (Wireless/Landline). When the number is
+// shared across more than one profile, every candidate (up to the cap
+// above) gets checked and whichever one shows the searched number as most
+// recently reported wins - same rule the old tool used, not just the
+// first result.
+//
+// Client scope change (2026-08-11): phone mode stops at the one number
+// that was searched - it never pulls in whatever other numbers happen to
+// sit on that same person's page. One phone in, that one phone's lead out,
+// nothing extra riding along. This is a phone-mode-only rule - Address,
+// Name, and Skip Trace modes don't exist yet, and this decision says
+// nothing about what they should return once they're built.
+// No saving, no duplicate checking, no qualifying yet - that's Phase 3.
+async function runPhoneSearch(rawPhone) {
+  const digits = String(rawPhone).replace(/\D/g, "");
+  if (digits.length !== 10) {
+    throw new Error("Enter a 10-digit US phone number.");
+  }
+  const dashed = `${digits.slice(0, 3)}-${digits.slice(3, 6)}-${digits.slice(6)}`;
+
+  currentAbortController = new AbortController();
+  const signal = currentAbortController.signal;
+
+  // Tracks the last page we know for certain actually loaded, updated at
+  // each real navigation below - not a live read of wherever the browser
+  // happens to be right now. Purely for error logging (2026-08-12,
+  // Mohsin's ask): when something genuinely unexpected goes wrong, we log
+  // both where it happened and where things were right before that, so a
+  // failure can be traced back to the step that actually caused it rather
+  // than just the step that happened to be running when it surfaced.
+  let lastKnownUrl = null;
+  let p;
+
+  try {
+    p = await ensurePage();
+    await p.bringToFront();
+    throwIfAborted(signal);
+    broadcastLog(`Searching FastPeopleSearch for ${dashed}...`);
+    await p.goto(`https://www.fastpeoplesearch.com/${dashed}`, { waitUntil: "domcontentloaded" });
+    lastKnownUrl = `https://www.fastpeoplesearch.com/${dashed}`;
+
+    // The results page loads its own content in behind a "Loading Search
+    // Results…" placeholder, and possibly behind one or two verification
+    // walls first. waitForResultsOutcome checks for a real hit and a
+    // genuine no-results outcome on every poll tick, side by side - a true
+    // negative resolves the moment the page actually settles, rather than
+    // always sitting through the full multi-minute timeout first (that
+    // full-timeout wait on every negative number was a real, reported bug
+    // - see the function's own notes for how this was confirmed safe).
+    const outcome = await waitForResultsOutcome(p, RESULTS_WAIT_MS, signal);
+
+    if (outcome === "no-results") {
+      broadcastLog("No results found for this number.");
+      return { found: false };
+    }
+
+    if (outcome === "timeout") {
+      broadcastLog("This number's page never fully loaded - giving up on it for now.");
+      throw new Error("This number's page never fully loaded (may still be showing a verification check) - try again.");
+    }
+
+    // Take a beat and look the results page over before pulling anything
+    // off it - a real person doesn't start clicking the instant a page
+    // finishes loading.
+    try {
+      await actLikeSomeoneBrowsing(p, signal);
+    } catch (err) {
+      if (err instanceof StoppedByUserError) throw err;
+      // A transient hiccup mid-pace (e.g. the page reloading itself right
+      // as a wall clears) shouldn't take down a page that already has real
+      // content on it - just skip straight to reading it.
+    }
+
+    // Every real candidate card (not the sponsored/paid-partner cards
+    // further down the page) links to its profile via this attribute.
+    const candidateHrefs = await p
+      .evaluate(() => {
+        const hrefs = Array.from(document.querySelectorAll(".card[data-link]"))
+          .map((card) => card.getAttribute("data-link"))
+          .filter(Boolean);
+        return Array.from(new Set(hrefs));
+      })
+      .catch(() => []);
+
+    if (candidateHrefs.length === 0) {
+      throw new Error("This number's results page loaded in an unexpected state - try again.");
+    }
+
+    const toCheck = candidateHrefs.slice(0, MAX_PHONE_CANDIDATES);
+    broadcastLog(
+      candidateHrefs.length > toCheck.length
+        ? `Found ${candidateHrefs.length} possible matches - checking the first ${toCheck.length}.`
+        : `Found ${toCheck.length} possible match${toCheck.length === 1 ? "" : "es"} for this number.`
+    );
+    if (toCheck.length > 1) {
+      broadcastLog("Checking each one to find whichever has this number most recently on file...");
+    }
+
+    const candidates = [];
+    for (let i = 0; i < toCheck.length; i++) {
+      throwIfAborted(signal);
+
+      // A pause before each candidate after the first - clicking into one
+      // profile after another with nothing in between is exactly the kind
+      // of burst pattern that reads as automated, up to 5 page loads back
+      // to back on a shared number. Placed before the goto (not after
+      // reading), so it never lands right after the "just cleared a
+      // captcha" breather above and stacks two long pauses together.
+      if (i > 0) {
+        await wait(randomBetween(1500, 3500), signal); // trimmed a little 2026-08-12, Mohsin's "a tad faster" ask
+      }
+
+      broadcastLog(
+        toCheck.length > 1
+          ? `Checking match ${i + 1} of ${toCheck.length}: ${nameFromCandidateHref(toCheck[i])}...`
+          : `Opening ${nameFromCandidateHref(toCheck[i])}'s profile...`
+      );
+
+      // Clicks the actual link on the results page (2026-08-12, Mohsin's
+      // call) - a real person working through a list of links opens one,
+      // reads it, goes back, then opens the next; they don't copy each
+      // link's address in turn and load it fresh. Targets the person's
+      // own name link specifically (h3.card-title a), not just anywhere
+      // inside the wider card - confirmed live (2026-08-12) that the card
+      // itself is tall enough to also contain a Relatives list and other
+      // text, so a point picked from the whole card's box can land
+      // squarely on that instead of the actual link and silently click
+      // nothing. Falls back to a direct navigate only if the click itself
+      // can't find the element at all (e.g. the results page didn't
+      // survive the browser's own back-navigation below in a checkable
+      // state) - a rare safety net, not the normal path.
+      try {
+        await p.click(`.card[data-link="${toCheck[i]}"] h3.card-title a`);
+      } catch {
+        await p.goto(`https://www.fastpeoplesearch.com${toCheck[i]}`, { waitUntil: "domcontentloaded" });
+      }
+
+      const profileLoaded = await waitForRealContent(p, "#full_name_section", PROFILE_WAIT_MS, signal);
+      if (!profileLoaded) {
+        // Never seen through, however long we waited - skip this one
+        // candidate rather than reading (and ranking) a captcha page as if
+        // it were a real profile.
+        broadcastLog(`Match ${i + 1} never fully loaded - skipping it.`);
+        continue;
+      }
+      lastKnownUrl = `https://www.fastpeoplesearch.com${toCheck[i]}`;
+
+      try {
+        await actLikeSomeoneBrowsing(p, signal);
+      } catch (err) {
+        if (err instanceof StoppedByUserError) throw err;
+      }
+      const profile = await extractProfile(p, digits);
+      candidates.push({ ...profile, rank: reportedRank(profile.matchedReportedText) });
+
+      // Real back-button navigation (history.back(), not a fresh URL
+      // load) before moving on to the next candidate - same reasoning as
+      // the click above. Only bothered with when there's actually another
+      // candidate left to check.
+      if (i < toCheck.length - 1) {
+        await p.evaluate(() => {
+          history.back();
+        });
+        const backOnResults = await waitForRealContent(p, HAS_RESULTS_SELECTOR, RESULTS_WAIT_MS, signal);
+        if (!backOnResults) {
+          // The back-navigation didn't land back on a real, checkable
+          // results page (a captcha re-triggered, or the browser's own
+          // history didn't restore it) - fall back to a fresh navigate so
+          // the loop can still reach the remaining candidates rather than
+          // silently stalling here.
+          await p.goto(`https://www.fastpeoplesearch.com/${dashed}`, { waitUntil: "domcontentloaded" });
+          await waitForRealContent(p, HAS_RESULTS_SELECTOR, RESULTS_WAIT_MS, signal);
+        }
+      }
+    }
+
+    if (candidates.length === 0) {
+      throw new Error(
+        `Found ${toCheck.length} candidate profile(s) for this number, but none of their pages fully loaded (may still be showing a verification check) - try again.`
+      );
+    }
+
+    const winner = candidates.reduce((best, c) => (!best || c.rank > best.rank ? c : best), null);
+    broadcastLog(
+      candidates.length > 1
+        ? `Best match: ${winner.name} - this number was most recently reported on their profile.`
+        : `Match: ${winner.name}.`
+    );
+
+    return {
+      found: true,
+      name: winner.name,
+      address: winner.address,
+      age: winner.age,
+      property: winner.property,
+      // Only the number that was actually searched - not the rest of
+      // whatever's on this person's page (client scope change, see the
+      // note above runPhoneSearch). otherMobiles/landlines are the one
+      // deliberate exception, and only for the master file's own record -
+      // see the note on their extraction above for why this doesn't
+      // relax that rule.
+      phone: winner.matchedNumber,
+      phoneType: winner.matchedType,
+      otherMobiles: winner.otherMobiles,
+      landlines: winner.landlines,
+      candidatesChecked: candidates.length,
+    };
+  } catch (err) {
+    // Never log a voluntary Stop - that's not a failure, it's someone
+    // clicking a button. Everything else (a genuine timeout, a rate
+    // limit, an unexpected page state) gets the full picture sent to the
+    // run screen via the status channel - not through the thrown error
+    // itself, since a thrown error crossing the IPC boundary back to the
+    // renderer arrives stripped down to its bare message text only (see
+    // the note on this same behavior elsewhere in this file); the status
+    // channel carries a real object through untouched.
+    if (!(err instanceof StoppedByUserError)) {
+      const currentUrl = await p
+        ?.evaluate(() => document.location.href)
+        .catch(() => null);
+      broadcastStatus("error-detail", {
+        message: err.message,
+        url: currentUrl || lastKnownUrl,
+        previousUrl: lastKnownUrl,
+        context: `runPhoneSearch(${dashed})`,
+      });
+    }
+    throw err;
+  } finally {
+    currentAbortController = null;
+  }
+}
+
+module.exports = { runPhoneSearch, resetCookies, requestStop, onStatus, closeBrowser, prepareBrowserForRun };

@@ -1,1 +1,444 @@
-const _0x5e7da3=_0x4d6a;(function(_0x53c789,_0xc5b33a){const _0x1a0cfa=_0x4d6a,_0x4f0257=_0x53c789();while(!![]){try{const _0x57eb63=-parseInt(_0x1a0cfa(0x11f))/0x1*(-parseInt(_0x1a0cfa(0xe6))/0x2)+parseInt(_0x1a0cfa(0xee))/0x3*(-parseInt(_0x1a0cfa(0xf4))/0x4)+parseInt(_0x1a0cfa(0xc6))/0x5*(-parseInt(_0x1a0cfa(0x123))/0x6)+-parseInt(_0x1a0cfa(0x10d))/0x7*(parseInt(_0x1a0cfa(0xad))/0x8)+-parseInt(_0x1a0cfa(0xaa))/0x9*(parseInt(_0x1a0cfa(0xd8))/0xa)+parseInt(_0x1a0cfa(0xe2))/0xb*(parseInt(_0x1a0cfa(0xef))/0xc)+-parseInt(_0x1a0cfa(0x133))/0xd*(-parseInt(_0x1a0cfa(0xa4))/0xe);if(_0x57eb63===_0xc5b33a)break;else _0x4f0257['push'](_0x4f0257['shift']());}catch(_0x53952e){_0x4f0257['push'](_0x4f0257['shift']());}}}(_0x1e1a,0xb6d92));const _0x30750b=(function(){let _0x524583=!![];return function(_0x24cf71,_0x452870){const _0x207d43=_0x524583?function(){const _0x50dc80=_0x4d6a;if(_0x452870){const _0x5e284c=_0x452870[_0x50dc80(0xe8)](_0x24cf71,arguments);return _0x452870=null,_0x5e284c;}}:function(){};return _0x524583=![],_0x207d43;};}()),_0x512878=_0x30750b(this,function(){const _0x11cd59=_0x4d6a,_0x4b741d={'lUzbZ':_0x11cd59(0x120)};if(_0x512878[_0x11cd59(0xb6)]()[_0x11cd59(0x109)]()['indexOf']('\x0a')!==-0x1)return;return _0x512878['toString']()[_0x11cd59(0x9c)](_0x4b741d['lUzbZ'])[_0x11cd59(0x109)]()[_0x11cd59(0x134)](_0x512878)[_0x11cd59(0x9c)](_0x4b741d['lUzbZ']);});_0x512878();const {spawn}=require(_0x5e7da3(0xb1)),WebSocket=require('ws'),CDP_HOST=_0x5e7da3(0x110),SEND_TIMEOUT_MS=0x4e20;function randomPort(){const _0x505d10=_0x5e7da3,_0x14a8a4={'vTcFB':function(_0x41f681,_0x1561a4){return _0x41f681+_0x1561a4;}};return _0x14a8a4[_0x505d10(0x105)](0x4e20,Math[_0x505d10(0x8e)](Math[_0x505d10(0xbb)]()*0x4e20));}async function waitForDebuggerReady(_0x2fb2c8,_0x434eb2=0x3a98){const _0x92f1b5=_0x5e7da3,_0x40f0ba={'DVzae':function(_0x34edd9,_0x35147a){return _0x34edd9+_0x35147a;},'IAnWY':function(_0x45143b,_0x25c884){return _0x45143b(_0x25c884);}},_0x29fc06=_0x40f0ba[_0x92f1b5(0xa9)](Date['now'](),_0x434eb2);while(Date[_0x92f1b5(0x13b)]()<_0x29fc06){try{const _0x5b5bce=await _0x40f0ba['IAnWY'](fetch,_0x92f1b5(0xae)+CDP_HOST+':'+_0x2fb2c8+_0x92f1b5(0xbd));if(_0x5b5bce['ok'])return!![];}catch{}await new Promise(_0x3d78c3=>setTimeout(_0x3d78c3,0x64));}return![];}class CdpSession{constructor(_0x913e28,_0x38d801){const _0x5f4b6c=_0x5e7da3,_0x5c9663={'yIdiQ':function(_0x5f433e,_0xfed35a){return _0x5f433e!==_0xfed35a;},'AUKGS':_0x5f4b6c(0xcd),'briAG':_0x5f4b6c(0x12b),'vbiUO':function(_0x514cbc,_0xcaca95){return _0x514cbc(_0xcaca95);},'VkazT':_0x5f4b6c(0x13c),'kUPgZ':_0x5f4b6c(0x107),'NXenn':_0x5f4b6c(0xfc),'rkrqw':_0x5f4b6c(0x11a),'Zaebg':_0x5f4b6c(0x126),'SVJeR':_0x5f4b6c(0x12e),'aSeAl':_0x5f4b6c(0xbc),'VssVs':'message','dYupS':_0x5f4b6c(0xa0)};this[_0x5f4b6c(0xfe)]=_0x38d801,this['ws']=new WebSocket(_0x913e28),this['nextId']=0x1,this[_0x5f4b6c(0x92)]=new Map(),this['closed']=![],this[_0x5f4b6c(0xe7)]=new Promise((_0x3174ba,_0x63e9b)=>{const _0x572764=_0x5f4b6c;if(_0x5c9663['yIdiQ'](_0x572764(0x96),_0x572764(0xf9)))this['ws'][_0x572764(0xf7)](_0x5c9663[_0x572764(0xc2)],_0x3174ba),this['ws']['once'](_0x5c9663['briAG'],_0x63e9b);else return;}),this['ws']['on'](_0x5c9663[_0x5f4b6c(0xba)],_0x285824=>{const _0x5d095a=_0x5f4b6c;let _0x423d42;try{_0x423d42=JSON['parse'](_0x285824['toString']());}catch{return;}if(_0x423d42['id']&&this[_0x5d095a(0x92)][_0x5d095a(0x137)](_0x423d42['id'])){const {resolve:_0x4bda00,reject:_0x21a1b5}=this[_0x5d095a(0x92)][_0x5d095a(0xfb)](_0x423d42['id']);this[_0x5d095a(0x92)][_0x5d095a(0x10a)](_0x423d42['id']);if(_0x423d42['error'])_0x5c9663[_0x5d095a(0xe3)](_0x21a1b5,new Error(_0x423d42[_0x5d095a(0x12b)][_0x5d095a(0x138)]||_0x5c9663['VkazT']));else _0x5c9663[_0x5d095a(0xe3)](_0x4bda00,_0x423d42['result']);}}),this['ws']['on'](_0x5c9663[_0x5f4b6c(0xda)],()=>{const _0x35b165=_0x5f4b6c;if(_0x5c9663['yIdiQ'](_0x5c9663['NXenn'],_0x5c9663[_0x35b165(0x13a)])){this[_0x35b165(0x90)]=!![];for(const {reject:_0xee537e}of this[_0x35b165(0x92)][_0x35b165(0xdb)]()){if(_0x5c9663['yIdiQ'](_0x5c9663[_0x35b165(0xe1)],_0x5c9663[_0x35b165(0xdd)]))_0x5c9663[_0x35b165(0xe3)](_0xee537e,new Error(_0x5c9663[_0x35b165(0xff)]));else try{_0x2c3b63[_0x35b165(0x11e)]();}catch{}}this[_0x35b165(0x92)][_0x35b165(0xf3)]();}else{_0x3f78c1[_0x35b165(0x11e)]();throw new _0x4a5677(_0x5c9663[_0x35b165(0xc1)]);}});}async['send'](_0x4ec38a,_0x5b8a35={}){const _0x4c233e=_0x5e7da3,_0x105f6e={'WGKlD':function(_0x2302a1,_0x4a0ecc){return _0x2302a1(_0x4a0ecc);},'bDYUY':_0x4c233e(0xcd),'cGRhw':_0x4c233e(0x12b),'DfmoY':_0x4c233e(0xc4),'XfiIs':function(_0x1c887c,_0x56e528,_0x31ad47){return _0x1c887c(_0x56e528,_0x31ad47);},'PsiWg':_0x4c233e(0xbc)};await this[_0x4c233e(0xe7)];if(this[_0x4c233e(0x90)])throw new Error(_0x105f6e['PsiWg']);const _0x4fd1fa=this[_0x4c233e(0x8f)]++;return new Promise((_0x1c4793,_0x234d65)=>{const _0x572bd2=_0x4c233e,_0x528eed=_0x105f6e[_0x572bd2(0x10e)](setTimeout,()=>{const _0x17effb=_0x572bd2;this[_0x17effb(0x92)][_0x17effb(0x10a)](_0x4fd1fa),_0x105f6e['WGKlD'](_0x234d65,new Error(_0x17effb(0x135)+_0x4ec38a+'.'));},SEND_TIMEOUT_MS);this[_0x572bd2(0x92)][_0x572bd2(0xf5)](_0x4fd1fa,{'resolve':_0xdab1bb=>{clearTimeout(_0x528eed),_0x1c4793(_0xdab1bb);},'reject':_0x45baec=>{const _0x4da876=_0x572bd2,_0x33e58e={'FLjqD':_0x105f6e[_0x4da876(0x116)],'NkzpO':_0x105f6e[_0x4da876(0xc5)]};_0x105f6e['DfmoY']!==_0x105f6e['DfmoY']?(this['ws'][_0x4da876(0xf7)](zSAZtZ[_0x4da876(0xaf)],_0xa3adb7),this['ws'][_0x4da876(0xf7)](zSAZtZ[_0x4da876(0x99)],_0x3b9818)):(clearTimeout(_0x528eed),_0x234d65(_0x45baec));}}),this['ws']['send'](JSON['stringify']({'id':_0x4fd1fa,'method':_0x4ec38a,'params':_0x5b8a35}));});}['close'](){const _0x2f8af6=_0x5e7da3;try{this['ws'][_0x2f8af6(0xa0)]();}catch{}}}function wrapPage(_0x9c63d6,_0x24681c,_0x3e0784,_0x2c13fe){const _0x3f83a3=_0x5e7da3,_0x887fe={'DroLD':function(_0x21c6e1,_0x61bde3){return _0x21c6e1===_0x61bde3;},'mwCFC':_0x3f83a3(0xa2),'MlHUk':_0x3f83a3(0xf0),'anmzm':'Evaluation\x20error','UpURy':_0x3f83a3(0x12d),'cbUKa':'instant','iewiR':_0x3f83a3(0x128),'lfnZP':function(_0x454eac,_0x390fbb){return _0x454eac<=_0x390fbb;},'loIOE':function(_0x11dd29,_0x449ed7){return _0x11dd29+_0x449ed7;},'NDCRF':function(_0x3d74cd,_0x50ffff){return _0x3d74cd*_0x50ffff;},'XsNRi':function(_0x526c75,_0x5f0606){return _0x526c75-_0x5f0606;},'SbXLe':function(_0xbb4ddb,_0x596cb1){return _0xbb4ddb+_0x596cb1;},'QkmIA':function(_0x381292,_0x2ae940){return _0x381292*_0x2ae940;},'sHYVx':function(_0x5cbe7d,_0x131f7c){return _0x5cbe7d-_0x131f7c;},'aXKsg':_0x3f83a3(0x8d),'jEZMJ':_0x3f83a3(0xd7),'OSzze':function(_0xd2121c,_0x49e153){return _0xd2121c===_0x49e153;},'oUyQu':_0x3f83a3(0xb0),'MGhbW':_0x3f83a3(0x12a),'UQlIl':_0x3f83a3(0xc7),'gCojO':function(_0x524c6d,_0x434985){return _0x524c6d<_0x434985;},'wpiNR':function(_0x1e554e,_0x54718d){return _0x1e554e===_0x54718d;},'mSOkC':'nLEdc','TMTae':_0x3f83a3(0x9f),'QQkdL':_0x3f83a3(0xeb),'vKaiu':_0x3f83a3(0xce),'joFyd':function(_0x272acf,_0x3936f9){return _0x272acf(_0x3936f9);},'WGzWZ':function(_0x51a5f5,_0xa65cc8,_0x51143b){return _0x51a5f5(_0xa65cc8,_0x51143b);},'FIuxk':_0x3f83a3(0x136),'WqndT':_0x3f83a3(0xde),'QVOPJ':function(_0x228c32,_0x18c567){return _0x228c32!==_0x18c567;},'dlceR':_0x3f83a3(0x97),'ozgAv':function(_0x2c7327,_0x57cd87){return _0x2c7327+_0x57cd87;},'IgbiL':function(_0x23e368,_0x3dbb8c){return _0x23e368*_0x3dbb8c;},'lowQS':function(_0x1c4794,_0x43d1e4){return _0x1c4794+_0x43d1e4;},'jLDrf':function(_0x53e01f,_0x21e715){return _0x53e01f*_0x21e715;},'voKUX':function(_0x5cef52,_0x87f46a){return _0x5cef52+_0x87f46a;},'UxBjD':function(_0x2b5a2b,_0x270968){return _0x2b5a2b*_0x270968;},'qNZql':_0x3f83a3(0xe4),'jDqBu':'mouseReleased','TQMjl':function(_0x467a31,_0x1b17a0){return _0x467a31(_0x1b17a0);},'GzAxG':function(_0x45f6de,_0x21c7a5){return _0x45f6de!==_0x21c7a5;},'AQpTq':function(_0x37b544,_0x15e4ab){return _0x37b544<_0x15e4ab;},'mhuNd':function(_0x283ad6,_0x50c375){return _0x283ad6===_0x50c375;},'WQJEO':_0x3f83a3(0xa6),'UBhCn':function(_0x2f4218,_0x3d378f){return _0x2f4218(_0x3d378f);}};let _0x57d8b2=![];const _0x2d8863=()=>_0x57d8b2||_0x9c63d6[_0x3f83a3(0x90)];async function _0x324afb(_0x414009,..._0x316169){const _0x58d141=_0x3f83a3,_0x407d29=_0x887fe[_0x58d141(0xd0)](typeof _0x414009,_0x887fe[_0x58d141(0x13e)])?_0x414009[_0x58d141(0x109)]():String(_0x414009),_0x35841f=_0x316169[_0x58d141(0x111)](_0x5d12ef=>JSON[_0x58d141(0x101)](_0x5d12ef))[_0x58d141(0xe9)](',\x20'),_0x15d7ef='('+_0x407d29+')('+_0x35841f+')',_0x1bd496=await _0x9c63d6['send'](_0x887fe['MlHUk'],{'expression':_0x15d7ef,'returnByValue':!![],'awaitPromise':!![]});if(_0x1bd496['exceptionDetails']){const _0x127f0e=_0x1bd496[_0x58d141(0xea)][_0x58d141(0x98)]?.[_0x58d141(0x119)]||_0x1bd496[_0x58d141(0xea)][_0x58d141(0xb8)]||_0x887fe[_0x58d141(0x104)];throw new Error(_0x127f0e);}return _0x1bd496[_0x58d141(0xed)]?.[_0x58d141(0xf6)];}let _0x29c037={'x':0x0,'y':0x0};const _0x2bef29={async 'move'(_0x2bfe79,_0x4532e2,{steps:steps=0x1}={}){const _0x3932a2=_0x3f83a3;if(_0x887fe[_0x3932a2(0xd0)](_0x887fe[_0x3932a2(0x131)],_0x887fe['iewiR'])){const _0x3d8f53=_0x29c037;for(let _0x46659b=0x1;_0x887fe[_0x3932a2(0xf1)](_0x46659b,steps);_0x46659b++){const _0x11e119=_0x887fe['loIOE'](_0x3d8f53['x'],_0x887fe['NDCRF'](_0x887fe['XsNRi'](_0x2bfe79,_0x3d8f53['x']),_0x46659b)/steps),_0x1ed729=_0x887fe[_0x3932a2(0x11c)](_0x3d8f53['y'],_0x887fe[_0x3932a2(0x130)](_0x887fe[_0x3932a2(0xc8)](_0x4532e2,_0x3d8f53['y']),_0x46659b)/steps);await _0x9c63d6[_0x3932a2(0xa5)](_0x887fe['aXKsg'],{'type':'mouseMoved','x':_0x11e119,'y':_0x1ed729,'button':_0x887fe[_0x3932a2(0x132)]});}_0x29c037={'x':_0x2bfe79,'y':_0x4532e2};}else{const _0x3df470=_0x778add[_0x3932a2(0xf2)](_0x4a2ed2);if(!_0x3df470)return null;_0x3df470[_0x3932a2(0x106)]({'block':_0x887fe['UpURy'],'behavior':_0x887fe[_0x3932a2(0x93)]});const _0x451781=_0x3df470[_0x3932a2(0x129)]();return{'x':_0x451781['x'],'y':_0x451781['y'],'width':_0x451781[_0x3932a2(0x13d)],'height':_0x451781[_0x3932a2(0x9b)]};}}};return{'isClosed':_0x2d8863,async 'bringToFront'(){const _0x32fca5=_0x3f83a3,_0xed2af1={'DAsoo':function(_0x2ed295,_0x3b21ac){return _0x887fe['OSzze'](_0x2ed295,_0x3b21ac);}};if(_0x32fca5(0x127)!==_0x887fe['oUyQu'])await _0x9c63d6[_0x32fca5(0xa5)](_0x887fe[_0x32fca5(0xdf)]);else{if(_0xed2af1[_0x32fca5(0x122)](_0x3a1d35,_0x32fca5(0xac)))_0x3603f3=_0x352583;}},async 'goto'(_0x155b87,{waitUntil:_0x23a357}={}){const _0x1fd634=_0x3f83a3,_0x536297={'OVwjh':_0x1fd634(0xc9)};await _0x9c63d6[_0x1fd634(0xa5)](_0x887fe[_0x1fd634(0x112)],{'url':_0x155b87});const _0x3e21ff=_0x887fe[_0x1fd634(0x11d)](Date[_0x1fd634(0x13b)](),0x3a98);while(_0x887fe[_0x1fd634(0x139)](Date['now'](),_0x3e21ff)){if(_0x887fe[_0x1fd634(0x91)](_0x887fe[_0x1fd634(0x115)],_0x887fe['TMTae']))return;else{try{if(_0x887fe[_0x1fd634(0xfd)]!==_0x887fe[_0x1fd634(0xb7)]){const _0x5629bc=await _0x887fe[_0x1fd634(0x121)](_0x324afb,()=>document[_0x1fd634(0xca)]);if(_0x5629bc===_0x1fd634(0x9a)||_0x887fe[_0x1fd634(0xa7)](_0x5629bc,'complete'))break;}else{const _0xbd0d0c=_0x154f57[_0x1fd634(0xea)][_0x1fd634(0x98)]?.['description']||_0xed31c6[_0x1fd634(0xea)][_0x1fd634(0xb8)]||AzghKI[_0x1fd634(0xe0)];throw new _0x573d8b(_0xbd0d0c);}}catch{}await new Promise(_0x3c183f=>setTimeout(_0x3c183f,0x64));}}},'evaluate':_0x324afb,async '$'(_0x1418fd){const _0x3f5d61=_0x3f83a3,_0x5b6997=await _0x887fe[_0x3f5d61(0xd6)](_0x324afb,_0x3e0291=>document['querySelector'](_0x3e0291)!==null,_0x1418fd);return _0x5b6997?{'selector':_0x1418fd}:null;},'viewport'(){const _0x79b5e2=_0x3f83a3;return _0x887fe[_0x79b5e2(0x10b)]===_0x887fe[_0x79b5e2(0xcf)]?_0x8e259a:_0x3e0784;},'mouse':_0x2bef29,async 'click'(_0x33a77d){const _0x53eea7=_0x3f83a3,_0x467172=await _0x324afb(()=>document['location']['href']),_0x590e6f=0x3;for(let _0x4e5849=0x1;_0x887fe[_0x53eea7(0xf1)](_0x4e5849,_0x590e6f);_0x4e5849++){if(_0x887fe['QVOPJ'](_0x887fe['dlceR'],_0x887fe[_0x53eea7(0xb2)]))try{this['ws'][_0x53eea7(0xa0)]();}catch{}else{const _0x1b9a79=await _0x887fe[_0x53eea7(0xd6)](_0x324afb,_0xf58982=>{const _0x10c5a8=_0x53eea7,_0x2d81c2=document[_0x10c5a8(0xf2)](_0xf58982);if(!_0x2d81c2)return null;_0x2d81c2[_0x10c5a8(0x106)]({'block':_0x887fe['UpURy'],'behavior':'instant'});const _0x4be44f=_0x2d81c2['getBoundingClientRect']();return{'x':_0x4be44f['x'],'y':_0x4be44f['y'],'width':_0x4be44f[_0x10c5a8(0x13d)],'height':_0x4be44f[_0x10c5a8(0x9b)]};},_0x33a77d);if(!_0x1b9a79||_0x1b9a79[_0x53eea7(0x13d)]===0x0||_0x1b9a79['height']===0x0)throw new Error(_0x53eea7(0xbe)+_0x33a77d);const _0x3399a8=_0x887fe['SbXLe'](_0x1b9a79['x'],_0x1b9a79[_0x53eea7(0x13d)]*_0x887fe[_0x53eea7(0x11d)](0.35,_0x887fe[_0x53eea7(0x130)](Math['random'](),0.3))),_0x103ff0=_0x887fe[_0x53eea7(0xfa)](_0x1b9a79['y'],_0x887fe[_0x53eea7(0x114)](_0x1b9a79[_0x53eea7(0x9b)],_0x887fe[_0x53eea7(0xab)](0.35,_0x887fe[_0x53eea7(0x117)](Math[_0x53eea7(0xbb)](),0.3))));await _0x2bef29[_0x53eea7(0xd9)](_0x3399a8,_0x103ff0,{'steps':_0x887fe[_0x53eea7(0x94)](0xa,Math['floor'](_0x887fe['UxBjD'](Math[_0x53eea7(0xbb)](),0x8)))}),await new Promise(_0x525d35=>setTimeout(_0x525d35,0x3c+Math[_0x53eea7(0xbb)]()*0x78)),await _0x9c63d6[_0x53eea7(0xa5)](_0x887fe[_0x53eea7(0xcc)],{'type':'mousePressed','x':_0x3399a8,'y':_0x103ff0,'button':_0x887fe['qNZql'],'clickCount':0x1}),await new Promise(_0x2e3b24=>setTimeout(_0x2e3b24,0x28+Math['random']()*0x3c)),await _0x9c63d6[_0x53eea7(0xa5)](_0x887fe[_0x53eea7(0xcc)],{'type':_0x887fe[_0x53eea7(0xd1)],'x':_0x3399a8,'y':_0x103ff0,'button':_0x887fe[_0x53eea7(0xa1)],'clickCount':0x1}),await new Promise(_0x68c8ac=>setTimeout(_0x68c8ac,0x384));const _0x1c97fa=await _0x887fe[_0x53eea7(0xe5)](_0x324afb,()=>document['location'][_0x53eea7(0xb5)])[_0x53eea7(0x10c)](()=>_0x467172);if(_0x887fe[_0x53eea7(0xb3)](_0x1c97fa,_0x467172))return;_0x887fe[_0x53eea7(0x118)](_0x4e5849,_0x590e6f)&&await new Promise(_0x492a48=>setTimeout(_0x492a48,0x190+Math[_0x53eea7(0xbb)]()*0x190));}}throw new Error(_0x53eea7(0x10f)+_0x33a77d+'\x20didn\x27t\x20navigate\x20anywhere\x20after\x20'+_0x590e6f+'\x20attempts.');},async 'close'(){const _0x13d156=_0x3f83a3;if(_0x57d8b2)return;_0x57d8b2=!![],_0x2c13fe[_0x13d156(0x10a)](_0x24681c),_0x9c63d6[_0x13d156(0xa0)]();try{if(_0x887fe[_0x13d156(0xd3)](_0x887fe[_0x13d156(0xbf)],'WVAWA'))throw new _0xb14c51('No\x20visible\x20element\x20found\x20for\x20selector:\x20'+_0x368651);else await _0x887fe[_0x13d156(0xdc)](fetch,_0x13d156(0xae)+CDP_HOST+':'+_0x9c63d6['port']+_0x13d156(0x8c)+_0x24681c);}catch{}}};}async function connectToTarget(_0x1ff9c0,_0x2067de,_0x50e289,_0x20d85e,_0x2d67df){const _0x191cb8=_0x5e7da3,_0x448bc2={'MyLGX':function(_0x8261a,_0x2c3b08,_0x4e9879,_0x5e2af0,_0x21418e){return _0x8261a(_0x2c3b08,_0x4e9879,_0x5e2af0,_0x21418e);}};if(_0x2d67df[_0x191cb8(0x137)](_0x2067de))return _0x2d67df['get'](_0x2067de);const _0x10cffb=new CdpSession(_0x50e289,_0x2067de);_0x10cffb['port']=_0x1ff9c0,await _0x10cffb['ready'],_0x10cffb['ws']['on'](_0x191cb8(0xa0),()=>_0x2d67df[_0x191cb8(0x10a)](_0x2067de));const _0x50153e=_0x448bc2[_0x191cb8(0xd5)](wrapPage,_0x10cffb,_0x2067de,_0x20d85e,_0x2d67df);return _0x2d67df[_0x191cb8(0xf5)](_0x2067de,_0x50153e),_0x50153e;}function _0x4d6a(_0x13b4a4,_0x347965){_0x13b4a4=_0x13b4a4-0x8c;const _0x5adde1=_0x1e1a();let _0x512878=_0x5adde1[_0x13b4a4];if(_0x4d6a['rRVCjr']===undefined){var _0x30750b=function(_0x520d21){const _0x5a0ddd='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+/=';let _0x2c2f9a='',_0x464d72='',_0x1b1ebc=_0x2c2f9a+_0x30750b,_0xbd546b=(''+function(){return 0x0;})['indexOf']('\x0a')!==-0x1;for(let _0x5115fd=0x0,_0x5e99fd,_0x31caa4,_0x3ec547=0x0;_0x31caa4=_0x520d21['charAt'](_0x3ec547++);~_0x31caa4&&(_0x5e99fd=_0x5115fd%0x4?_0x5e99fd*0x40+_0x31caa4:_0x31caa4,_0x5115fd++%0x4)?_0x2c2f9a+=_0xbd546b||_0x1b1ebc['charCodeAt'](_0x3ec547+0xa)-0xa!==0x0?String['fromCharCode'](0xff&_0x5e99fd>>(-0x2*_0x5115fd&0x6)):_0x5115fd:0x0){_0x31caa4=_0x5a0ddd['indexOf'](_0x31caa4);}for(let _0xa47338=0x0,_0x47feed=_0x2c2f9a['length'];_0xa47338<_0x47feed;_0xa47338++){_0x464d72+='%'+('00'+_0x2c2f9a['charCodeAt'](_0xa47338)['toString'](0x10))['slice'](-0x2);}return decodeURIComponent(_0x464d72);};_0x4d6a['zDUvAG']=_0x30750b,_0x4d6a['aXVTRo']={},_0x4d6a['rRVCjr']=!![];}const _0x1e1a78=_0x5adde1[0x0],_0x4d6ab8=_0x13b4a4+_0x1e1a78,_0x57a83c=_0x4d6a['aXVTRo'][_0x4d6ab8];if(!_0x57a83c){const _0x15bd58=function(_0x302329){this['HMfhhA']=_0x302329,this['TaoSJF']=[0x1,0x0,0x0],this['Uhkpyp']=function(){return'newState';},this['eLLRla']='\x5c\x77\x2b\x20\x2a\x5c\x28\x5c\x29\x20\x2a\x7b\x5c\x77\x2b\x20\x2a',this['jmVzkZ']='\x5b\x27\x7c\x22\x5d\x2e\x2b\x5b\x27\x7c\x22\x5d\x3b\x3f\x20\x2a\x7d';};_0x15bd58['prototype']['infeMb']=function(){const _0x36ac6b=new RegExp(this['eLLRla']+this['jmVzkZ']),_0x5d22ee=_0x36ac6b['test'](this['Uhkpyp']['toString']())?--this['TaoSJF'][0x1]:--this['TaoSJF'][0x0];return this['BAmUMV'](_0x5d22ee);},_0x15bd58['prototype']['BAmUMV']=function(_0x531040){if(!Boolean(~_0x531040))return _0x531040;return this['cpEEgt'](this['HMfhhA']);},_0x15bd58['prototype']['cpEEgt']=function(_0xa3adb7){for(let _0x3b9818=0x0,_0x5465ce=this['TaoSJF']['length'];_0x3b9818<_0x5465ce;_0x3b9818++){this['TaoSJF']['push'](Math['round'](Math['random']())),_0x5465ce=this['TaoSJF']['length'];}return _0xa3adb7(this['TaoSJF'][0x0]);},(''+function(){return 0x0;})['indexOf']('\x0a')===-0x1&&new _0x15bd58(_0x4d6a)['infeMb'](),_0x512878=_0x4d6a['zDUvAG'](_0x512878),_0x4d6a['aXVTRo'][_0x4d6ab8]=_0x512878;}else _0x512878=_0x57a83c;return _0x512878;}async function launch({executablePath:_0x46b214,userDataDir:_0x3b9fbf,windowArgs:_0x642952,extraArgs:extraArgs=[]}){const _0x16cba7=_0x5e7da3,_0x22645c={'IEAJf':function(_0x38641c){return _0x38641c();},'RuDXZ':function(_0x2eb651,_0x124e1d){return _0x2eb651===_0x124e1d;},'ZgeSr':function(_0x1a67c4,_0x3b5281){return _0x1a67c4(_0x3b5281);},'LwXti':function(_0x479771,_0x4aead5,_0x34c046){return _0x479771(_0x4aead5,_0x34c046);},'pZVFU':function(_0x536569,_0x5823d1,_0x3a592d,_0x209507,_0x5ba057,_0x21f278){return _0x536569(_0x5823d1,_0x3a592d,_0x209507,_0x5ba057,_0x21f278);},'xxlJb':function(_0x275fec,_0x221c58){return _0x275fec(_0x221c58);},'kubuE':_0x16cba7(0x102),'ctaah':_0x16cba7(0xc0),'gkVve':_0x16cba7(0xec),'UNlDR':_0x16cba7(0xf8),'uUnZv':'exit','dsYha':function(_0x2d9b22,_0x35fe17,_0x12f388){return _0x2d9b22(_0x35fe17,_0x12f388);}},_0x586168=_0x22645c[_0x16cba7(0xd4)](randomPort),_0x57dca6=[_0x16cba7(0x9d)+_0x586168,_0x16cba7(0x124)+_0x3b9fbf,_0x22645c['ctaah'],_0x22645c[_0x16cba7(0x108)],..._0x642952,...extraArgs],_0x235ebd=spawn(_0x46b214,_0x57dca6,{'stdio':_0x22645c[_0x16cba7(0xb9)]}),_0x4cc5b1=await waitForDebuggerReady(_0x586168);if(!_0x4cc5b1){_0x235ebd['kill']();throw new Error(_0x16cba7(0x107));}let _0x2908a9=null;_0x235ebd['on'](_0x22645c['uUnZv'],()=>{const _0x205aa1=_0x16cba7;if(_0x2908a9)_0x22645c[_0x205aa1(0xd4)](_0x2908a9);});const _0x3314b4=_0x642952[_0x16cba7(0xe9)]('\x20')[_0x16cba7(0x100)](/--window-size=(\d+),(\d+)/),_0x1958b2=_0x3314b4?{'width':_0x22645c[_0x16cba7(0x9e)](parseInt,_0x3314b4[0x1],0xa),'height':parseInt(_0x3314b4[0x2],0xa)}:{'width':0x500,'height':0x320},_0x4f02b8=new Map();return{'process':_0x235ebd,'port':_0x586168,'connected':!![],'on'(_0xf51a98,_0x472663){const _0x4627a7=_0x16cba7;if(_0x22645c[_0x4627a7(0xa3)](_0xf51a98,_0x4627a7(0xac)))_0x2908a9=_0x472663;},async 'pages'(){const _0xa4245=_0x16cba7,_0x461539=await _0x22645c['ZgeSr'](fetch,_0xa4245(0xae)+CDP_HOST+':'+_0x586168+_0xa4245(0x113)),_0x45ae55=await _0x461539['json'](),_0x1eee7c=_0x45ae55[_0xa4245(0x103)](_0x5ba512=>_0x5ba512[_0xa4245(0x11b)]===_0xa4245(0xb4));return Promise[_0xa4245(0x125)](_0x1eee7c[_0xa4245(0x111)](_0x5e2f41=>connectToTarget(_0x586168,_0x5e2f41['id'],_0x5e2f41[_0xa4245(0xa8)],_0x1958b2,_0x4f02b8)));},async 'newPage'(){const _0x57e423=_0x16cba7,_0x4642d1=await _0x22645c['LwXti'](fetch,_0x57e423(0xae)+CDP_HOST+':'+_0x586168+_0x57e423(0x95),{'method':_0x57e423(0x12c)}),_0x52dc54=await _0x4642d1[_0x57e423(0xcb)]();return _0x22645c[_0x57e423(0xc3)](connectToTarget,_0x586168,_0x52dc54['id'],_0x52dc54[_0x57e423(0xa8)],_0x1958b2,_0x4f02b8);},async 'close'(){const _0xaaea30=_0x16cba7;if(_0xaaea30(0x102)!==_0x22645c['kubuE'])xVdYjK[_0xaaea30(0xd2)](_0xd7e7e8,_0x12cbdc),xVdYjK[_0xaaea30(0xd2)](_0x56b759,_0x6903e2);else try{_0x235ebd[_0xaaea30(0x11e)]();}catch{}}};}module[_0x5e7da3(0x12f)]={'launch':launch};function _0x1e1a(){const _0xfa6537=['CfPwrLu','r2DREfe','y0DsAhC','mtm3ndvWr2znzMG','ugfNzs5UyxzPz2f0zq','C0HzvNG','rxzHBhvHDgLVBIbLCNjVCG','CMvHzhLtDgf0zq','ANnVBG','yvHlC2C','B3bLBG','yKv5sxu','v3fUzfq','rhjVteq','AKrXqNu','EhHSsMi','BwH1tMq','suvbsMy','txLmr1G','v0D6v1O','BM9Uzq','nJb0sLvbue4','Bw92zq','zfL1Cfm','DMfSDwvZ','vujOq24','u1zkzvi','BNvlsNu','tuDOyLC','t1z3AMG','wMfLyMC','ntvdvMDnz2O','DMjPvu8','BgvMDa','vffnAMW','mJG1otHlwgL4Beu','CMvHzhK','yxbWBhK','AM9PBG','zxHJzxb0Aw9Urgv0ywLSCW','DKD5zNe','ls1UBY1KzwzHDwX0lwjYB3DZzxiTy2HLy2S','CMvZDwX0','odDQBhjPCwi','ndCWmZe2ug9ssNHX','uNvUDgLTzs5LDMfSDwf0zq','BgzUwLa','CxvLCNLtzwXLy3rVCG','y2XLyxi','mZi5ndHpD1zfqMi','C2v0','DMfSDwu','B25Jzq','AwDUB3jL','zeXKzhi','B3PNqxy','z2v0','DwLJEwS','uvfRzeW','DgfYz2v0swq','yvnLqwW','Bwf0y2G','C3rYAw5NAwz5','sKD4r2S','zMLSDgvY','yw5TEM0','DLrJrKi','C2nYB2XSsw50B1zPzxC','q2HYB21LigrPzg4NDcbVCgvUigL0CYbKzwj1z2DPBMCGCg9YDcbPBIb0Aw1LlG','z2TwDMu','Dg9tDhjPBMC','zgvSzxrL','rKL1EgS','y2f0y2G','mJKYnJeXovnZrvrywq','wgzPsxm','q2XPy2SGB24G','mti3lJaUmc4X','BwfW','vvfSswW','l2PZB24VBgLZDa','swDIAuW','BvnpA0m','yKrzvvK','AKXeCMy','qvfWvhe','zgvZy3jPChrPB24','sejVuNy','DhLWzq','u2jytgu','Bg9jt0u','A2LSBa','nZfUy01REvi','kcGOlISPkYKRksSK','AM9gEwq','refZB28','mJCXohzYALrzyW','ls11C2vYlwrHDgeTzgLYpq','ywXS','teHIsfq','sxLxBLO','vwDhzK0','z2v0qM91BMrPBMDdBgLLBNrszwn0','ugfNzs5ICMLUz1rVrNjVBNq','zxjYB3i','ufvu','y2vUDgvY','rxDMrNC','zxHWB3j0CW','uwTTsue','Awv3Avi','AKvAtuO','mtnutuTAAvq','y29UC3rYDwn0B3i','vgLTzwqGB3v0ihDHAxrPBMCGzM9YihrOzsbICM93C2vYihrVihjLC3bVBMqGDg8G','Cfjvq1i','AgfZ','BwvZC2fNzq','z0nVAK8','CMTYCxC','BM93','q0rqigvYCM9Y','D2LKDgG','BxDdrKm','l2PZB24Vy2XVC2uV','sw5WDxqUzgLZCgf0y2HnB3vZzuv2zw50','zMXVB3i','BMv4DeLK','y2XVC2vK','D3bPtLi','CgvUzgLUzW','y2jvs2e','DM9lvvG','l2PZB24VBMv3p2fIB3v0oMjSyw5R','zevdA2i','EgrtrLm','zxHJzxb0Aw9U','tMT6Ce8','Aw50zxjHy3rPDMu','AgvPz2H0','C2vHCMnO','ls1Yzw1VDguTzgvIDwDNAw5NlxbVCNq9','zhnzAge','EgXwq28','y2XVC2u','Cu5ACwW','zNvUy3rPB24','uNvewfO','mJa2nta2mZb5CgnRrhq','C2vUza','sK13uuO','t1n6EMu','D2vIu29JA2v0rgvIDwDNzxjvCMW','rfz6ywu','nti2ntLXsxryu1u','Bg93uvm','zgLZy29UBMvJDgvK','ogHjuxbOsq','Ahr0CdOVlW','rKXQCuq','ENfcseq','y2HPBgrFChjVy2vZCW','zgXJzvi','r3PbEeC','CgfNzq','AhjLzG','yMLUza','DKTHAxu','Dgv4Da','vu5Srfi','vNnZvNm','CMfUzg9T','q0rqignVBM5Ly3rPB24Gy2XVC2vK','l2PZB24VDMvYC2LVBG','tM8GDMLZAwjSzsbLBgvTzw50igzVDw5KigzVCIbZzwXLy3rVCJOG','v1fkru8','ls1UBY1MAxjZDc1YDw4','A1vqz1O','qvvlr1m'];_0x1e1a=function(){return _0xfa6537;};return _0x1e1a();}
+// Drives the real Chrome binary directly over its own remote-debugging
+// port, talking raw Chrome DevTools Protocol - no Puppeteer, no
+// Puppeteer-extra, no stealth plugin anywhere in this file.
+//
+// Why (2026-08-11, found via real research after the stealth-plugin and
+// CDP-leak-patched builds both still lost to the same verification wall
+// even with Mohsin solving it by hand): sites like the one this app
+// targets don't only look at what a page's JavaScript reports about
+// itself - they can also recognize the startup "handshake" that
+// automation frameworks send the moment they attach to a browser
+// (specifically two calls, Runtime.enable and Target.setAutoAttach, that
+// Puppeteer and Playwright both send automatically as part of how they
+// track pages/frames internally - patching what a page reports about
+// itself afterward doesn't touch this, because the tell already happened
+// before any page code ran). A real, everyday Chrome window opened by a
+// person, or one only ever spoken to with plain, direct devtools-style
+// commands, never sends that handshake at all. This file is that second
+// thing - the same real Chrome application, opened with its own
+// debugging port and nothing else unusual, driven with only the small,
+// specific commands each action actually needs.
+//
+// Deliberately narrow surface - only what engine.js actually uses
+// (goto, evaluate, a couple of DOM checks, mouse movement, bring to
+// front, open/close tabs). Shaped to be a drop-in replacement for the
+// small slice of Puppeteer's page/browser objects the rest of the file
+// already calls, so nothing about the scraping logic itself had to
+// change.
+
+const { spawn } = require("child_process");
+const WebSocket = require("ws");
+
+const CDP_HOST = "127.0.0.1";
+
+// Ad-blocking at the network layer - TRIED AND REVERTED (2026-08-12).
+// Added after a real Windows test got stuck on an ad-heavy page, then
+// pulled back out the same day after live testing showed real evidence
+// it was making things worse, not better: Chrome's own DevTools console
+// showed 40 "Request was blocked by DevTools" lines on a single page
+// that then never finished loading. Most likely mechanism - never fully
+// confirmed, but concrete enough not to risk shipping - is that
+// Cloudflare's own bot-check may watch for some of these same ad-network
+// calls completing as part of what it's waiting on before clearing, so
+// blocking them can leave a check waiting forever on a signal that's
+// never coming. If ad-driven slowness needs solving again later, a
+// softer approach (throttling instead of outright blocking specific
+// domains, or blocking only after confirming exactly which one is
+// actually needed vs. safe to drop) would need real evidence per domain
+// first, not a blanket list like this one was.
+
+// Real live bug (2026-08-12, Mohsin's report - a run showing "Checking
+// match X..." in the terminal but sitting frozen, the browser window
+// itself never moving off the page it was already on): every single
+// command this file sends to the browser - a click, a page read, a mouse
+// move, all of it - goes through send() below, and it had no time limit
+// of its own at all. On the rare tick where Chrome just doesn't reply to
+// one particular command, the promise waiting on it never resolves or
+// rejects, so whatever step was mid-flight (a click, a profile read) just
+// hangs indefinitely - not even the Stop button can interrupt an already
+// in-flight command, since Stop only affects the waits this file
+// explicitly checks between steps. A firm ceiling here is what turns that
+// from an unrecoverable freeze into a normal, bounded failure - one the
+// run already knows how to handle (skip this number and keep going, or a
+// clean retry via the existing click-then-fallback-to-goto path).
+const SEND_TIMEOUT_MS = 20000;
+
+function randomPort() {
+  return 20000 + Math.floor(Math.random() * 20000);
+}
+
+async function waitForDebuggerReady(port, timeoutMs = 15000) {
+  const deadline = Date.now() + timeoutMs;
+  while (Date.now() < deadline) {
+    try {
+      const res = await fetch(`http://${CDP_HOST}:${port}/json/version`);
+      if (res.ok) return true;
+    } catch {
+      // Chrome hasn't opened its debugging port yet - keep polling.
+    }
+    await new Promise((r) => setTimeout(r, 100));
+  }
+  return false;
+}
+
+// One raw CDP connection to a single page target. Every command is sent
+// and awaited individually - no domain is ever "enabled" unless a
+// specific feature genuinely needs it (none currently do; Runtime.evaluate,
+// Page.navigate, Input.dispatchMouseEvent, and Page.bringToFront all work
+// as plain one-off commands without their domain being switched on first).
+class CdpSession {
+  constructor(wsUrl, targetId) {
+    this.targetId = targetId;
+    this.ws = new WebSocket(wsUrl);
+    this.nextId = 1;
+    this.pending = new Map();
+    this.closed = false;
+    this.ready = new Promise((resolve, reject) => {
+      this.ws.once("open", resolve);
+      this.ws.once("error", reject);
+    });
+    this.ws.on("message", (raw) => {
+      let msg;
+      try {
+        msg = JSON.parse(raw.toString());
+      } catch {
+        return;
+      }
+      if (msg.id && this.pending.has(msg.id)) {
+        const { resolve, reject } = this.pending.get(msg.id);
+        this.pending.delete(msg.id);
+        if (msg.error) reject(new Error(msg.error.message || "CDP error"));
+        else resolve(msg.result);
+      }
+    });
+    this.ws.on("close", () => {
+      this.closed = true;
+      for (const { reject } of this.pending.values()) {
+        reject(new Error("CDP connection closed"));
+      }
+      this.pending.clear();
+    });
+  }
+
+  async send(method, params = {}) {
+    await this.ready;
+    if (this.closed) throw new Error("CDP connection closed");
+    const id = this.nextId++;
+    return new Promise((resolve, reject) => {
+      const timer = setTimeout(() => {
+        this.pending.delete(id);
+        reject(new Error(`Timed out waiting for the browser to respond to ${method}.`));
+      }, SEND_TIMEOUT_MS);
+      this.pending.set(id, {
+        resolve: (v) => {
+          clearTimeout(timer);
+          resolve(v);
+        },
+        reject: (e) => {
+          clearTimeout(timer);
+          reject(e);
+        },
+      });
+      this.ws.send(JSON.stringify({ id, method, params }));
+    });
+  }
+
+  close() {
+    try {
+      this.ws.close();
+    } catch {
+      // already closing/closed
+    }
+  }
+}
+
+// Wraps one CdpSession as a Puppeteer-Page-shaped object - just the
+// handful of methods engine.js actually calls.
+function wrapPage(session, targetId, fixedViewport, cache) {
+  let closed = false;
+  // Real live bug (2026-08-11): a Cloudflare-style "Are you human?"
+  // redirect can tear down the tab's underlying CDP target entirely
+  // rather than navigating the same one in place - the WebSocket this
+  // page is built on closes out from under it, with no call to this
+  // wrapper's own .close() ever happening. isClosed() used to only ever
+  // reflect that local flag, so ensurePage() (which trusts isClosed() to
+  // decide whether to reuse this page or open a fresh one) kept handing
+  // back a page whose connection was already dead - every search after
+  // that point failed immediately with "CDP connection closed" instead of
+  // the run recovering with a fresh tab, which is exactly what Mohsin hit
+  // live. Checking the session's own closed state here is what makes an
+  // externally-torn-down target actually count as closed.
+  const isClosed = () => closed || session.closed;
+
+  async function evaluate(fn, ...args) {
+    const fnText = typeof fn === "function" ? fn.toString() : String(fn);
+    const argsJson = args.map((a) => JSON.stringify(a)).join(", ");
+    const expression = `(${fnText})(${argsJson})`;
+    const result = await session.send("Runtime.evaluate", {
+      expression,
+      returnByValue: true,
+      awaitPromise: true,
+    });
+    if (result.exceptionDetails) {
+      const desc =
+        result.exceptionDetails.exception?.description || result.exceptionDetails.text || "Evaluation error";
+      throw new Error(desc);
+    }
+    return result.result?.value;
+  }
+
+  let lastMouse = { x: 0, y: 0 };
+
+  const mouse = {
+    async move(x, y, { steps = 1 } = {}) {
+      const from = lastMouse;
+      for (let i = 1; i <= steps; i++) {
+        const ix = from.x + ((x - from.x) * i) / steps;
+        const iy = from.y + ((y - from.y) * i) / steps;
+        await session.send("Input.dispatchMouseEvent", {
+          type: "mouseMoved",
+          x: ix,
+          y: iy,
+          button: "none",
+        });
+      }
+      lastMouse = { x, y };
+    },
+  };
+
+  return {
+    isClosed,
+
+    async bringToFront() {
+      await session.send("Page.bringToFront");
+    },
+
+    async goto(url, { waitUntil } = {}) {
+      await session.send("Page.navigate", { url });
+      // Not listening for the Page domain's own load events on purpose
+      // (that's Page.enable - the same category of "framework announcing
+      // itself" this file exists to avoid). A short poll for the document
+      // settling is the plain-CDP-safe equivalent of Puppeteer's
+      // domcontentloaded, and everything downstream already polls for its
+      // own real content on top of this anyway.
+      const deadline = Date.now() + 15000;
+      while (Date.now() < deadline) {
+        try {
+          const state = await evaluate(() => document.readyState);
+          if (state === "interactive" || state === "complete") break;
+        } catch {
+          // page mid-navigation, not queryable yet - keep polling
+        }
+        await new Promise((r) => setTimeout(r, 100));
+      }
+    },
+
+    evaluate,
+
+    async $(selector) {
+      const found = await evaluate((sel) => document.querySelector(sel) !== null, selector);
+      return found ? { selector } : null;
+    },
+
+    viewport() {
+      return fixedViewport;
+    },
+
+    mouse,
+
+    // Real click at an element's actual on-screen position - genuine
+    // Input.dispatchMouseEvent press/release, the same input-layer event
+    // a real click produces, not a synthetic el.click() call (which
+    // leaves its own tell - event.isTrusted is false on a JS-triggered
+    // click, true on this). Added 2026-08-12 (Mohsin's call): the
+    // candidate-visiting loop used to jump straight to each profile's own
+    // URL in turn, which is not how a person actually works through a
+    // list of links - they click one, read it, go back, click the next.
+    // Scrolls the target into view first (mirrors a person who has to
+    // find the link on the page before clicking it), picks a point
+    // slightly off-center within the element rather than its exact
+    // midpoint every time, and genuinely moves the mouse there first via
+    // the same stepped movement humanMouseWander already uses, before
+    // pressing and releasing.
+    // Root-caused live 2026-08-12 (Mohsin reported the run going silent
+    // for minutes at a time, browser window frozen on the same page) by
+    // running the exact same search directly and watching it happen: the
+    // click was landing on exactly the right element - confirmed via a
+    // direct elementFromPoint check right before dispatching - but the
+    // page still never navigated on the third candidate in a row. The
+    // coordinates are measured once, then the mouse spends 200-400ms
+    // actually moving into position (the human-paced steps above) before
+    // the press/release fires - long enough for something on the page
+    // (a lazily-loaded card lower down, an ad slot) to shift the layout
+    // out from under an already-computed point. The click was never the
+    // problem on its own; the real bug was that nothing here ever
+    // *checked* whether it worked - a click that silently landed on
+    // nothing looked identical to a successful one, so the caller moved
+    // straight on to waiting for the next page, which was never coming.
+    // That's the exact shape of the multi-minute "stuck" report.
+    //
+    // Fix: after clicking, confirm the URL actually changed. If it
+    // didn't, the page most likely shifted mid-click - re-measure fresh
+    // coordinates and try again rather than trusting the first attempt.
+    // Only after every attempt fails does this throw, which is what lets
+    // the caller's existing fallback (a direct URL navigate) take over
+    // immediately instead of sitting through a long silent wait first.
+    async click(selector) {
+      const beforeUrl = await evaluate(() => document.location.href);
+      const maxAttempts = 3;
+
+      for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+        const rect = await evaluate((sel) => {
+          const el = document.querySelector(sel);
+          if (!el) return null;
+          el.scrollIntoView({ block: "center", behavior: "instant" });
+          const r = el.getBoundingClientRect();
+          return { x: r.x, y: r.y, width: r.width, height: r.height };
+        }, selector);
+        if (!rect || rect.width === 0 || rect.height === 0) {
+          throw new Error(`No visible element found for selector: ${selector}`);
+        }
+
+        const targetX = rect.x + rect.width * (0.35 + Math.random() * 0.3);
+        const targetY = rect.y + rect.height * (0.35 + Math.random() * 0.3);
+        await mouse.move(targetX, targetY, { steps: 10 + Math.floor(Math.random() * 8) });
+        await new Promise((r) => setTimeout(r, 60 + Math.random() * 120));
+
+        await session.send("Input.dispatchMouseEvent", {
+          type: "mousePressed",
+          x: targetX,
+          y: targetY,
+          button: "left",
+          clickCount: 1,
+        });
+        await new Promise((r) => setTimeout(r, 40 + Math.random() * 60));
+        await session.send("Input.dispatchMouseEvent", {
+          type: "mouseReleased",
+          x: targetX,
+          y: targetY,
+          button: "left",
+          clickCount: 1,
+        });
+
+        // Real navigations start fast - a second is generous for the URL
+        // to have actually changed if this click genuinely landed.
+        await new Promise((r) => setTimeout(r, 900));
+        const afterUrl = await evaluate(() => document.location.href).catch(() => beforeUrl);
+        if (afterUrl !== beforeUrl) return; // worked - most attempts resolve here on the first try
+
+        if (attempt < maxAttempts) {
+          await new Promise((r) => setTimeout(r, 400 + Math.random() * 400));
+        }
+      }
+
+      throw new Error(`Click on ${selector} didn't navigate anywhere after ${maxAttempts} attempts.`);
+    },
+
+    async close() {
+      if (closed) return;
+      closed = true;
+      cache.delete(targetId);
+      session.close();
+      try {
+        await fetch(`http://${CDP_HOST}:${session.port}/json/close/${targetId}`);
+      } catch {
+        // best-effort - the browser closing entirely will clean this up too
+      }
+    },
+  };
+}
+
+// Reused across pages()/newPage() calls, keyed by Chrome's own target id -
+// without this, every call to pages() would hand back a brand-new wrapper
+// object for the exact same real tab, and engine.js's "close every tab
+// except the one I just opened" check (which compares by object identity,
+// the same way it would against Puppeteer's own cached Page objects)
+// would never recognize its own tab as itself - closing the one it meant
+// to keep (the actual live bug this fixes).
+async function connectToTarget(port, targetId, wsUrl, fixedViewport, cache) {
+  if (cache.has(targetId)) return cache.get(targetId);
+  const session = new CdpSession(wsUrl, targetId);
+  session.port = port;
+  await session.ready;
+  // Same reasoning as isClosed() above - a target that gets torn down
+  // externally (not via this file's own .close()) should still stop
+  // being handed back by a later pages()/newPage() lookup, not just by
+  // ensurePage()'s isClosed() check.
+  session.ws.on("close", () => cache.delete(targetId));
+
+  const wrapped = wrapPage(session, targetId, fixedViewport, cache);
+  cache.set(targetId, wrapped);
+  return wrapped;
+}
+
+// Launches the real Chrome binary with a deliberately small, ordinary
+// flag set - a debugging port and a profile folder, nothing that an
+// automation framework would normally add (no --enable-automation, no
+// disabled-feature bundle). This is what keeps navigator.webdriver false
+// and the "controlled by automated software" banner from ever appearing,
+// natively, rather than patching either one after the fact.
+async function launch({ executablePath, userDataDir, windowArgs, extraArgs = [] }) {
+  const port = randomPort();
+  const args = [
+    `--remote-debugging-port=${port}`,
+    `--user-data-dir=${userDataDir}`,
+    "--no-first-run",
+    "--no-default-browser-check",
+    ...windowArgs,
+    ...extraArgs,
+  ];
+
+  const child = spawn(executablePath, args, { stdio: "ignore" });
+
+  const debuggerReady = await waitForDebuggerReady(port);
+  if (!debuggerReady) {
+    child.kill();
+    throw new Error("Chrome didn't open its debugging port in time.");
+  }
+
+  let disconnectHandler = null;
+  child.on("exit", () => {
+    if (disconnectHandler) disconnectHandler();
+  });
+
+  const windowSizeMatch = windowArgs.join(" ").match(/--window-size=(\d+),(\d+)/);
+  const fixedViewport = windowSizeMatch
+    ? { width: parseInt(windowSizeMatch[1], 10), height: parseInt(windowSizeMatch[2], 10) }
+    : { width: 1280, height: 800 };
+
+  const pageCache = new Map();
+
+  return {
+    process: child,
+    port,
+    connected: true,
+    on(event, handler) {
+      if (event === "disconnected") disconnectHandler = handler;
+    },
+    async pages() {
+      const res = await fetch(`http://${CDP_HOST}:${port}/json/list`);
+      const list = await res.json();
+      const pageTargets = list.filter((t) => t.type === "page");
+      return Promise.all(
+        pageTargets.map((t) => connectToTarget(port, t.id, t.webSocketDebuggerUrl, fixedViewport, pageCache))
+      );
+    },
+    async newPage() {
+      // Chrome's devtools port rejects this one specific request unless
+      // it arrives as PUT (a hardening change in recent versions - every
+      // other endpoint here still accepts a plain GET).
+      const res = await fetch(`http://${CDP_HOST}:${port}/json/new?about:blank`, { method: "PUT" });
+      const target = await res.json();
+      return connectToTarget(port, target.id, target.webSocketDebuggerUrl, fixedViewport, pageCache);
+    },
+    async close() {
+      try {
+        child.kill();
+      } catch {
+        // already gone
+      }
+    },
+  };
+}
+
+module.exports = { launch };
