@@ -246,6 +246,12 @@ function wrapPage(session, targetId, fixedViewport, cache) {
 
     mouse,
 
+    // Currently unused (2026-08-12, later same day) - engine.js's
+    // candidate-visiting loop went back to direct href navigation, the
+    // click+back-navigation approach below it was built for didn't work
+    // well live. Left in place rather than deleted, in case it's worth
+    // revisiting later; not currently called from anywhere.
+    //
     // Real click at an element's actual on-screen position - genuine
     // Input.dispatchMouseEvent press/release, the same input-layer event
     // a real click produces, not a synthetic el.click() call (which

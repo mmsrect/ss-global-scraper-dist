@@ -1113,24 +1113,14 @@ async function runPhoneSearch(rawPhone) {
           : `Opening ${nameFromCandidateHref(toCheck[i])}'s profile...`
       );
 
-      // Clicks the actual link on the results page (2026-08-12, Mohsin's
-      // call) - a real person working through a list of links opens one,
-      // reads it, goes back, then opens the next; they don't copy each
-      // link's address in turn and load it fresh. Targets the person's
-      // own name link specifically (h3.card-title a), not just anywhere
-      // inside the wider card - confirmed live (2026-08-12) that the card
-      // itself is tall enough to also contain a Relatives list and other
-      // text, so a point picked from the whole card's box can land
-      // squarely on that instead of the actual link and silently click
-      // nothing. Falls back to a direct navigate only if the click itself
-      // can't find the element at all (e.g. the results page didn't
-      // survive the browser's own back-navigation below in a checkable
-      // state) - a rare safety net, not the normal path.
-      try {
-        await p.click(`.card[data-link="${toCheck[i]}"] h3.card-title a`);
-      } catch {
-        await p.goto(`https://www.fastpeoplesearch.com${toCheck[i]}`, { waitUntil: "domcontentloaded" });
-      }
+      // Direct href navigation (reversed back 2026-08-12, later same day -
+      // Mohsin's own earlier click+back-navigation call from earlier that
+      // day wasn't working well live, so he reversed it himself: no more
+      // clicking the card's link and no more real back-navigation between
+      // candidates - just take the href this candidate already came with
+      // and go straight there, same as every candidate before that
+      // 2026-08-12 change did it.
+      await p.goto(`https://www.fastpeoplesearch.com${toCheck[i]}`, { waitUntil: "domcontentloaded" });
 
       const profileLoaded = await waitForRealContent(p, "#full_name_section", PROFILE_WAIT_MS, signal);
       if (!profileLoaded) {
@@ -1149,26 +1139,6 @@ async function runPhoneSearch(rawPhone) {
       }
       const profile = await extractProfile(p, digits);
       candidates.push({ ...profile, rank: reportedRank(profile.matchedReportedText) });
-
-      // Real back-button navigation (history.back(), not a fresh URL
-      // load) before moving on to the next candidate - same reasoning as
-      // the click above. Only bothered with when there's actually another
-      // candidate left to check.
-      if (i < toCheck.length - 1) {
-        await p.evaluate(() => {
-          history.back();
-        });
-        const backOnResults = await waitForRealContent(p, HAS_RESULTS_SELECTOR, RESULTS_WAIT_MS, signal);
-        if (!backOnResults) {
-          // The back-navigation didn't land back on a real, checkable
-          // results page (a captcha re-triggered, or the browser's own
-          // history didn't restore it) - fall back to a fresh navigate so
-          // the loop can still reach the remaining candidates rather than
-          // silently stalling here.
-          await p.goto(`https://www.fastpeoplesearch.com/${dashed}`, { waitUntil: "domcontentloaded" });
-          await waitForRealContent(p, HAS_RESULTS_SELECTOR, RESULTS_WAIT_MS, signal);
-        }
-      }
     }
 
     if (candidates.length === 0) {
