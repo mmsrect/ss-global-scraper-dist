@@ -860,7 +860,14 @@ async function waitForResultsOutcome(p, timeoutMs, signal) {
 // the one label that doesn't match its column name verbatim (the master
 // file's own header is "Lot SQ FT," matching the extension's real
 // schema) - every other label is already an exact match.
+// Bedrooms added 2026-08-12 - confirmed live it's a real, normal
+// labeled pair (<dt>Bedrooms</dt><dd>3</dd>) sitting right alongside
+// Bathrooms in the exact same box, contrary to the earlier 2026-08-11/12
+// call that it was "genuinely absent" (that only held for the two
+// profiles checked that day). Reuses the same dl-loop below rather than
+// needing any new extraction logic.
 const PROPERTY_LABEL_TO_HEADER = {
+  Bedrooms: "Bedrooms",
   Bathrooms: "Bathrooms",
   "Square Feet": "Square Feet",
   "Year Built": "Year Built",
@@ -890,6 +897,14 @@ async function extractProfile(p, searchedDigits) {
     const ageMatch = bioText.match(/Age\s+(\d+)/);
     const age = ageMatch ? ageMatch[1] : "";
 
+    // Born month/year (added 2026-08-12, Mohsin's ask) - the other half
+    // of this exact same bio line ("Age 39, Born June 1987..."), already
+    // being read for Age above and thrown away until now. Confirmed live
+    // 2026-08-12 the wording is consistent enough to match with one
+    // plain regex, same as Age's own.
+    const bornMatch = bioText.match(/Born\s+([A-Za-z]+\s+\d{4})/);
+    const born = bornMatch ? bornMatch[1] : "";
+
     // "Current Address Property Details" - present on every real profile
     // checked live, a plain set of label/value pairs, matched by the real
     // column name via labelToHeader above rather than by position (so a
@@ -897,6 +912,7 @@ async function extractProfile(p, searchedDigits) {
     // record, just leaves that one column blank instead of shifting every
     // field after it out of place).
     const property = {};
+    if (born) property["Born"] = born;
     const propertySection = document.querySelector("#current-addresses-property");
     if (propertySection) {
       propertySection.querySelectorAll("dl").forEach((dl) => {
