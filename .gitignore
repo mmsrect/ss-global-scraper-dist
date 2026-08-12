@@ -1,0 +1,11 @@
+# Installed by `npm install` on whichever machine runs this - never the
+# same across machines/platforms (Windows vs Mac binaries differ), and
+# huge - never belongs in this repo.
+node_modules/
+
+# OS-generated clutter, Windows and Mac.
+.DS_Store
+Thumbs.db
+
+# npm's own debug output when an install fails.
+npm-debug.log*
