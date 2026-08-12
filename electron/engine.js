@@ -504,6 +504,12 @@ function broadcastLog(message) {
 // "Reginald Sissons" lets the terminal say who's about to be checked
 // before that candidate's page has even loaded, rather than just an
 // index number.
+//
+// Unused since the 2026-08-12 "current owner" rewrite of runPhoneSearch
+// below (the owner link's own text already gives a real name, no slug
+// parsing needed) - left in place rather than deleted, same as
+// rawChromeDriver.js's click() method, in case the multi-candidate
+// approach is ever reinstated.
 function nameFromCandidateHref(href) {
   const slug = href.split("/").pop().split("_id_")[0] || "";
   return slug
@@ -625,6 +631,11 @@ async function actLikeSomeoneBrowsing(p, signal) {
 // A shared number can belong to several people - the same disambiguation
 // rule the old tool used elsewhere (Skip Trace): check up to this many
 // candidate profiles rather than assuming the first one is right.
+//
+// Unused since the 2026-08-12 "current owner" rewrite (client's explicit
+// ask: stop visiting multiple profiles, trust the results page's own
+// named owner instead) - left in place rather than deleted, same
+// reasoning as nameFromCandidateHref above.
 const MAX_PHONE_CANDIDATES = 5;
 
 const MONTH_NUMBERS = {
@@ -986,6 +997,11 @@ async function extractProfile(p, searchedDigits) {
 // month), same shape the old tool used for its own "last reported" text -
 // 0 if the searched number isn't listed on this profile at all (loses
 // every real comparison rather than crashing).
+//
+// Unused since the 2026-08-12 "current owner" rewrite - there's only one
+// profile now, nothing left to rank against another. Left in place rather
+// than deleted, same reasoning as the other candidate-ranking helpers
+// above.
 function reportedRank(reportedText) {
   const match = reportedText.match(/reported\s+(\w+)\s+(\d{4})/i);
   if (!match) return 0;
@@ -995,11 +1011,20 @@ function reportedRank(reportedText) {
 
 // Looks up a phone number on FastPeopleSearch and reads the real lead
 // details off the matching person's page - name, address, and that one
-// searched number's own type (Wireless/Landline). When the number is
-// shared across more than one profile, every candidate (up to the cap
-// above) gets checked and whichever one shows the searched number as most
-// recently reported wins - same rule the old tool used, not just the
-// first result.
+// searched number's own type (Wireless/Landline).
+//
+// Rewritten 2026-08-12 (client scope change, walked through live on a
+// real search): the results page names its own "current owner" right at
+// the top, hyperlinked straight to their profile - that line is read
+// directly and its profile visited, instead of opening and ranking up to
+// 5 candidate profiles (the old approach, superseded - see
+// MAX_PHONE_CANDIDATES/nameFromCandidateHref/reportedRank above). Client
+// confirmed the current-owner line is almost always the right match, and
+// explicitly did not want multiple profiles opened - it wastes time
+// against a results page that can carry thousands of matches. If that
+// line is ever missing (not yet seen live, planned for regardless), the
+// number is skipped and settled as "too-many-results" rather than
+// guessed at.
 //
 // Client scope change (2026-08-11): phone mode stops at the one number
 // that was searched - it never pulls in whatever other numbers happen to
@@ -1068,109 +1093,102 @@ async function runPhoneSearch(rawPhone) {
       // content on it - just skip straight to reading it.
     }
 
-    // Every real candidate card (not the sponsored/paid-partner cards
-    // further down the page) links to its profile via this attribute.
-    const candidateHrefs = await p
+    // Read straight off the results page's own "current owner" line
+    // instead of visiting a list of candidate cards (2026-08-12, client
+    // scope change - superseded the multi-candidate ranking approach
+    // below). FastPeopleSearch already tells you who it thinks the real
+    // match is - "The current owner of the phone number ... is <Name>",
+    // name hyperlinked straight to their profile - so re-deriving that by
+    // opening up to 5 profiles and comparing "reported" dates was wasted
+    // work the site had already done for us. Client confirmed this line
+    // is almost always the right match, and no longer wants multiple
+    // profiles opened at all.
+    //
+    // The phrase appears twice on a real results page (once here, once
+    // repeated inside an FAQ answer further down, alongside a second,
+    // unrelated link back to the search itself) - confirmed live
+    // 2026-08-12. Matching every element containing the phrase and taking
+    // the one with the fewest descendant elements (and an actual link
+    // inside it) reliably picks the small, tightly-wrapped sentence this
+    // one lives in over the larger FAQ paragraph, without hardcoding a
+    // class name FastPeopleSearch could change - same "match by
+    // text/shape, not a brittle selector" approach already used for
+    // captcha/rate-limit detection above.
+    const currentOwner = await p
       .evaluate(() => {
-        const hrefs = Array.from(document.querySelectorAll(".card[data-link]"))
-          .map((card) => card.getAttribute("data-link"))
-          .filter(Boolean);
-        return Array.from(new Set(hrefs));
+        const matches = Array.from(document.querySelectorAll("body *")).filter(
+          (el) =>
+            !/^(script|style)$/i.test(el.tagName) &&
+            /current owner of the phone number/i.test(el.textContent || "") &&
+            el.querySelector("a[href]")
+        );
+        if (matches.length === 0) return null;
+        matches.sort((a, b) => a.querySelectorAll("*").length - b.querySelectorAll("*").length);
+        const link = matches[0].querySelector("a[href]");
+        return { href: link.getAttribute("href"), name: link.textContent.trim() };
       })
-      .catch(() => []);
+      .catch(() => null);
 
-    if (candidateHrefs.length === 0) {
-      throw new Error("This number's results page loaded in an unexpected state - try again.");
+    // Fallback: the "current owner" line hasn't been seen missing on a
+    // real results page yet (client hasn't hit this case in testing
+    // either) - but a heavily-shared number could plausibly show a list of
+    // results with no single named owner. Rather than guess at ranking one
+    // of them, per the client's explicit instruction this is treated as a
+    // final, settled outcome of its own ("too many results"), not a retry
+    // - same shape as the existing no-results outcome above.
+    if (!currentOwner) {
+      broadcastLog("No single current owner shown for this number - too many results, skipping.");
+      return { found: false, status: "too-many-results" };
     }
 
-    const toCheck = candidateHrefs.slice(0, MAX_PHONE_CANDIDATES);
-    broadcastLog(
-      candidateHrefs.length > toCheck.length
-        ? `Found ${candidateHrefs.length} possible matches - checking the first ${toCheck.length}.`
-        : `Found ${toCheck.length} possible match${toCheck.length === 1 ? "" : "es"} for this number.`
-    );
-    if (toCheck.length > 1) {
-      broadcastLog("Checking each one to find whichever has this number most recently on file...");
+    broadcastLog(`Current owner: ${currentOwner.name} - opening their profile...`);
+
+    // Same believable pause the old candidate loop used before its own
+    // goto - not clicking the card, just navigating straight to the
+    // profile link the page already gave us (consistent with the
+    // direct-href approach the multi-candidate version settled on).
+    await wait(randomBetween(1500, 3500), signal);
+
+    // The owner link's href is already a full URL on a real page (unlike
+    // a result card's data-link, which is relative) - confirmed live
+    // 2026-08-12. Handle either shape rather than assuming one.
+    const ownerUrl = /^https?:\/\//i.test(currentOwner.href)
+      ? currentOwner.href
+      : `https://www.fastpeoplesearch.com${currentOwner.href}`;
+
+    await p.goto(ownerUrl, { waitUntil: "domcontentloaded" });
+
+    const profileLoaded = await waitForRealContent(p, "#full_name_section", PROFILE_WAIT_MS, signal);
+    if (!profileLoaded) {
+      throw new Error("The current owner's profile never fully loaded (may still be showing a verification check) - try again.");
+    }
+    lastKnownUrl = ownerUrl;
+
+    try {
+      await actLikeSomeoneBrowsing(p, signal);
+    } catch (err) {
+      if (err instanceof StoppedByUserError) throw err;
     }
 
-    const candidates = [];
-    for (let i = 0; i < toCheck.length; i++) {
-      throwIfAborted(signal);
-
-      // A pause before each candidate after the first - clicking into one
-      // profile after another with nothing in between is exactly the kind
-      // of burst pattern that reads as automated, up to 5 page loads back
-      // to back on a shared number. Placed before the goto (not after
-      // reading), so it never lands right after the "just cleared a
-      // captcha" breather above and stacks two long pauses together.
-      if (i > 0) {
-        await wait(randomBetween(1500, 3500), signal); // trimmed a little 2026-08-12, Mohsin's "a tad faster" ask
-      }
-
-      broadcastLog(
-        toCheck.length > 1
-          ? `Checking match ${i + 1} of ${toCheck.length}: ${nameFromCandidateHref(toCheck[i])}...`
-          : `Opening ${nameFromCandidateHref(toCheck[i])}'s profile...`
-      );
-
-      // Direct href navigation (reversed back 2026-08-12, later same day -
-      // Mohsin's own earlier click+back-navigation call from earlier that
-      // day wasn't working well live, so he reversed it himself: no more
-      // clicking the card's link and no more real back-navigation between
-      // candidates - just take the href this candidate already came with
-      // and go straight there, same as every candidate before that
-      // 2026-08-12 change did it.
-      await p.goto(`https://www.fastpeoplesearch.com${toCheck[i]}`, { waitUntil: "domcontentloaded" });
-
-      const profileLoaded = await waitForRealContent(p, "#full_name_section", PROFILE_WAIT_MS, signal);
-      if (!profileLoaded) {
-        // Never seen through, however long we waited - skip this one
-        // candidate rather than reading (and ranking) a captcha page as if
-        // it were a real profile.
-        broadcastLog(`Match ${i + 1} never fully loaded - skipping it.`);
-        continue;
-      }
-      lastKnownUrl = `https://www.fastpeoplesearch.com${toCheck[i]}`;
-
-      try {
-        await actLikeSomeoneBrowsing(p, signal);
-      } catch (err) {
-        if (err instanceof StoppedByUserError) throw err;
-      }
-      const profile = await extractProfile(p, digits);
-      candidates.push({ ...profile, rank: reportedRank(profile.matchedReportedText) });
-    }
-
-    if (candidates.length === 0) {
-      throw new Error(
-        `Found ${toCheck.length} candidate profile(s) for this number, but none of their pages fully loaded (may still be showing a verification check) - try again.`
-      );
-    }
-
-    const winner = candidates.reduce((best, c) => (!best || c.rank > best.rank ? c : best), null);
-    broadcastLog(
-      candidates.length > 1
-        ? `Best match: ${winner.name} - this number was most recently reported on their profile.`
-        : `Match: ${winner.name}.`
-    );
+    const profile = await extractProfile(p, digits);
 
     return {
       found: true,
-      name: winner.name,
-      address: winner.address,
-      age: winner.age,
-      property: winner.property,
+      name: profile.name,
+      address: profile.address,
+      age: profile.age,
+      property: profile.property,
       // Only the number that was actually searched - not the rest of
       // whatever's on this person's page (client scope change, see the
       // note above runPhoneSearch). otherMobiles/landlines are the one
       // deliberate exception, and only for the master file's own record -
       // see the note on their extraction above for why this doesn't
       // relax that rule.
-      phone: winner.matchedNumber,
-      phoneType: winner.matchedType,
-      otherMobiles: winner.otherMobiles,
-      landlines: winner.landlines,
-      candidatesChecked: candidates.length,
+      phone: profile.matchedNumber,
+      phoneType: profile.matchedType,
+      otherMobiles: profile.otherMobiles,
+      landlines: profile.landlines,
+      candidatesChecked: 1,
     };
   } catch (err) {
     // Never log a voluntary Stop - that's not a failure, it's someone
