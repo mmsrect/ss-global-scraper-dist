@@ -277,10 +277,14 @@ const pacingRangesBySite = new Map();
 
 // Kept as the one entry point the run screen calls before starting (same
 // name as the earlier live-Chrome approach) - now also refreshes this
-// run's pacing from Supabase before anything launches.
+// run's pacing from Supabase before anything launches. Fetches every live
+// site's level, not just FastPeopleSearch's - TruePeopleSearch (added
+// 2026-08-14) would otherwise silently ignore its own admin-set slider
+// and fall back to pacing.js's default every run.
 async function prepareBrowserForRun() {
   await ensureBrowser();
   pacingRangesBySite.set("fastpeoplesearch", await pacingRangeForSite("fastpeoplesearch"));
+  pacingRangesBySite.set("truepeoplesearch", await pacingRangeForSite("truepeoplesearch"));
 }
 
 // Recovery for a real reported case (2026-08-11): a run that looked stuck
@@ -712,6 +716,15 @@ const CAPTCHA_POLL_MS = 2000; // trimmed a little 2026-08-12, Mohsin's "a tad fa
 // widget) by title/URL/body text rather than a specific selector - new
 // wording or a new provider still gets caught by these generic phrases
 // without needing a code change.
+//
+// TruePeopleSearch's own wall added 2026-08-14 (first real live check
+// against that site, during selector research): a phone-search result URL
+// (/resultphone?...) redirects to its own /InternalCaptcha?returnUrl=...
+// page, plain title "Captcha" - genuinely different wording/URL shape
+// from any of FastPeopleSearch's three, so none of the checks above would
+// have caught it. Shared here rather than split into a per-site function,
+// same as the rest of this list - harmless to check against FastPeopleSearch
+// too, since that site never produces this title/URL shape.
 async function isCaptchaShowing(p) {
   return p
     .evaluate(() => {
@@ -724,7 +737,9 @@ async function isCaptchaShowing(p) {
         /verify you are human/i.test(text) ||
         /slide right to secure/i.test(text) ||
         /are you human/i.test(text) ||
-        /\/bot-check/i.test(url)
+        /\/bot-check/i.test(url) ||
+        /^captcha$/i.test(title.trim()) ||
+        /\/InternalCaptcha/i.test(url)
       );
     })
     .catch(() => false);
@@ -1271,4 +1286,490 @@ async function runPhoneSearch(rawPhone, slot = "A") {
   }
 }
 
-module.exports = { runPhoneSearch, resetCookies, requestStop, onStatus, closeBrowser, prepareBrowserForRun };
+// --- TruePeopleSearch (phone mode) ---
+// Second site, added 2026-08-14. Same job, same master file, same columns
+// as FastPeopleSearch's own runPhoneSearch above - only the navigation,
+// selectors, and captcha shapes differ, per Mohsin's framing ("just
+// another source"). Every selector/URL/text pattern below was confirmed
+// live against the real site before being written here, never guessed -
+// see claude/site-research/truepeoplesearch.md for the full walkthrough,
+// including the real HTML each selector was pulled from and the live
+// end-to-end test that validated the ranking logic against an
+// independently-known-correct answer.
+
+// No single "current owner" line the way FastPeopleSearch has post its
+// 2026-08-12 rewrite - confirmed live 2026-08-14, TruePeopleSearch's
+// results page is a plain list of candidate cards with no indication of
+// which is most current. Phone mode here goes back to the PRE-rewrite
+// approach instead, reusing exactly the helpers that rewrite left in
+// place for this reason (MAX_PHONE_CANDIDATES, nameFromCandidateHref,
+// reportedRank above) rather than inventing new ones.
+const TPS_NO_RESULTS_TEXT = /we could not find any records for that search criteria/i;
+// The attribute itself already carries the profile href - no need to
+// even read the anchor text/href separately. Scoped to `.card-summary`
+// specifically (not a bare `[data-detail-link]` anywhere on the page) -
+// a real live bug (2026-08-14, Mohsin's report): a bare attribute
+// selector was also picking up one persistent, unrelated element that
+// carries the same attribute on every results page regardless of what
+// was actually searched - confirmed live across two completely different
+// numbers, both times landing on the exact same dead profile ID, which
+// 404s as "This record is no longer available." Scoping to the real
+// candidate-card class (confirmed live in claude/site-research/
+// truepeoplesearch.md's real-HTML section) is the fix; the dead-page
+// fast-fail below (waitForTPSProfileOutcome) is the safety net in case
+// something like this slips through again for a different reason.
+const TPS_CANDIDATE_SELECTOR = ".card-summary[data-detail-link]";
+// A candidate profile that's been removed/expired - confirmed live
+// 2026-08-14 as the same root cause behind the stray candidate above.
+// Checked as a fast-fail alongside "did the real profile load" rather
+// than only discovered after sitting through the full timeout - same
+// "check the negative on every poll tick" instinct as every other wait
+// in this file.
+const TPS_RECORD_GONE_TEXT = /this record is no longer available/i;
+
+// TruePeopleSearch's own rate-limit page - two genuinely different
+// shapes confirmed live so far, both real, both caught here:
+//  1. (2026-08-14) A styled page at `truepeoplesearch.com/ratelimited`
+//     (no hyphen - FastPeopleSearch's own equivalent is `/rate-limited`,
+//     with one), heading "This IP address has been temporarily
+//     rate-limited."
+//  2. (2026-08-14, same day) A second, plain-text response served
+//     directly AT the profile URL that was actually requested (no
+//     redirect, no styled page, often no real <title> either) - "This IP
+//     has been rate limited, sorry for the inconvenience. If you are
+//     using a VPN please turn it off..." Caught the first check too
+//     narrow (`/temporarily rate-limited/i` didn't match this wording at
+//     all) - broadened to a plain `/rate.?limited/i` against the body
+//     text, which covers both real wordings without needing to
+//     special-case each one.
+// Reuses the same RateLimitedError the FastPeopleSearch side already
+// throws - the run screen's handling of it (pause the whole run, leave
+// the row untouched, wait for a proxy change and a manual Resume) is
+// already site-agnostic, nothing there needed to change either time.
+async function isTPSRateLimited(p) {
+  return p
+    .evaluate(() => {
+      const title = document.title || "";
+      const url = document.location ? document.location.href : "";
+      const text = document.body ? document.body.innerText.slice(0, 800) : "";
+      return /\/ratelimited/i.test(url) || /rate.?limited/i.test(title) || /rate.?limited/i.test(text);
+    })
+    .catch(() => false);
+}
+const TPS_RESULTS_WAIT_MS = 60000; // 1 minute, same reasoning/value as FastPeopleSearch's own RESULTS_WAIT_MS
+const TPS_PROFILE_WAIT_MS = 60000;
+
+// Profile-page version of the wait above - checks three things on every
+// poll tick, not just after a timeout: a genuine dead/removed candidate
+// (fails fast, no reason to sit through a minute for a page that will
+// never load real content), the real profile actually loading (a plain
+// `h1` check - see below for why that's safe despite the dead-record
+// page also having one), or a captcha.
+//
+// `loaded` was briefly tightened to require an actual phone-numbers
+// entry specifically (reasoning: a bare `h1` check is what let the
+// dead-record page look "loaded" on a first pass) - reverted same day
+// after a real live case: a genuine, fully-rendered candidate profile
+// (confirmed live via screenshot - real name, address, background report,
+// the works) simply has no Phone Numbers section on it at all, so that
+// stricter check polled the full timeout waiting for something that was
+// never going to appear. Safe to go back to a plain `h1` check because
+// `gone` is evaluated in the same pass and checked first by the caller -
+// a dead page matching both `gone` and a bare `h1` still correctly
+// resolves as "gone", never "loaded". A profile that genuinely has no
+// phone section still gets its number-match correctly, downstream:
+// extractTPSProfile finds no phone entries at all, matchedNumber comes
+// back null, and this candidate is skipped from ranking exactly the same
+// as any other real non-match - the timeout-vs-loaded distinction here
+// is purely about not stalling, not about correctness of the eventual
+// answer.
+async function waitForTPSProfileOutcome(p, timeoutMs, signal) {
+  const deadline = Date.now() + timeoutMs;
+  let sawCaptcha = false;
+  while (Date.now() < deadline) {
+    throwIfAborted(signal);
+    throwIfPageDead(p);
+    if (await isTPSRateLimited(p)) {
+      broadcastLog("⛔ Rate limit hit - stopping the run. Change your proxy, then click Resume.");
+      throw new RateLimitedError();
+    }
+
+    const state = await p
+      .evaluate((goneTextPattern) => {
+        const title = document.title || "";
+        const text = document.body?.innerText || "";
+        return {
+          gone: new RegExp(goneTextPattern, "i").test(text) || /404 page not found/i.test(title),
+          loaded: !!document.querySelector("h1"),
+        };
+      }, TPS_RECORD_GONE_TEXT.source)
+      .catch(() => ({ gone: false, loaded: false }));
+
+    if (state.gone) return "gone";
+    if (state.loaded) {
+      if (sawCaptcha) {
+        broadcastStatus("captcha-clear");
+        await wait(randomBetween(4000, 9000), signal);
+      }
+      return "loaded";
+    }
+
+    const captchaNow = await isCaptchaShowing(p);
+    if (captchaNow && !sawCaptcha) {
+      sawCaptcha = true;
+      broadcastStatus(
+        "captcha-waiting",
+        "A verification check is showing in the browser window - solve it there. This run continues on its own the moment it clears."
+      );
+    } else if (!captchaNow && sawCaptcha) {
+      sawCaptcha = false;
+      broadcastStatus("captcha-clear");
+    }
+
+    await wait(CAPTCHA_POLL_MS, signal);
+  }
+
+  if (sawCaptcha) broadcastStatus("captcha-clear");
+  return "timeout";
+}
+
+// Same shape as FastPeopleSearch's own waitForResultsOutcome (checks the
+// negative on every poll tick, not just after a full timeout, so a true
+// no-results number doesn't sit through the whole wait) - separate
+// function because the actual selectors/text are entirely different on
+// this site, not because the logic needs to differ.
+async function waitForTPSResultsOutcome(p, timeoutMs, signal) {
+  const deadline = Date.now() + timeoutMs;
+  let sawCaptcha = false;
+  while (Date.now() < deadline) {
+    throwIfAborted(signal);
+    throwIfPageDead(p);
+    // TruePeopleSearch's own rate-limit page - confirmed live 2026-08-14
+    // (Mohsin caught a real one, closing the gap this comment used to
+    // flag as "not yet seen"). See isTPSRateLimited's own note for the
+    // real URL/text signals.
+    if (await isTPSRateLimited(p)) {
+      broadcastLog("⛔ Rate limit hit - stopping the run. Change your proxy, then click Resume.");
+      throw new RateLimitedError();
+    }
+
+    const state = await p
+      .evaluate((candidateSel, noResultsPattern) => {
+        const text = document.body?.innerText || "";
+        return {
+          hasResults: document.querySelectorAll(candidateSel).length > 0,
+          isNoResults: new RegExp(noResultsPattern, "i").test(text),
+        };
+      }, TPS_CANDIDATE_SELECTOR, TPS_NO_RESULTS_TEXT.source)
+      .catch(() => ({ hasResults: false, isNoResults: false }));
+
+    if (state.hasResults || state.isNoResults) {
+      if (sawCaptcha) {
+        broadcastStatus("captcha-clear");
+        await wait(randomBetween(4000, 9000), signal);
+      }
+      return state.hasResults ? "has-results" : "no-results";
+    }
+
+    const captchaNow = await isCaptchaShowing(p);
+    if (captchaNow && !sawCaptcha) {
+      sawCaptcha = true;
+      broadcastStatus(
+        "captcha-waiting",
+        "A verification check is showing in the browser window - solve it there. This run continues on its own the moment it clears."
+      );
+    } else if (!captchaNow && sawCaptcha) {
+      sawCaptcha = false;
+      broadcastStatus("captcha-clear");
+    }
+
+    await wait(CAPTCHA_POLL_MS, signal);
+  }
+
+  if (sawCaptcha) broadcastStatus("captcha-clear");
+  return "timeout";
+}
+
+// Every property field on this site follows one uniform shape -
+// `{Label}<br><b>{Value}</b>` - confirmed live 2026-08-14 (see the
+// research file's real-HTML section), unlike FastPeopleSearch's own
+// messier layout which needed PROPERTY_LABEL_TO_HEADER's hand-written
+// mapping. Reuses that same map here anyway (rather than a second one)
+// since the label text itself is identical between the two sites for
+// every field they share - only "Lot Square Feet" (this site's own
+// wording) needs its own entry alongside FastPeopleSearch's "Lot SqFt.".
+const TPS_PROPERTY_LABEL_TO_HEADER = {
+  ...PROPERTY_LABEL_TO_HEADER,
+  "Lot Square Feet": "Lot SQ FT",
+};
+
+// Reads everything this project's master file needs off one real profile
+// page - name, address, age/born, every property-detail field, email if
+// present, and every phone number listed (to find the searched one and
+// rank this candidate against the others). Mirrors extractProfile above
+// field-for-field; only the selectors differ.
+async function extractTPSProfile(p, searchedDigits) {
+  return p.evaluate((digits, labelToHeader) => {
+    const name = document.querySelector("h1")?.textContent?.trim() || null;
+
+    // Same combined "Age X, Born Month Year" bio line as FastPeopleSearch -
+    // but NOT the <h1>'s next sibling (a real bug, fixed 2026-08-14,
+    // Mohsin's catch: Age/Born were coming back blank on real runs). The
+    // real markup is `<h1>Name</h1><div class="d-sm-none mt-0"></div>
+    // <span>Age X, Born Month Year<br>Lives in City, ST</span>...` - the
+    // element right after the h1 is an EMPTY div, not the bio span, so
+    // reading its textContent always returned "". Found by matching the
+    // actual text pattern among the h1's sibling spans instead of trusting
+    // sibling position, which is exactly the kind of fragile assumption
+    // this project's "match by text/shape, not a brittle selector" habit
+    // exists to avoid - this one slipped through by copying
+    // FastPeopleSearch's own (correct, for that site's own real markup)
+    // approach without re-checking it against this site's actual HTML.
+    const bioSpan = Array.from(document.querySelector("h1")?.parentElement?.querySelectorAll("span") || []).find((s) =>
+      /^\s*Age\b/i.test(s.textContent || "")
+    );
+    const bioText = bioSpan?.textContent || "";
+    const ageMatch = bioText.match(/Age\s+(\d+)/);
+    const age = ageMatch ? ageMatch[1] : "";
+    const bornMatch = bioText.match(/Born\s+([A-Za-z]+\s+\d{4})/);
+    const born = bornMatch ? bornMatch[1] : "";
+
+    // Street/city/state/zip separated by a literal <br>, same technique
+    // as FastPeopleSearch's own address extraction - turn it into a comma
+    // before flattening to text so the master file's Street/Region split
+    // (which expects a comma) works unchanged.
+    const addressLink = document.querySelector('a[data-link-to-more="address"]');
+    let address = null;
+    if (addressLink) {
+      const withCommaBreak = addressLink.innerHTML.replace(/<br\s*\/?>/gi, ", ");
+      const scratch = document.createElement("div");
+      scratch.innerHTML = withCommaBreak;
+      address = scratch.textContent.replace(/\s+/g, " ").trim();
+    }
+
+    // Property details - one uniform shape, `{Label}<br><b>{Value}</b>`,
+    // confirmed live to cover all 16 fields with a single loop (no
+    // per-field selector needed). "N/A" is the site's own literal text
+    // for a field it doesn't have data for (confirmed live) - treated the
+    // same as genuinely blank, never saved as the literal string.
+    const property = {};
+    if (born) property["Born"] = born;
+    Array.from(document.querySelectorAll("b")).forEach((b) => {
+      const container = b.parentElement;
+      if (!container) return;
+      // The label is the container's own leading text node, before the
+      // <br><b>...</b> - reading container.childNodes[0] rather than
+      // container.textContent avoids also picking up the value itself.
+      const label = container.childNodes[0]?.textContent?.trim() || "";
+      const header = labelToHeader[label];
+      if (!header) return;
+      const value = b.textContent.trim();
+      if (value && value !== "N/A") property[header] = value;
+    });
+
+    // Email Addresses section is entirely absent (not just empty) on a
+    // profile with no known email - confirmed live 2026-08-14 (different
+    // missing-data shape than property's own "N/A" convention). Located
+    // by its heading text rather than a class name, matching this
+    // project's existing "match by text/shape, not a brittle selector"
+    // approach for anything without a clean id/data-attribute to key off.
+    let email = null;
+    const emailHeading = Array.from(document.querySelectorAll("h2")).find((h) => /Email Addresses/i.test(h.textContent || ""));
+    if (emailHeading) {
+      const row = emailHeading.closest(".row")?.parentElement;
+      const emailDiv = row?.querySelector(".row.pl-sm-2 .col div");
+      email = emailDiv?.textContent?.trim() || null;
+    }
+
+    const phones = Array.from(document.querySelectorAll('a[data-link-to-more="phone"]')).map((a) => {
+      const number = a.textContent.trim();
+      const digitsOnly = number.replace(/\D/g, "");
+      // Type sits in the sibling "- <span class='smaller'>Wireless</span>"
+      // text right after the link, inside the same parent.
+      const afterLink = a.parentElement?.textContent || "";
+      const typeMatch = afterLink.match(/-\s*([A-Za-z]+)/);
+      const type = typeMatch ? typeMatch[1] : null;
+      const reportedBlock = a.parentElement?.querySelector(".dt-ln")?.textContent || "";
+      return { number, type, digits: digitsOnly, reportedText: reportedBlock };
+    });
+
+    const matched = phones.find((entry) => entry.digits === digits);
+    const otherMobiles = phones
+      .filter((entry) => entry.digits !== digits && /wireless/i.test(entry.type || ""))
+      .map((entry) => entry.number);
+    const landlines = phones.filter((entry) => /landline/i.test(entry.type || "")).map((entry) => entry.number);
+
+    return {
+      name,
+      address,
+      age,
+      property,
+      email,
+      otherMobiles,
+      landlines,
+      matchedNumber: matched ? matched.number : null,
+      matchedType: matched ? matched.type : null,
+      matchedReportedText: matched?.reportedText || "",
+    };
+  }, searchedDigits, TPS_PROPERTY_LABEL_TO_HEADER);
+}
+
+// Locked shape (Mohsin, 2026-08-14, walked through live against a real
+// 4-candidate number pulled from a genuine past leads export - see the
+// research file for the full validated example): search -> collect up to
+// MAX_PHONE_CANDIDATES real candidate profiles -> open each, check
+// whether the searched number is actually listed there (confirmed live
+// that not every "candidate" the results page shows actually has the
+// number - roughly 1 in 4 in the real test) -> among the real matches,
+// keep whichever has the most recent "Last reported" date -> only that
+// one profile's data gets saved. No single match among the checked
+// candidates is a genuine Not Found, not guessed at.
+//
+// `slot` (same convention as FastPeopleSearch's own runPhoneSearch) -
+// which tab this lookup runs in, defaults to "A".
+async function runPhoneSearchTruePeopleSearch(rawPhone, slot = "A") {
+  const digits = String(rawPhone).replace(/\D/g, "");
+  if (digits.length !== 10) {
+    throw new Error("Enter a 10-digit US phone number.");
+  }
+  const tpsFormatted = `(${digits.slice(0, 3)})${digits.slice(3, 6)}-${digits.slice(6)}`;
+
+  currentAbortController = new AbortController();
+  const signal = currentAbortController.signal;
+
+  let lastKnownUrl = null;
+  let p;
+
+  try {
+    p = await ensurePage(slot);
+    await p.bringToFront();
+    throwIfAborted(signal);
+    broadcastLog(`Searching TruePeopleSearch for ${tpsFormatted}...`);
+    const resultsUrl = `https://www.truepeoplesearch.com/resultphone?phoneno=${tpsFormatted}`;
+    await p.goto(resultsUrl, { waitUntil: "domcontentloaded" });
+    lastKnownUrl = resultsUrl;
+
+    const outcome = await waitForTPSResultsOutcome(p, TPS_RESULTS_WAIT_MS, signal);
+
+    if (outcome === "no-results") {
+      broadcastLog("No results found for this number.");
+      return { found: false };
+    }
+    if (outcome === "timeout") {
+      broadcastLog("This number's page never fully loaded - giving up on it for now.");
+      throw new Error("This number's page never fully loaded (may still be showing a verification check) - try again.");
+    }
+
+    try {
+      await actLikeSomeoneBrowsing(p, signal, "truepeoplesearch");
+    } catch (err) {
+      if (err instanceof StoppedByUserError) throw err;
+    }
+
+    // Dedupe by href before taking the first N - see TPS_CANDIDATE_SELECTOR's
+    // own note above for why a raw element count can't be trusted here.
+    const candidateHrefs = await p
+      .evaluate((sel) => {
+        const seen = [];
+        document.querySelectorAll(sel).forEach((el) => {
+          const href = el.getAttribute("data-detail-link");
+          if (href && !seen.includes(href)) seen.push(href);
+        });
+        return seen;
+      }, TPS_CANDIDATE_SELECTOR)
+      .catch(() => []);
+
+    const candidates = candidateHrefs.slice(0, MAX_PHONE_CANDIDATES);
+    broadcastLog(
+      `${candidates.length} candidate${candidates.length === 1 ? "" : "s"} to check` +
+        (candidateHrefs.length > candidates.length ? ` (capped at ${MAX_PHONE_CANDIDATES})` : "") +
+        "..."
+    );
+
+    let best = null; // { profile, rank }
+    for (const href of candidates) {
+      throwIfAborted(signal);
+      const profileUrl = `https://www.truepeoplesearch.com${href}`;
+      broadcastLog(`Checking ${nameFromCandidateHref(href)}...`);
+      await p.goto(profileUrl, { waitUntil: "domcontentloaded" });
+      lastKnownUrl = profileUrl;
+
+      const profileOutcome = await waitForTPSProfileOutcome(p, TPS_PROFILE_WAIT_MS, signal);
+      if (profileOutcome === "gone") {
+        // A real, live case (2026-08-14) - the results page can list a
+        // candidate whose actual profile has been removed/expired. Fails
+        // fast rather than sitting through the full timeout waiting for
+        // content that will never load.
+        broadcastLog("This candidate's record is no longer available - skipping it.");
+        continue;
+      }
+      if (profileOutcome === "timeout") {
+        // A single candidate failing to load (still-showing verification,
+        // a genuinely slow page) shouldn't sink the whole number - skip
+        // just this one candidate and keep checking the rest, same
+        // "don't let one bad step end the search" instinct as elsewhere
+        // in this file.
+        broadcastLog("This candidate's profile never fully loaded - skipping it.");
+        continue;
+      }
+
+      try {
+        await actLikeSomeoneBrowsing(p, signal, "truepeoplesearch");
+      } catch (err) {
+        if (err instanceof StoppedByUserError) throw err;
+      }
+
+      const profile = await extractTPSProfile(p, digits);
+      if (!profile.matchedNumber) continue; // this candidate doesn't actually list the number - not a real match
+
+      const rank = reportedRank(profile.matchedReportedText);
+      if (!best || rank > best.rank) {
+        best = { profile, rank };
+      }
+    }
+
+    if (!best) {
+      broadcastLog("None of the candidates actually listed this number - marking Not Found.");
+      return { found: false };
+    }
+
+    const profile = best.profile;
+    return {
+      found: true,
+      name: profile.name,
+      address: profile.address,
+      age: profile.age,
+      property: profile.property,
+      phone: profile.matchedNumber,
+      phoneType: profile.matchedType,
+      otherMobiles: profile.otherMobiles,
+      landlines: profile.landlines,
+      candidatesChecked: candidates.length,
+    };
+  } catch (err) {
+    if (!(err instanceof StoppedByUserError)) {
+      const currentUrl = await p
+        ?.evaluate(() => document.location.href)
+        .catch(() => null);
+      broadcastStatus("error-detail", {
+        message: err.message,
+        url: currentUrl || lastKnownUrl,
+        previousUrl: lastKnownUrl,
+        context: `runPhoneSearchTruePeopleSearch(${tpsFormatted})`,
+      });
+    }
+    throw err;
+  } finally {
+    currentAbortController = null;
+  }
+}
+
+module.exports = {
+  runPhoneSearch,
+  runPhoneSearchTruePeopleSearch,
+  resetCookies,
+  requestStop,
+  onStatus,
+  closeBrowser,
+  prepareBrowserForRun,
+};
