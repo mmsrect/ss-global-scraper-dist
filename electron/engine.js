@@ -3,6 +3,7 @@ const os = require("os");
 const fs = require("fs");
 const { app, screen } = require("electron");
 const rawChrome = require("./rawChromeDriver");
+const { pacingRangeForSite, levelToRangeMs } = require("./pacing");
 
 // 2026-08-11 (found via real research, after a stealth-plugin build and a
 // CDP-leak-patched build both still lost to the same verification wall
@@ -257,14 +258,29 @@ function rightHalfWindowArgs() {
 // window, separate from the app's window and from the person's real
 // Chrome entirely, and stays open across multiple searches in a run
 // rather than relaunching per lookup.
+//
+// Tabs are kept in named slots rather than one single `page` (added
+// 2026-08-14, tab-rotation test) - "A" is the original single-tab
+// behavior and stays the default everywhere nothing else is specified,
+// so nothing about single-site runs changes. A second slot ("B") only
+// gets created the moment something actually asks for it, which today
+// is only the rotation test itself.
 let browser = null;
-let page = null;
+const pages = new Map(); // slot name -> Puppeteer page
+
+// The pause range currently in effect, per site - fetched fresh from
+// Supabase once per prepareBrowserForRun() call (2026-08-14, admin
+// pacing) and cached here for the rest of that run, same "checked once at
+// a natural boundary" shape as the kill switch. An admin moving the
+// slider mid-run takes effect on the next Start/Resume, not live.
+const pacingRangesBySite = new Map();
 
 // Kept as the one entry point the run screen calls before starting (same
-// name as the earlier live-Chrome approach), but there's nothing to ask
-// permission for anymore - just launches the browser.
+// name as the earlier live-Chrome approach) - now also refreshes this
+// run's pacing from Supabase before anything launches.
 async function prepareBrowserForRun() {
   await ensureBrowser();
+  pacingRangesBySite.set("fastpeoplesearch", await pacingRangeForSite("fastpeoplesearch"));
 }
 
 // Recovery for a real reported case (2026-08-11): a run that looked stuck
@@ -338,17 +354,19 @@ async function ensureBrowser() {
 
   browser.on("disconnected", () => {
     browser = null;
-    page = null;
+    pages.clear();
   });
 
   // Belt-and-braces on top of the preference patch above: whatever Chrome
   // actually opened on launch (its own default tab, or - if it still
   // decided to restore something - a leftover tab), close every one of
-  // them except a single fresh tab this app creates and controls itself.
-  // Safe here since this is the app's own disposable profile, never a
-  // real person's actual open tabs.
-  page = await browser.newPage();
-  const otherPages = (await browser.pages()).filter((p) => p !== page);
+  // them except a single fresh tab this app creates and controls itself
+  // (slot "A" - other slots only open later, on demand). Safe here since
+  // this is the app's own disposable profile, never a real person's
+  // actual open tabs.
+  const firstPage = await browser.newPage();
+  pages.set("A", firstPage);
+  const otherPages = (await browser.pages()).filter((p) => p !== firstPage);
   for (const p of otherPages) {
     await p.close().catch(() => {});
   }
@@ -356,11 +374,13 @@ async function ensureBrowser() {
   return browser;
 }
 
-async function ensurePage() {
+async function ensurePage(slot = "A") {
   const b = await ensureBrowser();
-  if (page && !page.isClosed()) return page;
-  page = await b.newPage();
-  return page;
+  const existing = pages.get(slot);
+  if (existing && !existing.isClosed()) return existing;
+  const p = await b.newPage();
+  pages.set(slot, p);
+  return p;
 }
 
 // Closing the browser properly (rather than letting the OS kill it when
@@ -383,7 +403,7 @@ async function closeBrowser() {
     await browser.close().catch(() => {});
   }
   browser = null;
-  page = null;
+  pages.clear();
   return true;
 }
 
@@ -397,7 +417,7 @@ async function resetCookies() {
   if (browser && browser.connected) {
     await browser.close();
     browser = null;
-    page = null;
+    pages.clear();
   }
   const fsp = require("fs/promises");
   // A closed browser doesn't always release its file handles on the
@@ -549,10 +569,13 @@ function wait(ms, signal) {
 }
 
 // A believable "just landed, glancing at the page" pause before doing
-// anything else. Trimmed a little 2026-08-12 (Mohsin's "make it a tad
-// faster" ask) - still a real, varied pause, just not as generous as the
-// original range.
-async function humanPause(signal, minMs = 400, maxMs = 1200) {
+// anything else. The range is admin-controlled now (2026-08-14, "My
+// scraping work"'s Pacing section) - minMs/maxMs come from that site's
+// slider (see pacingRangesBySite / pacing.js's levelToRangeMs), not a
+// number fixed in code. The 2000/4000 defaults here only cover a caller
+// that somehow never set a range at all - normal runs always pass real
+// values in.
+async function humanPause(signal, minMs = 2000, maxMs = 4000) {
   await wait(randomBetween(minMs, maxMs), signal);
 }
 
@@ -622,10 +645,20 @@ async function humanScroll(p, signal, passes = randomBetween(2, 4)) {
 
 // Bundles the above into one "arrived on a page, taking it in" beat - call
 // after every navigation, before reading anything off the page.
-async function actLikeSomeoneBrowsing(p, signal) {
-  await humanPause(signal);
-  await humanMouseWander(p, signal);
-  await humanScroll(p, signal);
+//
+// Mouse-wander and scroll steps switched off 2026-08-13 (Mohsin's ask) -
+// just the pause remains between actions now. humanMouseWander and
+// humanScroll are left defined above, untouched, in case this gets
+// switched back on later.
+//
+// `site` (2026-08-14) picks whose slider governs this pause - looked up
+// in pacingRangesBySite, which prepareBrowserForRun() refreshes from
+// Supabase once at the start of each run. Falls back to the same
+// moderate default pacing.js itself falls back to if the site was never
+// fetched for some reason (shouldn't normally happen).
+async function actLikeSomeoneBrowsing(p, signal, site) {
+  const range = pacingRangesBySite.get(site) || levelToRangeMs(2);
+  await humanPause(signal, range.minMs, range.maxMs);
 }
 
 // A shared number can belong to several people - the same disambiguation
@@ -1033,7 +1066,13 @@ function reportedRank(reportedText) {
 // Name, and Skip Trace modes don't exist yet, and this decision says
 // nothing about what they should return once they're built.
 // No saving, no duplicate checking, no qualifying yet - that's Phase 3.
-async function runPhoneSearch(rawPhone) {
+//
+// `slot` (added 2026-08-14, tab-rotation test): which tab this lookup
+// runs in - defaults to "A" so every existing caller keeps behaving
+// exactly as before. The run screen alternates "A"/"B" itself when
+// rotation is turned on; this function doesn't know or care that a
+// rotation is happening, it just runs in whichever tab it's told.
+async function runPhoneSearch(rawPhone, slot = "A") {
   const digits = String(rawPhone).replace(/\D/g, "");
   if (digits.length !== 10) {
     throw new Error("Enter a 10-digit US phone number.");
@@ -1054,7 +1093,7 @@ async function runPhoneSearch(rawPhone) {
   let p;
 
   try {
-    p = await ensurePage();
+    p = await ensurePage(slot);
     await p.bringToFront();
     throwIfAborted(signal);
     broadcastLog(`Searching FastPeopleSearch for ${dashed}...`);
@@ -1085,7 +1124,7 @@ async function runPhoneSearch(rawPhone) {
     // off it - a real person doesn't start clicking the instant a page
     // finishes loading.
     try {
-      await actLikeSomeoneBrowsing(p, signal);
+      await actLikeSomeoneBrowsing(p, signal, "fastpeoplesearch");
     } catch (err) {
       if (err instanceof StoppedByUserError) throw err;
       // A transient hiccup mid-pace (e.g. the page reloading itself right
@@ -1143,11 +1182,10 @@ async function runPhoneSearch(rawPhone) {
 
     broadcastLog(`Current owner: ${currentOwner.name} - opening their profile...`);
 
-    // Same believable pause the old candidate loop used before its own
-    // goto - not clicking the card, just navigating straight to the
-    // profile link the page already gave us (consistent with the
-    // direct-href approach the multi-candidate version settled on).
-    await wait(randomBetween(1500, 3500), signal);
+    // No separate pre-navigation pause here (removed 2026-08-13, Mohsin's
+    // ask) - one pause per page, right after it loads (actLikeSomeoneBrowsing
+    // above and below), not an extra one stacked on before following the
+    // link too.
 
     // The owner link's href is already a full URL on a real page (unlike
     // a result card's data-link, which is relative) - confirmed live
@@ -1165,7 +1203,7 @@ async function runPhoneSearch(rawPhone) {
     lastKnownUrl = ownerUrl;
 
     try {
-      await actLikeSomeoneBrowsing(p, signal);
+      await actLikeSomeoneBrowsing(p, signal, "fastpeoplesearch");
     } catch (err) {
       if (err instanceof StoppedByUserError) throw err;
     }
