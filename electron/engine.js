@@ -1210,6 +1210,23 @@ async function runPhoneSearch(rawPhone, slot = "A") {
 
     const profile = await extractProfile(p, digits);
 
+    // Real bug, fixed 2026-08-14 (Mohsin's catch): a profile loading
+    // successfully isn't the same thing as the searched number actually
+    // being the number that led here - extractProfile already computes
+    // whether the searched digits matched one of this profile's own
+    // listed numbers (matchedNumber/matchedType), but this used to return
+    // found:true unconditionally regardless of that, so a real mismatch
+    // (the "current owner" line pointed at a profile that, once opened,
+    // doesn't actually list the number that was searched) got logged as
+    // "Done" even though nothing was ever saved for it (the lead-save
+    // step downstream only fires on a real wireless-type match, so no
+    // data was ever wrongly saved - only the status was wrong). Now
+    // treated the same as any other genuine no-record outcome.
+    if (!profile.matchedNumber) {
+      broadcastLog("Opened the profile, but it doesn't actually list the number that was searched - marking Not Found.");
+      return { found: false };
+    }
+
     return {
       found: true,
       name: profile.name,
