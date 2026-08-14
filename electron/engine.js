@@ -411,6 +411,23 @@ async function closeBrowser() {
   return true;
 }
 
+// Closes just one site's tab, leaving the browser and every other slot's
+// tab untouched (added 2026-08-15, per-source rate-limit handling) - a
+// site that hits its rate limit gets its own tab closed and dropped from
+// rotation for the rest of this run, while whatever's still active in
+// another slot keeps going uninterrupted. `ensurePage(slot)` already
+// reopens a fresh tab on demand if this slot is ever asked for again (a
+// brand new Start/Resume after a full stop), so nothing further is needed
+// here to "give the site back" later.
+async function closeTab(slot) {
+  const p = pages.get(slot);
+  if (p && !p.isClosed()) {
+    await p.close().catch(() => {});
+  }
+  pages.delete(slot);
+  return true;
+}
+
 // Deletes this app's own saved profile - cookies, history, everything it
 // copied in - so the next launch re-seeds itself from the real Chrome
 // profile again, same as the very first time. Never touches the real
@@ -473,10 +490,31 @@ class StoppedByUserError extends Error {
 // the IPC boundary arrives wrapped in Electron's own "Error invoking
 // remote method..." prefix - same reasoning as StoppedByUserError above,
 // which has the identical matching requirement on the other side.
+// Site labels matched by the run screen's own text-based error detection
+// below - kept here, next to the throw sites, rather than duplicated on
+// the renderer side of the IPC boundary (custom Error properties don't
+// reliably survive that crossing, only .message does - same reasoning as
+// StoppedByUserError already relies on).
+const RATE_LIMIT_SITE_LABELS = {
+  fastpeoplesearch: "FastPeopleSearch",
+  truepeoplesearch: "TruePeopleSearch",
+};
+
+// `site` (added 2026-08-15, multi-source rate-limit handling) names which
+// site actually hit the wall, baked directly into the message text - the
+// run screen's per-source fallback (close just that site's tab, keep
+// going on whatever else is still active) needs to know which one, and
+// message-text matching is the only thing that survives the IPC crossing
+// intact. Every real throw site below always passes a real site id now;
+// falling back to the bare id itself (rather than throwing) if a future
+// site is ever added here without updating the label map, so this never
+// hard-crashes over a missing label.
 class RateLimitedError extends Error {
-  constructor() {
-    super("Rate limited - change your proxy, then Resume.");
+  constructor(site) {
+    const label = RATE_LIMIT_SITE_LABELS[site] || site || "this site";
+    super(`Rate limited on ${label} - change your proxy, then Resume.`);
     this.rateLimited = true;
+    this.site = site;
   }
 }
 
@@ -781,8 +819,8 @@ async function waitForRealContent(p, selector, timeoutMs, signal) {
     throwIfAborted(signal);
     throwIfPageDead(p);
     if (await isRateLimited(p)) {
-      broadcastLog("⛔ Rate limit hit - stopping the run. Change your proxy, then click Resume.");
-      throw new RateLimitedError();
+      broadcastLog("⛔ FastPeopleSearch rate limit hit.");
+      throw new RateLimitedError("fastpeoplesearch");
     }
 
     const found = await p.$(selector).catch(() => null);
@@ -857,8 +895,8 @@ async function waitForResultsOutcome(p, timeoutMs, signal) {
     throwIfAborted(signal);
     throwIfPageDead(p);
     if (await isRateLimited(p)) {
-      broadcastLog("⛔ Rate limit hit - stopping the run. Change your proxy, then click Resume.");
-      throw new RateLimitedError();
+      broadcastLog("⛔ FastPeopleSearch rate limit hit.");
+      throw new RateLimitedError("fastpeoplesearch");
     }
 
     const state = await p
@@ -1395,8 +1433,8 @@ async function waitForTPSProfileOutcome(p, timeoutMs, signal) {
     throwIfAborted(signal);
     throwIfPageDead(p);
     if (await isTPSRateLimited(p)) {
-      broadcastLog("⛔ Rate limit hit - stopping the run. Change your proxy, then click Resume.");
-      throw new RateLimitedError();
+      broadcastLog("⛔ TruePeopleSearch rate limit hit.");
+      throw new RateLimitedError("truepeoplesearch");
     }
 
     const state = await p
@@ -1454,8 +1492,8 @@ async function waitForTPSResultsOutcome(p, timeoutMs, signal) {
     // flag as "not yet seen"). See isTPSRateLimited's own note for the
     // real URL/text signals.
     if (await isTPSRateLimited(p)) {
-      broadcastLog("⛔ Rate limit hit - stopping the run. Change your proxy, then click Resume.");
-      throw new RateLimitedError();
+      broadcastLog("⛔ TruePeopleSearch rate limit hit.");
+      throw new RateLimitedError("truepeoplesearch");
     }
 
     const state = await p
@@ -1776,5 +1814,6 @@ module.exports = {
   requestStop,
   onStatus,
   closeBrowser,
+  closeTab,
   prepareBrowserForRun,
 };
