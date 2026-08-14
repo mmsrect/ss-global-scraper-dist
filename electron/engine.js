@@ -739,7 +739,12 @@ async function isCaptchaShowing(p) {
         /are you human/i.test(text) ||
         /\/bot-check/i.test(url) ||
         /^captcha$/i.test(title.trim()) ||
-        /\/InternalCaptcha/i.test(url)
+        /\/InternalCaptcha/i.test(url) ||
+        // New shape, confirmed live 2026-08-14 on FastPeopleSearch: a
+        // Cloudflare challenge whose title reads "Security Challenge"
+        // rather than "Just a moment..." - same underlying Cloudflare
+        // check, different title text, previously undetected here.
+        /^security challenge$/i.test(title.trim())
       );
     })
     .catch(() => false);
