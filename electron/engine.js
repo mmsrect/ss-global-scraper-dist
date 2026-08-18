@@ -795,7 +795,53 @@ async function isCaptchaShowing(p) {
 // serve this IP any more requests for a while. No amount of waiting on
 // this page changes that - see RateLimitedError above for what happens
 // once this is detected.
+// Cloudflare's HARD BLOCK - a third thing, genuinely distinct from both the
+// solvable challenges in isCaptchaShowing() above and from each site's own
+// rate-limit page (confirmed live 2026-08-17 on FastPeopleSearch, real
+// captured page: title "Attention Required! | Cloudflare", HTTP 403, body
+// "Sorry, you have been blocked / You are unable to access
+// fastpeoplesearch.com", served directly at the requested URL with no
+// redirect). Every one of the nine existing captcha checks and both
+// rate-limit checks were run against the real blocked page and all
+// returned false - so until now this page was invisible to the app: it sat
+// through the full 60s results wait, reported the misleading "page never
+// fully loaded" error, and then let the run carry straight on hammering a
+// site that had already cut us off. Full write-up in
+// ../../claude/bug-reports/cloudflare-hard-block-undetected.md.
+//
+// Treated as a rate-limit-class event rather than a captcha because there
+// is nothing to solve - "you have been blocked" is a refusal, not a
+// challenge, and no amount of waiting clears it (confirmed live: it took a
+// VPN IP change). That means it wants exactly the response a rate limit
+// already gets - stop, change IP, resume - so it reuses RateLimitedError
+// rather than introducing a third concept the run screen would have to
+// learn.
+//
+// Matched on the body text rather than the title alone deliberately:
+// "Attention Required! | Cloudflare" is Cloudflare-generic boilerplate that
+// could plausibly front a solvable challenge in some other configuration,
+// whereas "you have been blocked" / "unable to access" is unambiguous about
+// being a refusal. Same "match the meaning, not one exact sentence" lesson
+// that came out of TPS's rate-limit matcher having to be broadened from
+// /temporarily rate-limited/i to a plain /rate.?limited/i after Shape B was
+// missed entirely.
+//
+// Site-agnostic on purpose - this is Cloudflare's page, not any one site's,
+// so it is wired into BOTH sites' rate-limit checks below rather than only
+// the site it happened to be discovered on.
+async function isCloudflareHardBlocked(p) {
+  return p
+    .evaluate(() => {
+      const title = document.title || "";
+      const text = document.body ? document.body.innerText.slice(0, 800) : "";
+      const blocked = /you have been blocked/i.test(text) || /unable to access/i.test(text);
+      return blocked && (/attention required/i.test(title) || /cloudflare/i.test(title));
+    })
+    .catch(() => false);
+}
+
 async function isRateLimited(p) {
+  if (await isCloudflareHardBlocked(p)) return true;
   return p
     .evaluate(() => {
       const title = document.title || "";
@@ -1390,6 +1436,13 @@ const TPS_RECORD_GONE_TEXT = /this record is no longer available/i;
 // the row untouched, wait for a proxy change and a manual Resume) is
 // already site-agnostic, nothing there needed to change either time.
 async function isTPSRateLimited(p) {
+  // Cloudflare's hard block is Cloudflare's page, not FastPeopleSearch's -
+  // checked here too rather than only on the site it was first seen on.
+  // Not yet observed live on TruePeopleSearch; wired in pre-emptively
+  // because the cost of the check is one evaluate on an already-2s poll,
+  // and the cost of missing it is a run that keeps hammering a site that
+  // has blocked it.
+  if (await isCloudflareHardBlocked(p)) return true;
   return p
     .evaluate(() => {
       const title = document.title || "";
