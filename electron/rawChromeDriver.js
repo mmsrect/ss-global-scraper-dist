@@ -289,8 +289,21 @@ function wrapPage(session, targetId, fixedViewport, cache) {
     // Only after every attempt fails does this throw, which is what lets
     // the caller's existing fallback (a direct URL navigate) take over
     // immediately instead of sitting through a long silent wait first.
-    async click(selector) {
-      const beforeUrl = await evaluate(() => document.location.href);
+    // `options.confirm` (2026-08-23) - how this click knows it landed.
+    //
+    // The URL check below was written for links that navigate, and every
+    // caller until now was one. Prop Wire's "Next page" is not: it re-renders
+    // the results in place and leaves the address bar exactly as it was, so a
+    // click that worked perfectly looked like three failed attempts and threw.
+    //
+    // A caller that clicks something non-navigational passes its own proof
+    // instead - an async predicate polled after each attempt. The retry
+    // behaviour (three goes, fresh coordinates each time, because the page can
+    // shift under the pointer mid-click) is the valuable part and is kept
+    // identical for both kinds.
+    async click(selector, options = {}) {
+      const { confirm = null, confirmTimeoutMs = 10000 } = options;
+      const beforeUrl = confirm ? null : await evaluate(() => document.location.href);
       const maxAttempts = 3;
 
       for (let attempt = 1; attempt <= maxAttempts; attempt++) {
@@ -326,18 +339,38 @@ function wrapPage(session, targetId, fixedViewport, cache) {
           clickCount: 1,
         });
 
-        // Real navigations start fast - a second is generous for the URL
-        // to have actually changed if this click genuinely landed.
-        await new Promise((r) => setTimeout(r, 900));
-        const afterUrl = await evaluate(() => document.location.href).catch(() => beforeUrl);
-        if (afterUrl !== beforeUrl) return; // worked - most attempts resolve here on the first try
+        if (confirm) {
+          // The caller's own proof, polled rather than waited out once - an
+          // in-page re-render can take a moment longer than a navigation and
+          // there is no URL to watch for it.
+          const startedAt = Date.now();
+          let landed = false;
+          while (Date.now() - startedAt < confirmTimeoutMs) {
+            await new Promise((r) => setTimeout(r, 200));
+            if (await confirm().catch(() => false)) {
+              landed = true;
+              break;
+            }
+          }
+          if (landed) return;
+        } else {
+          // Real navigations start fast - a second is generous for the URL
+          // to have actually changed if this click genuinely landed.
+          await new Promise((r) => setTimeout(r, 900));
+          const afterUrl = await evaluate(() => document.location.href).catch(() => beforeUrl);
+          if (afterUrl !== beforeUrl) return; // worked - most attempts resolve here on the first try
+        }
 
         if (attempt < maxAttempts) {
           await new Promise((r) => setTimeout(r, 400 + Math.random() * 400));
         }
       }
 
-      throw new Error(`Click on ${selector} didn't navigate anywhere after ${maxAttempts} attempts.`);
+      throw new Error(
+        confirm
+          ? `Click on ${selector} didn't change the page after ${maxAttempts} attempts.`
+          : `Click on ${selector} didn't navigate anywhere after ${maxAttempts} attempts.`
+      );
     },
 
     async close() {

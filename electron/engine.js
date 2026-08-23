@@ -1093,6 +1093,15 @@ async function extractProfile(p, searchedDigits) {
       address = scratch.textContent.replace(/\s+/g, " ").trim();
     }
 
+    // "Current Address (Since February 2000)" - the move-in date, confirmed
+    // live 2026-08-17 in the Current Address section's own heading. Phone
+    // mode has no use for it (there's only ever one profile to look at),
+    // but address mode's locked winner rule is "most recent move-in wins",
+    // so it needs a per-candidate recency signal. Additive only - nothing
+    // that already reads this function's output is affected.
+    const currentAddressSince =
+      document.querySelector("#current_address_section")?.textContent?.match(/since\s+(\w+\s+\d{4})/i)?.[1] || "";
+
     const phones = Array.from(document.querySelectorAll("#phone_number_section dl")).map((dl) => {
       const number = dl.querySelector("dt a")?.textContent?.trim() || "";
       const dds = dl.querySelectorAll("dd");
@@ -1116,13 +1125,57 @@ async function extractProfile(p, searchedDigits) {
       .map((entry) => entry.number);
     const landlines = phones.filter((entry) => /landline/i.test(entry.type || "")).map((entry) => entry.number);
 
+    // Email (2026-08-21). Confirmed live on a real profile - a clean, dedicated
+    // section with a real id, so no text-matching heuristics needed here the
+    // way TruePeopleSearch's own email extraction needs them:
+    //
+    //   <div id="email_section" class="detail-box">
+    //     <h2>Email Addresses ...</h2>
+    //     <div class="detail-box-content">
+    //       <div class="detail-box-email"><div class="row">
+    //         <h3 class="col-sm-12 col-md-6">mehb2270@gmail.com</h3>
+    //         <h3 class="col-sm-12 col-md-6">mehb@charter.net</h3>
+    //         ... 5 in total on the real profile checked
+    //
+    // Scoped to `.detail-box-email h3` rather than every h3 in the section -
+    // the section's own <h2> heading is not an address, and a looser selector
+    // would sweep up whatever markup the site adds around it later.
+    //
+    // Multiple addresses are joined with "; ", matching how the old Chrome
+    // extension wrote them, so a master file carrying output from both tools
+    // stays consistent. A profile with no emails simply has no #email_section
+    // (same absent-not-empty shape TruePeopleSearch uses) - null, never "".
+    //
+    // This closes the standing gap where the master file's Email column was
+    // blank on all 208 real rows.
+    const emailNodes = Array.from(document.querySelectorAll("#email_section .detail-box-email h3"));
+    const emails = emailNodes.map((h) => h.textContent.trim()).filter((v) => v.includes("@"));
+    const email = emails.length ? emails.join("; ") : null;
+
+    // Added 2026-08-20 for address mode, additive only - nothing that already
+    // reads this function is affected. otherMobiles above deliberately drops
+    // each number's "reported" text, which is fine for phone mode (the
+    // searched number IS the lead) but makes it impossible for address mode to
+    // choose a primary by recency. These two carry the text through so the
+    // caller can rank them.
+    const wirelessPhones = phones
+      .filter((entry) => /wireless/i.test(entry.type || ""))
+      .map((entry) => ({ number: entry.number, reportedText: entry.reportedText }));
+    const landlinePhones = phones
+      .filter((entry) => /landline/i.test(entry.type || ""))
+      .map((entry) => ({ number: entry.number, reportedText: entry.reportedText }));
+
     return {
       name,
       address,
+      currentAddressSince,
       age,
       property,
+      email,
       otherMobiles,
       landlines,
+      wirelessPhones,
+      landlinePhones,
       matchedNumber: matched ? matched.number : null,
       matchedType: matched ? matched.type : null,
       matchedReportedText: matched?.reportedText || "",
@@ -1347,6 +1400,12 @@ async function runPhoneSearch(rawPhone, slot = "A") {
       phoneType: profile.matchedType,
       otherMobiles: profile.otherMobiles,
       landlines: profile.landlines,
+      // Carried through 2026-08-21. Record-keeping only, on exactly the same
+      // footing as otherMobiles/landlines above - it goes into the master
+      // file's own Email column and is deliberately absent from the
+      // client-facing export's column list, so this does not touch the
+      // "one phone in, that one phone's lead out" delivery rule.
+      email: profile.email,
       candidatesChecked: 1,
     };
   } catch (err) {
@@ -1367,6 +1426,357 @@ async function runPhoneSearch(rawPhone, slot = "A") {
         url: currentUrl || lastKnownUrl,
         previousUrl: lastKnownUrl,
         context: `runPhoneSearch(${dashed})`,
+      });
+    }
+    throw err;
+  } finally {
+    currentAbortController = null;
+  }
+}
+
+// --- FastPeopleSearch (address mode) ---
+// Added 2026-08-17. Every URL/selector/page shape below was confirmed live
+// against the real site first - see claude/site-research/fastpeoplesearch-address.md
+// for the captured markup and the end-to-end validation against a
+// known-correct answer (Reginald Sissons, cross-confirmed from the
+// TruePeopleSearch phone-mode test's own number).
+//
+// The important structural difference from phone mode: FastPeopleSearch's
+// address results page CANNOT tell current residents from past ones. Every
+// card is headed "Past Addresses" and there is no equivalent of
+// cyberbackgroundchecks' .address-current marker that the old Chrome
+// extension relies on. Only the profile can answer it, via
+// #current_address_section. So unlike phone mode - which reads a single
+// "current owner" sentence off the results page and opens exactly one
+// profile - address mode has to open candidates and check each one.
+
+const MAX_ADDRESS_CANDIDATES = 5; // same cap as MAX_PHONE_CANDIDATES, Mohsin's call 2026-08-17
+
+// Confirmed live: /address/{street-slug}_{city}-{state}-{zip}, lowercased,
+// spaces to hyphens, commas dropped, street joined to region by a single
+// underscore. Validated against a real master-file row ("16275 W Boulder
+// Dr" + "Surprise AZ 85374") which resolved first time, and matches the
+// site's own internal links (every Neighbors and Past Addresses href uses
+// this same shape) - so it's the site's real canonical form, not an
+// artifact of one form submission.
+function addressSlug(street, region) {
+  const part = (value) =>
+    String(value || "")
+      .toLowerCase()
+      .replace(/[.,#]/g, "")
+      .replace(/[^a-z0-9\s-]/g, "")
+      .trim()
+      .replace(/\s+/g, "-");
+  return `${part(street)}_${part(region)}`;
+}
+
+// Same normalisation the old extension's own address matching used - upper
+// case, punctuation stripped, whitespace collapsed - so "3725 Rock Bridge
+// Dr NE" and "3725 Rock Bridge Dr Ne," compare equal.
+// Orders a profile's mobile numbers so the best one to actually call comes
+// first, and returns just the numbers.
+//
+// Why this exists (found live on TruePeopleSearch, 2026-08-19, and it applies
+// to both sites): every number on a profile carries the date it was last
+// reported, and the site does NOT list them newest first. On the real record
+// checked, the first-listed wireless number was last seen in May 2018 while a
+// later one in the same list was seen in December 2025. Address mode picks the
+// lead's primary mobile from this list, so taking whatever happened to be
+// printed first would routinely hand Wasim's team a seven-year-old number and
+// claim it against the shared duplicate list as though it were current.
+//
+// Ties (two numbers with the same reported month, or none at all) keep the
+// site's own order - a stable sort, so nothing shuffles arbitrarily between
+// runs on the same record.
+function rankMobilesByRecency(wirelessPhones) {
+  return (wirelessPhones || [])
+    .map((entry, index) => ({ ...entry, index }))
+    .sort((a, b) => {
+      const diff = reportedRank(b.reportedText || "") - reportedRank(a.reportedText || "");
+      return diff !== 0 ? diff : a.index - b.index;
+    })
+    .map((entry) => entry.number)
+    .filter(Boolean);
+}
+
+function normalizeAddressText(value) {
+  return String(value || "")
+    .toUpperCase()
+    .replace(/[.,#]/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+// "Current Address (Since February 2000)" -> sortable integer, same
+// year*12+month shape reportedRank() already uses. 0 when absent, so a
+// profile with no move-in date loses every comparison rather than crashing.
+function sinceRank(sinceText) {
+  const match = String(sinceText || "").match(/(\w+)\s+(\d{4})/);
+  if (!match) return 0;
+  const month = MONTH_NUMBERS[match[1].toLowerCase()] || 0;
+  return parseInt(match[2], 10) * 12 + month;
+}
+
+// Card heading shapes confirmed live:
+//   "Barbara Sissons Age 77 • Surprise, AZ"
+//   "Barb Sissons Surprise, AZ"                        (no age at all)
+//   "Helen Hollifield Deceased (1910 - 2010) • Conover, NC"
+// Age and deceased-status come from the heading text; the NAME comes from
+// the profile href, not the heading.
+//
+// Why: the heading's shape is not consistent. A card with an age reads
+// "Barbara Sissons Age 77 • Surprise, AZ" - name, then a bullet, then the
+// city. A card WITHOUT an age has no bullet either: "Barb Sissons Surprise,
+// AZ". There is no reliable way to tell where the name ends and the city
+// begins from that string alone ("Barb Sissons Surprise" and "Michael Bush
+// N Hollywood" are grammatically identical), and a first attempt at
+// stripping a trailing "City, ST" happily ate the surname too.
+//
+// The href has no such ambiguity: "/barb-sissons_id_G339..." carries the
+// name and nothing else. Same slug the existing nameFromCandidateHref()
+// already relies on.
+function parseCandidateHeading(href, headingText) {
+  const text = String(headingText || "").replace(/\s+/g, " ").trim();
+  const deceased = /deceased/i.test(text);
+  const ageMatch = text.match(/\bAge\s+(\d+)/i);
+  const age = ageMatch ? parseInt(ageMatch[1], 10) : null;
+
+  const slug = String(href || "").split("/").pop().split("_id_")[0] || "";
+  const parts = slug.split("-").filter(Boolean);
+  const name = parts.map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
+  const surname = parts.length ? parts[parts.length - 1].toUpperCase() : "";
+
+  return { name, age, surname, deceased };
+}
+
+// Alias suppression (locked 2026-08-17). The same human turns up as several
+// separate cards under name variants - confirmed live: "Barbara Sissons"
+// (77) / "Barb Sissons", and "Lorraine Sissons" (81) / "Lory Sissons" (81),
+// each with its own profile id and nothing on the page linking them. Left
+// alone, aliases eat the 5-candidate budget and can crowd out a genuine
+// resident (of the first 5 cards on that real page, only 3 were distinct
+// people).
+//
+// Rule: same surname AND both ages present and equal -> treat as one
+// person, keep the first. Deliberately NOT merging when either age is
+// missing (Mohsin's call): wrongly skipping a real resident whose record
+// simply has no age is the worse error, while a duplicate only costs one
+// candidate slot. So Lorraine/Lory merge; Barbara/Barb both get checked.
+// Accepted false positive: same-aged siblings at one address.
+function dedupeCandidates(candidates) {
+  const kept = [];
+  for (const candidate of candidates) {
+    const isAlias = kept.some(
+      (seen) => seen.surname && seen.surname === candidate.surname && seen.age != null && seen.age === candidate.age
+    );
+    if (!isAlias) kept.push(candidate);
+  }
+  return kept;
+}
+
+async function runAddressSearch(street, region, slot = "A") {
+  const cleanStreet = String(street || "").trim();
+  const cleanRegion = String(region || "").trim();
+  if (!cleanStreet || !cleanRegion) {
+    throw new Error("Both a street and a city/state (or zip) are needed to search an address.");
+  }
+  const label = `${cleanStreet}, ${cleanRegion}`;
+
+  currentAbortController = new AbortController();
+  const signal = currentAbortController.signal;
+
+  let lastKnownUrl = null;
+  let p;
+
+  try {
+    p = await ensurePage(slot);
+    await p.bringToFront();
+    throwIfAborted(signal);
+
+    broadcastLog(`Searching FastPeopleSearch for ${label}...`);
+    const resultsUrl = `https://www.fastpeoplesearch.com/address/${addressSlug(cleanStreet, cleanRegion)}`;
+    await p.goto(resultsUrl, { waitUntil: "domcontentloaded" });
+    lastKnownUrl = resultsUrl;
+
+    // Same outcome waiter phone mode uses. Confirmed live that both its
+    // selectors behave correctly on address pages: the has-results
+    // selector matches only real person cards (all 7 on a real page sat
+    // inside .people-list, none leaked in from Neighbors or sponsored
+    // blocks), and the no-results check is selector PLUS the literal text
+    // "no results found" - which matters, because h1.list-results-header
+    // is ALSO present on address pages that do have results, carrying the
+    // address as its text. A presence-only check would report every
+    // successful address search as a negative.
+    const outcome = await waitForResultsOutcome(p, RESULTS_WAIT_MS, signal);
+
+    if (outcome === "no-results") {
+      broadcastLog("No records found for this address.");
+      return { found: false };
+    }
+    if (outcome === "timeout") {
+      broadcastLog("This address's page never fully loaded - giving up on it for now.");
+      throw new Error("This address's page never fully loaded (may still be showing a verification check) - try again.");
+    }
+
+    try {
+      await actLikeSomeoneBrowsing(p, signal, "fastpeoplesearch");
+    } catch (err) {
+      if (err instanceof StoppedByUserError) throw err;
+    }
+
+    const rawCandidates = await p
+      .evaluate(() => {
+        const seen = [];
+        document.querySelectorAll(".people-list .card[data-link]").forEach((card) => {
+          const href = card.getAttribute("data-link");
+          if (!href || seen.some((entry) => entry.href === href)) return;
+          const heading = card.querySelector("h3");
+          seen.push({ href, heading: heading ? heading.textContent : "" });
+        });
+        return seen;
+      })
+      .catch(() => []);
+
+    const parsed = rawCandidates.map((entry) => ({ ...entry, ...parseCandidateHeading(entry.href, entry.heading) }));
+
+    // Deceased people come back as ordinary results (confirmed live:
+    // "Helen Hollifield Deceased (1910 - 2010)"). Never a callable lead.
+    const living = parsed.filter((entry) => !entry.deceased);
+    const deduped = dedupeCandidates(living);
+    const candidates = deduped.slice(0, MAX_ADDRESS_CANDIDATES);
+    const cappedOut = deduped.length > candidates.length;
+
+    const skipped = parsed.length - deduped.length;
+    broadcastLog(
+      `${candidates.length} candidate${candidates.length === 1 ? "" : "s"} to check` +
+        (skipped > 0 ? ` (${skipped} skipped as deceased or duplicate)` : "") +
+        (cappedOut ? ` (capped at ${MAX_ADDRESS_CANDIDATES})` : "") +
+        "..."
+    );
+
+    if (candidates.length === 0) {
+      broadcastLog("No living, non-duplicate candidates at this address - marking Not Found.");
+      return { found: false };
+    }
+
+    const searchedStreet = normalizeAddressText(cleanStreet);
+    let best = null; // { profile, rank }
+
+    for (const candidate of candidates) {
+      throwIfAborted(signal);
+      const profileUrl = `https://www.fastpeoplesearch.com${candidate.href}`;
+      broadcastLog(`Checking ${candidate.name || nameFromCandidateHref(candidate.href)}...`);
+      await p.goto(profileUrl, { waitUntil: "domcontentloaded" });
+      lastKnownUrl = profileUrl;
+
+      const loaded = await waitForRealContent(p, "#full_name_section", PROFILE_WAIT_MS, signal);
+      if (!loaded) {
+        // One slow or still-walled candidate shouldn't sink the whole
+        // address - skip just this one, same instinct as the TPS phone loop.
+        broadcastLog("This candidate's profile never fully loaded - skipping it.");
+        continue;
+      }
+
+      try {
+        await actLikeSomeoneBrowsing(p, signal, "fastpeoplesearch");
+      } catch (err) {
+        if (err instanceof StoppedByUserError) throw err;
+      }
+
+      // No searched number exists in address mode, so "" is passed as the
+      // digits to match: nothing can equal it, which is exactly right -
+      // matchedNumber comes back null, and otherMobiles/landlines come back
+      // holding EVERY number on the profile rather than "all except the
+      // searched one". That's what address mode wants (all mobiles up to 3,
+      // all landlines up to 3, Mohsin 2026-08-17), and it needs no change
+      // to extractProfile itself.
+      const profile = await extractProfile(p, "");
+
+      // The locked rule: the searched address must be this person's CURRENT
+      // address, not one of their previous ones.
+      const profileAddress = normalizeAddressText(profile.address);
+      if (!profileAddress || !profileAddress.includes(searchedStreet)) {
+        broadcastLog("Searched address isn't this person's current address - skipping them.");
+        continue;
+      }
+
+      const rank = sinceRank(profile.currentAddressSince);
+      if (!best || rank > best.rank) best = { profile, rank };
+    }
+
+    if (!best) {
+      if (cappedOut) {
+        // Genuinely different from Not Found: people do live here, we just
+        // ran out of candidate budget before finding one whose current
+        // address matches. Kept visible so these can be re-run later
+        // rather than buried among real negatives.
+        broadcastLog(`Checked ${MAX_ADDRESS_CANDIDATES} candidates without a current-address match, and more exist.`);
+        return { found: false, status: "too-many-residents" };
+      }
+      broadcastLog("Nobody at this address has it as their current address - marking Not Found.");
+      return { found: false };
+    }
+
+    const profile = best.profile;
+    // Ranked by how recently each number was last reported, not by the order
+    // the site happened to print them in - see rankMobilesByRecency above for
+    // the live evidence that first-listed is routinely years stale. Falls back
+    // to the old otherMobiles list if a profile somehow carries no per-number
+    // reported text, so this can never return fewer numbers than before.
+    const ranked = rankMobilesByRecency(profile.wirelessPhones);
+    const mobiles = (ranked.length ? ranked : profile.otherMobiles || []).slice(0, 3);
+    const landlines = (profile.landlines || []).slice(0, 3);
+
+    if (mobiles.length === 0) {
+      // A real person was found and correctly matched - just not callable.
+      // Deliberately NOT a reason to fall through to the next candidate
+      // (Mohsin 2026-08-17): the winner stands once chosen.
+      //
+      // Their details still come back (2026-08-21) so the run can PARK them in
+      // the Incomplete Leads tab rather than discard them. A real person found
+      // and then thrown away is the one loss a re-run can't undo.
+      broadcastLog(`${profile.name || "This resident"} has no mobile number - parking them, not discarding.`);
+      return {
+        found: false,
+        status: "no-mobile-number",
+        name: profile.name,
+        address: profile.address,
+        age: profile.age,
+        property: profile.property,
+        mobiles: [],
+        landlines,
+        email: profile.email,
+        source: "FastPeopleSearch",
+      };
+    }
+
+    return {
+      found: true,
+      name: profile.name,
+      address: profile.address,
+      age: profile.age,
+      property: profile.property,
+      phone: mobiles[0],
+      phoneType: "Wireless",
+      otherMobiles: mobiles.slice(1),
+      landlines,
+      // The whole ranked list, for the lead writer - it fills Mobile 1-3 in
+      // one go rather than reassembling primary + others at the call site.
+      mobiles,
+      // Read for real as of 2026-08-21 - see extractProfile's own note for the
+      // confirmed markup. Both sites now fill the Email column.
+      email: profile.email,
+      source: "FastPeopleSearch",
+      candidatesChecked: candidates.length,
+    };
+  } catch (err) {
+    if (!(err instanceof StoppedByUserError)) {
+      const currentUrl = await p?.evaluate(() => document.location.href).catch(() => null);
+      broadcastStatus("error-detail", {
+        message: err.message,
+        url: currentUrl || lastKnownUrl,
+        previousUrl: lastKnownUrl,
+        context: `runAddressSearch(${label})`,
       });
     }
     throw err;
@@ -1695,14 +2105,41 @@ async function extractTPSProfile(p, searchedDigits) {
       .map((entry) => entry.number);
     const landlines = phones.filter((entry) => /landline/i.test(entry.type || "")).map((entry) => entry.number);
 
+    // --- Added 2026-08-20 for address mode. Additive only. ---
+
+    // The move-in date. This is the one thing address mode's locked winner
+    // rule ("most recent move-in wins") depends on, and unlike FastPeopleSearch
+    // - which puts it right in the Current Address heading - TruePeopleSearch
+    // states it only in the Background Profile prose near the foot of the page:
+    //
+    //   "She has lived at 671 Bundy Ave in San Jose, CA since June 1989."
+    //
+    // Confirmed live 2026-08-19. Anchored to "has lived at" on purpose: the
+    // same page also carries "Jennie is linked to the business Mc Monagle
+    // Jennie J since Jan 2001", and a bare scan for "since" picks up that
+    // business date instead - which would silently rank candidates by the
+    // wrong number rather than fail loudly.
+    const currentAddressSince =
+      document.body.innerText.match(/has lived at[\s\S]{0,160}?\bsince\s+([A-Za-z]+\s+\d{4})/i)?.[1] || "";
+
+    const wirelessPhones = phones
+      .filter((entry) => /wireless/i.test(entry.type || ""))
+      .map((entry) => ({ number: entry.number, reportedText: entry.reportedText }));
+    const landlinePhones = phones
+      .filter((entry) => /landline/i.test(entry.type || ""))
+      .map((entry) => ({ number: entry.number, reportedText: entry.reportedText }));
+
     return {
       name,
       address,
+      currentAddressSince,
       age,
       property,
       email,
       otherMobiles,
       landlines,
+      wirelessPhones,
+      landlinePhones,
       matchedNumber: matched ? matched.number : null,
       matchedType: matched ? matched.type : null,
       matchedReportedText: matched?.reportedText || "",
@@ -1840,6 +2277,9 @@ async function runPhoneSearchTruePeopleSearch(rawPhone, slot = "A") {
       phoneType: profile.matchedType,
       otherMobiles: profile.otherMobiles,
       landlines: profile.landlines,
+      // Same record-keeping-only footing as FastPeopleSearch's own phone
+      // search - master file column, never the client export (2026-08-21).
+      email: profile.email,
       candidatesChecked: candidates.length,
     };
   } catch (err) {
@@ -1860,9 +2300,1182 @@ async function runPhoneSearchTruePeopleSearch(rawPhone, slot = "A") {
   }
 }
 
+// --- TruePeopleSearch (address mode) ---
+//
+// Built 2026-08-20 against claude/site-research/truepeoplesearch-address.md,
+// every URL/selector/page shape in which was confirmed live on the real site
+// first (Mohsin clearing the captchas), never guessed.
+//
+// Three things make this site EASIER than FastPeopleSearch's address mode,
+// and they are worth stating because they remove code rather than add it:
+//
+//  1. The search is a plain query string - `/resultaddress?streetaddress=
+//     &citystatezip=`. No slug to assemble, so the whole class of unit-number
+//     problems that dogs FastPeopleSearch simply does not arise here; the
+//     street and region go in exactly as the file wrote them.
+//  2. The results page tells us which town each person lives in NOW. Anyone
+//     whose current town isn't the town we searched has moved away, and can be
+//     dropped before their profile is ever opened. On the real test address
+//     that halved the profile visits.
+//  3. The no-results case has its own unambiguous sentence.
+//
+// One thing is harder: the hidden template card. The results page carries an
+// element that looks exactly like a real candidate to a plain selector but is
+// `d-none` and has no real name element. It is the same stray that caused a
+// live bug in phone mode on 2026-08-14, where two completely different
+// searches both landed on one dead profile. It is excluded twice below, on
+// purpose - once by the hidden class, once by requiring a real name.
+const TPS_ADDRESS_NO_RESULTS_TEXT = /we could not find any records associated with that address/i;
+
+// The town half of a "City, ST 12345" region string, upper-cased. Used only
+// for the cheap pre-filter described above - never as proof, since two
+// different streets in one town read identically here.
+function tpsRegionTown(region) {
+  const first = String(region || "").split(",")[0];
+  return first.replace(/\s+/g, " ").trim().toUpperCase();
+}
+
+// True when this candidate card's own "lives in" town matches the town we
+// searched. A card with no readable town is kept rather than dropped - the
+// filter exists to save work, and it must never be the reason a real resident
+// is missed.
+function tpsCandidateStillLivesInTown(cardTown, searchedTown) {
+  if (!cardTown || !searchedTown) return true;
+  return cardTown.toUpperCase().includes(searchedTown);
+}
+
+async function runAddressSearchTruePeopleSearch(street, region, slot = "B") {
+  const cleanStreet = String(street || "").trim();
+  const cleanRegion = String(region || "").trim();
+  if (!cleanStreet || !cleanRegion) {
+    throw new Error("Both a street and a city/state (or zip) are needed to search an address.");
+  }
+  const label = `${cleanStreet}, ${cleanRegion}`;
+
+  currentAbortController = new AbortController();
+  const signal = currentAbortController.signal;
+
+  let lastKnownUrl = null;
+  let p;
+
+  try {
+    p = await ensurePage(slot);
+    await p.bringToFront();
+    throwIfAborted(signal);
+
+    broadcastLog(`Searching TruePeopleSearch for ${label}...`);
+    const resultsUrl =
+      "https://www.truepeoplesearch.com/resultaddress" +
+      `?streetaddress=${encodeURIComponent(cleanStreet)}` +
+      `&citystatezip=${encodeURIComponent(cleanRegion)}`;
+    await p.goto(resultsUrl, { waitUntil: "domcontentloaded" });
+    lastKnownUrl = resultsUrl;
+
+    // Address mode's no-results sentence is NOT the one phone mode watches
+    // for ("...for that search criteria") - confirmed live, this site words
+    // the two differently. Reusing phone mode's pattern here would have meant
+    // every empty address sat waiting for the full timeout and then reported
+    // as a stall instead of an honest Not Found.
+    const outcome = await p
+      .evaluate(
+        (noResultsSource) => {
+          const bodyText = document.body.innerText || "";
+          if (new RegExp(noResultsSource, "i").test(bodyText)) return "no-results";
+          if (document.querySelector(".card-summary[data-detail-link]:not(.d-none)")) return "has-results";
+          return "unknown";
+        },
+        TPS_ADDRESS_NO_RESULTS_TEXT.source
+      )
+      .catch(() => "unknown");
+
+    if (outcome === "unknown") {
+      // Could be the InternalCaptcha gate, could be a slow page. Fall back to
+      // the site's normal results waiter, which already knows both shapes.
+      const waited = await waitForTPSResultsOutcome(p, TPS_RESULTS_WAIT_MS, signal);
+      if (waited === "no-results") {
+        broadcastLog("No records found for this address.");
+        return { found: false };
+      }
+      if (waited === "timeout") {
+        broadcastLog("This address's page never fully loaded - giving up on it for now.");
+        throw new Error(
+          "This address's page never fully loaded (may still be showing a verification check) - try again."
+        );
+      }
+    } else if (outcome === "no-results") {
+      broadcastLog("No records found for this address.");
+      return { found: false };
+    }
+
+    try {
+      await actLikeSomeoneBrowsing(p, signal, "truepeoplesearch");
+    } catch (err) {
+      if (err instanceof StoppedByUserError) throw err;
+    }
+
+    const searchedTown = tpsRegionTown(cleanRegion);
+
+    const rawCandidates = await p
+      .evaluate(() => {
+        const out = [];
+        const seen = new Set();
+        // Both guards against the hidden template card, together: it is
+        // `d-none`, and it uses a plain `.h4` for its name where a real card
+        // uses `.content-header`. Either alone would do; both is cheap.
+        document.querySelectorAll(".card-summary[data-detail-link]:not(.d-none)").forEach((card) => {
+          const href = card.getAttribute("data-detail-link");
+          const nameEl = card.querySelector(".content-header");
+          if (!href || !nameEl) return;
+          if (seen.has(href)) return; // one card renders two View Details anchors (desktop + mobile)
+          seen.add(href);
+
+          // Headline reads "{Name} Age {n} • {City, ST}". The town is the last
+          // .content-value on that line; reading it by position rather than by
+          // a class of its own, since it has none.
+          const values = Array.from(card.querySelectorAll(":scope > .row .content-value"));
+          const townText = values.length ? values[values.length - 1].textContent.trim() : "";
+          out.push({
+            href,
+            name: nameEl.textContent.replace(/\s+/g, " ").trim(),
+            town: /^[A-Za-z .'-]+,\s*[A-Z]{2}$/.test(townText) ? townText : "",
+          });
+        });
+        return out;
+      })
+      .catch(() => []);
+
+    // The free pre-filter. Anyone whose current town isn't the searched town
+    // has moved away, and opening their profile can only ever confirm that.
+    const stillLocal = rawCandidates.filter((c) => tpsCandidateStillLivesInTown(c.town, searchedTown));
+    const movedAway = rawCandidates.length - stillLocal.length;
+
+    const candidates = stillLocal.slice(0, MAX_ADDRESS_CANDIDATES);
+    const cappedOut = stillLocal.length > candidates.length;
+
+    broadcastLog(
+      `${candidates.length} candidate${candidates.length === 1 ? "" : "s"} to check` +
+        (movedAway > 0 ? ` (${movedAway} already moved away)` : "") +
+        (cappedOut ? ` (capped at ${MAX_ADDRESS_CANDIDATES})` : "") +
+        "..."
+    );
+
+    if (candidates.length === 0) {
+      broadcastLog("Nobody currently living at this address - marking Not Found.");
+      return { found: false };
+    }
+
+    const searchedStreet = normalizeAddressText(cleanStreet);
+    let best = null; // { profile, rank }
+
+    for (const candidate of candidates) {
+      throwIfAborted(signal);
+      const profileUrl = `https://www.truepeoplesearch.com${candidate.href}`;
+      broadcastLog(`Checking ${candidate.name || nameFromCandidateHref(candidate.href)}...`);
+      await p.goto(profileUrl, { waitUntil: "domcontentloaded" });
+      lastKnownUrl = profileUrl;
+
+      const loaded = await waitForTPSProfileOutcome(p, TPS_PROFILE_WAIT_MS, signal);
+      if (loaded !== "loaded") {
+        // A dead/expired profile or a slow one shouldn't sink the whole
+        // address - skip just this candidate, same as phone mode does.
+        broadcastLog("This candidate's profile never fully loaded - skipping it.");
+        continue;
+      }
+
+      try {
+        await actLikeSomeoneBrowsing(p, signal, "truepeoplesearch");
+      } catch (err) {
+        if (err instanceof StoppedByUserError) throw err;
+      }
+
+      // "" as the searched digits, exactly as FastPeopleSearch's address mode
+      // does: nothing can equal it, so no number is treated as "the searched
+      // one" and every number on the profile comes back available to us.
+      const profile = await extractTPSProfile(p, "");
+
+      // The locked rule, and the reason the pre-filter above is only a filter:
+      // the searched STREET must be this person's current address, not merely
+      // the same town.
+      const profileAddress = normalizeAddressText(profile.address);
+      if (!profileAddress || !profileAddress.includes(searchedStreet)) {
+        broadcastLog("Searched address isn't this person's current address - skipping them.");
+        continue;
+      }
+
+      const rank = sinceRank(profile.currentAddressSince);
+      if (!best || rank > best.rank) best = { profile, rank };
+    }
+
+    if (!best) {
+      if (cappedOut) {
+        broadcastLog(`Checked ${MAX_ADDRESS_CANDIDATES} candidates without a current-address match, and more exist.`);
+        return { found: false, status: "too-many-residents" };
+      }
+      broadcastLog("Nobody at this address has it as their current address - marking Not Found.");
+      return { found: false };
+    }
+
+    const profile = best.profile;
+    const ranked = rankMobilesByRecency(profile.wirelessPhones);
+    const mobiles = (ranked.length ? ranked : profile.otherMobiles || []).slice(0, 3);
+    const landlines = (profile.landlines || []).slice(0, 3);
+
+    if (mobiles.length === 0) {
+      // Same locked rule as FastPeopleSearch's address mode: the winner
+      // stands once chosen. A person correctly matched but not callable is a
+      // real outcome, not a reason to fall through to second place.
+      //
+      // Details returned so the run can park them (2026-08-21). This site
+      // publishes email, so a parked person here often still has a real way
+      // to be reached - which is precisely why discarding them was wrong.
+      broadcastLog(`${profile.name || "This resident"} has no mobile number - parking them, not discarding.`);
+      return {
+        found: false,
+        status: "no-mobile-number",
+        name: profile.name,
+        address: profile.address,
+        age: profile.age,
+        property: profile.property,
+        mobiles: [],
+        landlines,
+        email: profile.email,
+        source: "TruePeopleSearch",
+      };
+    }
+
+    return {
+      found: true,
+      name: profile.name,
+      address: profile.address,
+      age: profile.age,
+      property: profile.property,
+      phone: mobiles[0],
+      phoneType: "Wireless",
+      otherMobiles: mobiles.slice(1),
+      mobiles,
+      landlines,
+      // This site DOES publish email, and often several - which is what makes
+      // address mode the first thing in this app able to fill the master
+      // file's Email column at all.
+      email: profile.email,
+      source: "TruePeopleSearch",
+      candidatesChecked: candidates.length,
+    };
+  } catch (err) {
+    if (!(err instanceof StoppedByUserError)) {
+      const currentUrl = await p?.evaluate(() => document.location.href).catch(() => null);
+      broadcastStatus("error-detail", {
+        message: err.message,
+        url: currentUrl || lastKnownUrl,
+        previousUrl: lastKnownUrl,
+        context: `runAddressSearchTruePeopleSearch(${label})`,
+      });
+    }
+    throw err;
+  } finally {
+    currentAbortController = null;
+  }
+}
+
+
+// --- Prop Wire (Stage 1: building the address list) ----------------------
+//
+// This is a PORT of the Chrome extension's own content-propwire.js, not a
+// reimplementation. Mohsin's instruction (2026-08-21): the extension's code is
+// tested and it works, copy it. Every selector, every timeout and every
+// stop-condition below is the extension's, verified still live against the
+// real site on 2026-08-21:
+//
+//   li.result-tile                                  - one property per tile
+//   .result-tile-info h2  -> firstChild             - the street
+//   .result-tile-info h2  -> span                   - "City, ST 12345"
+//   .pagination-wrapper b                           - total result count
+//   .pagination-wrapper button[aria-label="Next page"]
+//
+// Live check that day: a Tucson city search rendered 100 tiles per page and
+// reported 325,217 results, with all four selectors matching exactly.
+//
+// Two differences from the extension, both forced by where this now runs:
+//
+//  1. The extension was injected INTO the page and could use a MutationObserver
+//     to notice a new page of results. We drive the browser from outside, so
+//     the same "has the first address changed yet" test is done by polling
+//     instead. Same signal, same 10s ceiling, same meaning.
+//  2. The extension held the whole address list in its own storage. Here each
+//     page is handed straight to the renderer as it is scraped, so addresses
+//     land in the master file continuously - a Stop, a crash or a closed lid
+//     keeps everything collected up to that point instead of losing the lot.
+//
+// Prop Wire needs no login and no proxy (Mohsin, confirmed live 2026-08-21).
+// It is a source of addresses, not a place people are looked up, which is why
+// it is deliberately NOT in the Search Sources registry.
+
+const PROPWIRE_TILE_WAIT_MS = 15000; // extension's own waitForResultTiles ceiling
+const PROPWIRE_PAGE_CHANGE_WAIT_MS = 10000; // extension's own waitForPageChange ceiling
+const PROPWIRE_SETTLE_MS = 700; // extension's own post-click settle
+
+function propWireIsValidSearchUrl(url) {
+  try {
+    const parsed = new URL(String(url).trim());
+    return /(^|\.)propwire\.com$/i.test(parsed.hostname) && parsed.pathname.startsWith("/search");
+  } catch {
+    return false;
+  }
+}
+
+// The extension's own address identity - street + "|" + cityStateZip - so a
+// re-run of the same search never collects the same address twice.
+function propWireAddressKey(address) {
+  return `${address.street}|${address.cityStateZip}`.toUpperCase();
+}
+
+// Polls for the extension's own `li.result-tile`, up to the same 15 seconds it
+// allowed. This site draws its results client-side and late, which is exactly
+// why the wait exists: "not there yet" and "genuinely no results" are
+// different answers, and treating the first as the second would silently
+// report a full county as empty.
+async function waitForPropWireTiles(p, signal, timeoutMs = PROPWIRE_TILE_WAIT_MS) {
+  const startedAt = Date.now();
+  while (Date.now() - startedAt < timeoutMs) {
+    throwIfAborted(signal);
+    const present = await p.evaluate(() => !!document.querySelector("li.result-tile")).catch(() => false);
+    if (present) return true;
+    await wait(200, signal);
+  }
+  return false;
+}
+
+async function runPropWireListBuild(searchUrl, slot = "A") {
+  if (!propWireIsValidSearchUrl(searchUrl)) {
+    throw new Error(
+      "That doesn't look like a Prop Wire search link. Run your search on propwire.com, then copy the address from the browser bar."
+    );
+  }
+
+  currentAbortController = new AbortController();
+  const signal = currentAbortController.signal;
+
+  let p;
+  let pagesWalked = 0;
+  let collected = 0;
+  const seenKeys = new Set();
+
+  try {
+    p = await ensurePage(slot);
+    await p.bringToFront();
+    throwIfAborted(signal);
+
+    broadcastLog("Opening your Prop Wire search...");
+    await p.goto(String(searchUrl).trim(), { waitUntil: "domcontentloaded" });
+
+    // The extension's own noNewAddressStreak. Two pages in a row that add
+    // nothing, while the Next button still claims there is more, means the
+    // site's paging has got stuck - stop rather than keep clicking blindly.
+    let noNewAddressStreak = 0;
+
+    while (true) {
+      throwIfAborted(signal);
+
+      const rendered = await waitForPropWireTiles(p, signal);
+      if (!rendered) {
+        // A real stall, NOT an empty county - the extension is emphatic about
+        // this distinction and it is the single easiest thing to get wrong.
+        broadcastLog("Prop Wire's results didn't load within 15 seconds - stopping so you can check the page.");
+        return { ok: false, reason: "stalled", collected, pages: pagesWalked };
+      }
+
+      const page = await p
+        .evaluate(() => {
+          const items = Array.from(document.querySelectorAll("li.result-tile"));
+          const addresses = items
+            .map((li) => {
+              const h2 = li.querySelector(".result-tile-info h2");
+              if (!h2 || !h2.firstChild) return null;
+              const street = h2.firstChild.textContent.trim();
+              const spanEl = h2.querySelector("span");
+              const cityStateZip = spanEl ? spanEl.textContent.trim() : "";
+              if (!street) return null;
+              return { street, cityStateZip };
+            })
+            .filter(Boolean);
+
+          const wrapper = document.querySelector(".pagination-wrapper");
+          const bold = wrapper ? wrapper.querySelector("b") : null;
+          const total = bold ? parseInt(bold.textContent.replace(/[^0-9]/g, ""), 10) : null;
+          const nextBtn = wrapper ? wrapper.querySelector('button[aria-label="Next page"]') : null;
+
+          const firstTile = document.querySelector("li.result-tile .result-tile-info h2");
+          return {
+            addresses,
+            total: Number.isFinite(total) ? total : null,
+            hasNext: !!nextBtn && !nextBtn.disabled,
+            firstKey: firstTile ? firstTile.textContent.trim() : "",
+          };
+        })
+        .catch(() => null);
+
+      if (!page) {
+        broadcastLog("Couldn't read this page of results - stopping.");
+        return { ok: false, reason: "unreadable", collected, pages: pagesWalked };
+      }
+
+      // Tiles rendered but nothing scraped - the extension treats this as
+      // genuinely finished, not as a fault.
+      if (page.addresses.length === 0) {
+        broadcastLog("No more addresses on this page - the list is complete.");
+        return { ok: true, reason: "finished", collected, pages: pagesWalked, total: page.total };
+      }
+
+      pagesWalked += 1;
+
+      const fresh = page.addresses.filter((a) => !seenKeys.has(propWireAddressKey(a)));
+      for (const a of fresh) seenKeys.add(propWireAddressKey(a));
+      collected += fresh.length;
+
+      // Hand this page straight to the renderer so it lands in the master file
+      // now, rather than being held until the whole walk finishes.
+      if (fresh.length > 0) {
+        broadcastStatus("propwire-addresses", { addresses: fresh, total: page.total, page: pagesWalked });
+      }
+
+      broadcastLog(
+        `Page ${pagesWalked}: ${fresh.length} new address${fresh.length === 1 ? "" : "es"}` +
+          (page.total ? ` (${collected} collected of ${page.total.toLocaleString()} on the site)` : "")
+      );
+
+      noNewAddressStreak = fresh.length > 0 ? 0 : noNewAddressStreak + 1;
+      if (noNewAddressStreak >= 2) {
+        broadcastLog("Two pages in a row added nothing - Prop Wire's paging looks stuck, stopping here.");
+        return { ok: true, reason: "stuck", collected, pages: pagesWalked, total: page.total };
+      }
+
+      if (!page.hasNext) {
+        broadcastLog("That was the last page - the list is complete.");
+        return { ok: true, reason: "finished", collected, pages: pagesWalked, total: page.total };
+      }
+
+      const previousKey = page.firstKey;
+
+      // Prop Wire pages IN PLACE - clicking Next re-renders the tiles and
+      // leaves the URL untouched (confirmed live 2026-08-23, on a real
+      // Conover, NC search). The driver's normal click insists on a URL change
+      // to prove it landed, which made a perfectly good click look like three
+      // failures and killed the whole walk on page 2.
+      //
+      // So the proof of a landed click is the extension's own signal, the one
+      // its MutationObserver watched for: the first address on the page is no
+      // longer the one we just scraped. Same 10s ceiling as before.
+      const nextPageLanded = async () => {
+        const nowKey = await p
+          .evaluate(() => {
+            const el = document.querySelector("li.result-tile .result-tile-info h2");
+            return el ? el.textContent.trim() : "";
+          })
+          .catch(() => "");
+        return Boolean(nowKey) && nowKey !== previousKey;
+      };
+
+      try {
+        await p.click('.pagination-wrapper button[aria-label="Next page"]', {
+          confirm: nextPageLanded,
+          confirmTimeoutMs: PROPWIRE_PAGE_CHANGE_WAIT_MS,
+        });
+      } catch (err) {
+        if (err instanceof StoppedByUserError) throw err;
+        // A Next button that will not advance is the same condition as the
+        // extension's stuck-paging rule, and it gets the same ending: stop
+        // cleanly and keep everything collected so far, rather than throwing
+        // this walk away over its last page.
+        broadcastLog("Prop Wire wouldn't move on to the next page - stopping here and keeping everything collected.");
+        return { ok: true, reason: "stuck", collected, pages: pagesWalked, total: page.total };
+      }
+
+      await wait(PROPWIRE_SETTLE_MS, signal); // let the rest of the tile settle after the first render
+    }
+  } catch (err) {
+    if (err instanceof StoppedByUserError) {
+      // Everything collected so far is already in the file - a stop is a clean
+      // ending here, not a loss.
+      return { ok: true, reason: "stopped", collected, pages: pagesWalked };
+    }
+    broadcastStatus("error-detail", {
+      message: err.message,
+      context: `runPropWireListBuild(${searchUrl})`,
+    });
+    throw err;
+  } finally {
+    currentAbortController = null;
+  }
+}
+
+
+// --- NAME MODE (both sites) ------------------------------------------------
+//
+// Researched live 2026-08-23 before a line of this was written - see
+// claude/site-research/fastpeoplesearch-name.md and
+// claude/site-research/truepeoplesearch-name.md for the real captured shapes.
+// Three rules came out of that research (decisions.md, same date):
+//
+//  1. **The person must live in the searched city NOW.** Both sites treat the
+//     city as a hint, not a filter: Jennie McMonagle, resident of San Jose
+//     since 1989, is returned in full for a Roseville search on BOTH sites,
+//     and **neither site marks which city matched** - there is no tell to
+//     read, so do not go looking for one. Measured scale: "John Smith" +
+//     "Phoenix, AZ" returns 249 records on TruePeopleSearch and an uncountable
+//     "Over 100+" on FastPeopleSearch; 1 of the first 10 lives in Phoenix.
+//
+//  2. **Most recently moved in wins, capped at 5 candidates** - the same rule
+//     and the same cap address mode already uses, and both sites carry the
+//     move-in date at the same Month/Year granularity, so sinceRank is reused
+//     unchanged. Both sites render 10 cards per page, so a cap of 5 keeps name
+//     mode on page one and **it never pages**. The paging shapes are recorded
+//     in the research files if that ever changes, and they differ per site.
+//
+//  3. **The NAME has to be checked too** - the one the research forced, never
+//     flagged anywhere before. FastPeopleSearch does not honour the searched
+//     name: its first ten for "John Smith in Phoenix" held Gene Smith, Jack
+//     Smith, Gary Smith and a **John Clark**, and zero of the ten matched both
+//     name and city. Address mode never needed this - there the name is the
+//     answer, not the query.
+const MAX_NAME_CANDIDATES = 5;
+
+// Suffixes and honorifics the sites append of their own accord.
+// TruePeopleSearch returns "John Smith Jr" and "John Smith Sr" as matches for
+// a plain "John Smith" search (confirmed live), so these must never be allowed
+// to fail a comparison.
+const NAME_SUFFIXES = new Set(["JR", "SR", "II", "III", "IV", "V", "MR", "MRS", "MS", "DR"]);
+
+function nameWords(value) {
+  return String(value || "")
+    .toUpperCase()
+    .replace(/[^A-Z\s'-]/g, " ")
+    .split(/[\s'-]+/)
+    .filter((word) => word && !NAME_SUFFIXES.has(word));
+}
+
+// True when a candidate is plausibly the person named on the row.
+//
+// First name AND last name must both be present, because the looseness being
+// defended against is real and measured (Gene/Jack/Gary Smith, and a "John
+// Clark", all returned for "John Smith"). Middle names and initials in between
+// are ignored rather than required - "John A Smith" is the same human as "John
+// Smith", and both sites print middles inconsistently.
+//
+// An initial matches the full name it stands for in either direction ("J
+// Smith" / "John Smith"), which is deliberately generous: this is only a name
+// check, and the city check is what actually does the work of being right.
+function nameMatchesSearched(candidateName, searchedFirst, searchedLast) {
+  const words = nameWords(candidateName);
+  if (words.length < 2) return false;
+  const first = nameWords(searchedFirst)[0];
+  const lastParts = nameWords(searchedLast);
+  const last = lastParts.length ? lastParts[lastParts.length - 1] : "";
+  if (!first || !last) return false;
+
+  const candidateFirst = words[0];
+  const candidateLast = words[words.length - 1];
+  const initialMatch = (a, b) => (a.length === 1 && b.startsWith(a)) || (b.length === 1 && a.startsWith(b));
+
+  return (candidateFirst === first || initialMatch(candidateFirst, first)) && candidateLast === last;
+}
+
+// The two-letter state out of a "City, ST" / "City, ST 12345" region string.
+// "" when there isn't one, which is treated as "don't know" rather than "no
+// match" everywhere below.
+function regionState(region) {
+  const parts = String(region || "").split(",");
+  if (parts.length < 2) return "";
+  const match = parts[1].trim().match(/^([A-Za-z]{2})\b/);
+  return match ? match[1].toUpperCase() : "";
+}
+
+function escapeForRegex(value) {
+  return String(value || "").replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+// Compares two "City, ST" strings. The state half only ever votes NO when both
+// sides actually carry one - a card that prints a bare town shouldn't be
+// thrown away for failing to repeat itself.
+function sameTown(a, b) {
+  const townA = tpsRegionTown(a);
+  const townB = tpsRegionTown(b);
+  if (!townA || !townB || townA !== townB) return false;
+  const stateA = regionState(a);
+  const stateB = regionState(b);
+  return !stateA || !stateB || stateA === stateB;
+}
+
+// The cheap card-level filter. The city printed in a results-card headline is
+// the person's CURRENT city on both sites, so most of the wrong people can be
+// dropped before a single profile is opened - which is what makes the strict
+// city rule cost nothing. Name mode is better off here than address mode,
+// which has to open candidates to answer its equivalent question.
+//
+// An unreadable city is KEPT and settled on the profile instead. The filter
+// exists to save work; it must never be the reason a real match is missed.
+function cardCityLooksRight(cardCity, region) {
+  if (!cardCity) return true;
+  return sameTown(cardCity, region);
+}
+
+// Name mode's PROOF, and the counterpart of address mode's "the searched
+// street must be their current address". Unlike the card filter above, an
+// unreadable answer here is a NO - proof that can't be read isn't proof.
+//
+// TWO real failures shaped this, and both are worth keeping in view:
+//
+//  1. A plain "does the town appear anywhere in this address" check accepts
+//     "12 Phoenix Ave, Tucson, AZ 85711" as a Phoenix address. Street names
+//     collide with town names constantly - Phoenix Ave, Madison St, Auburn Rd -
+//     and every collision would be a wrong-city lead delivered as a right one.
+//     So the street is excluded from the search entirely.
+//
+//  2. Fixing (1) by reading the town from a FIXED position broke
+//     FastPeopleSearch outright, live, on 2026-08-23 - it rejected every single
+//     candidate on that site. The two sites do not punctuate alike, and both of
+//     these are real captured values:
+//
+//         FastPeopleSearch   "671 Bundy Ave, San Jose CA 95117"    ONE comma
+//         TruePeopleSearch   "671 Bundy Ave, San Jose, CA 95117"   TWO commas
+//
+//     Reading "the part before the last comma" finds the town on one site and
+//     the STREET on the other.
+//
+// So: split off the street at the first comma, then look for the town at the
+// START of any remaining part. That works on both punctuations, survives a unit
+// number sitting between them ("... , Apt 4, San Jose CA 95117"), and still
+// refuses the Phoenix Ave case because the street is never searched.
+//
+// The town must be followed by a state, a zip, or the end of its part - never
+// by more town words. Without that, searching "San" would match "San Jose".
+function profileCityMatches(profileAddress, region) {
+  const town = tpsRegionTown(region);
+  if (!town) return false;
+  const state = regionState(region);
+
+  const parts = String(profileAddress || "")
+    .split(",")
+    .map((part) => part.replace(/\s+/g, " ").trim())
+    .filter(Boolean);
+  if (parts.length === 0) return false;
+
+  const townPattern = new RegExp(
+    `^${escapeForRegex(town)}(\\s+[A-Z]{2}\\b|\\s+\\d{5}(-\\d{4})?\\b|\\s*$)`
+  );
+
+  if (parts.length >= 2) {
+    // Everything after the street. The street is deliberately not searched.
+    const locality = parts.slice(1);
+    const townFound = locality.some((part) => townPattern.test(part.toUpperCase().replace(/[.#]/g, "")));
+    if (!townFound) return false;
+    if (!state) return true;
+    return new RegExp(`(^|\\s)${escapeForRegex(state)}(\\s|$)`).test(locality.join(" ").toUpperCase());
+  }
+
+  // No commas at all. Nothing marks where the street ends, so the town is
+  // required to sit immediately before the state at the very END of the line -
+  // which rejects the Phoenix Ave collision for the same reason as above.
+  const address = normalizeAddressText(profileAddress);
+  if (!address) return false;
+  const tail = state ? `${escapeForRegex(town)}\\s+${escapeForRegex(state)}` : escapeForRegex(town);
+  return new RegExp(`(^|\\s)${tail}(\\s+\\d{5}(-\\d{4})?)?\\s*$`).test(address);
+}
+
+// FastPeopleSearch's name-search URL, confirmed live 2026-08-23 and
+// independently corroborated by the site's own internal links on the same page
+// (/name/jennie-mcmonagle, /name/jennie-mcmonagle_ca). Same slug rules as
+// addressSlug: lowercased, spaces to hyphens, comma dropped, the two halves
+// joined by a single underscore.
+//
+// The zip is deliberately dropped from the location half. Only the
+// "_{city}-{state}" form was confirmed live; whether a trailing zip is
+// tolerated here the way it is on an address slug was not tested, and name
+// mode has no need of one - the city is the whole question.
+function nameSlug(first, last, region) {
+  const part = (value) =>
+    String(value || "")
+      .toLowerCase()
+      .replace(/[.,#]/g, "")
+      .replace(/[^a-z0-9\s-]/g, "")
+      .trim()
+      .replace(/\s+/g, "-");
+  const location = String(region || "").replace(/\s*\d{5}(-\d{4})?\s*$/, "");
+  return `${part(`${first} ${last}`)}_${part(location)}`;
+}
+
+// FastPeopleSearch card headings are not consistently shaped - "John Smith Age
+// 80 • Lubbock, TX" carries a bullet, "Barb Sissons Surprise, AZ" (no age)
+// carries none - which is exactly the ambiguity parseCandidateHeading refuses
+// to guess at, having once eaten a surname trying.
+//
+// Name mode has one advantage address mode did not: the candidate's name is
+// already known unambiguously from the href, so it can simply be taken off the
+// front and whatever remains is the age and the city.
+//
+// Returns "" when the city genuinely can't be read - which means "go and check
+// the profile", never a silent pass.
+function cityFromFpsHeading(headingText, candidateName) {
+  let text = String(headingText || "").replace(/\s+/g, " ").trim();
+  const name = String(candidateName || "").trim();
+  if (name && text.toUpperCase().startsWith(name.toUpperCase())) text = text.slice(name.length);
+  text = text
+    .trim()
+    .replace(/^Age\s+\d+/i, "")
+    .replace(/^Deceased\s*\([^)]*\)/i, "")
+    .replace(/^[•·•\-\s]+/, "")
+    .trim();
+  return /^[A-Za-z .'-]+,\s*[A-Z]{2}$/.test(text) ? text : "";
+}
+
+// FastPeopleSearch, name mode. Mirrors runAddressSearch step for step - same
+// browsing behaviour, same captcha/rate-limit handling, same profile
+// extraction, same "most recent move-in wins" ranking. Two things differ, and
+// only two: the searched NAME has to be checked (this site does not honour
+// it), and the proof is the person's current CITY rather than a street.
+async function runNameSearch(first, last, region, slot = "A") {
+  const cleanFirst = String(first || "").trim();
+  const cleanLast = String(last || "").trim();
+  const cleanRegion = String(region || "").trim();
+  if (!cleanFirst || !cleanLast || !cleanRegion) {
+    throw new Error("A first name, a last name and a city/state are all needed to search a name.");
+  }
+  const label = `${cleanFirst} ${cleanLast}, ${cleanRegion}`;
+
+  currentAbortController = new AbortController();
+  const signal = currentAbortController.signal;
+
+  let lastKnownUrl = null;
+  let p;
+
+  try {
+    p = await ensurePage(slot);
+    await p.bringToFront();
+    throwIfAborted(signal);
+
+    broadcastLog(`Searching FastPeopleSearch for ${label}...`);
+    const resultsUrl = `https://www.fastpeoplesearch.com/name/${nameSlug(cleanFirst, cleanLast, cleanRegion)}`;
+    await p.goto(resultsUrl, { waitUntil: "domcontentloaded" });
+    lastKnownUrl = resultsUrl;
+
+    // Unchanged from address mode, and confirmed live for name pages: a miss
+    // is an HTTP 404 whose h1.list-results-header reads "No results found for
+    // {name} in {city} {state}" - the same selector and the same literal text
+    // this waiter already looks for.
+    const outcome = await waitForResultsOutcome(p, RESULTS_WAIT_MS, signal);
+
+    if (outcome === "no-results") {
+      broadcastLog("No records found for this name.");
+      return { found: false };
+    }
+    if (outcome === "timeout") {
+      broadcastLog("This name's page never fully loaded - giving up on it for now.");
+      throw new Error("This name's page never fully loaded (may still be showing a verification check) - try again.");
+    }
+
+    try {
+      await actLikeSomeoneBrowsing(p, signal, "fastpeoplesearch");
+    } catch (err) {
+      if (err instanceof StoppedByUserError) throw err;
+    }
+
+    const rawCandidates = await p
+      .evaluate(() => {
+        const seen = [];
+        document.querySelectorAll(".people-list .card[data-link]").forEach((card) => {
+          const href = card.getAttribute("data-link");
+          if (!href || seen.some((entry) => entry.href === href)) return;
+          const heading = card.querySelector("h3");
+          seen.push({ href, heading: heading ? heading.textContent : "" });
+        });
+        return seen;
+      })
+      .catch(() => []);
+
+    const parsed = rawCandidates.map((entry) => {
+      const details = parseCandidateHeading(entry.href, entry.heading);
+      return { ...entry, ...details, city: cityFromFpsHeading(entry.heading, details.name) };
+    });
+
+    // Deceased people come back as ordinary results on this site (confirmed
+    // live in the address research: "Helen Hollifield Deceased (1910 - 2010)").
+    // Never a callable lead.
+    const living = parsed.filter((entry) => !entry.deceased);
+
+    // The name check, and the reason it exists: on the real captured page for
+    // "John Smith in Phoenix, AZ" this drops Gene Smith, Jack Smith, Gary
+    // Smith and John Clark - four of ten cards the site returned for a search
+    // it was told the name for.
+    const rightName = living.filter((entry) => nameMatchesSearched(entry.name, cleanFirst, cleanLast));
+    const wrongName = living.length - rightName.length;
+
+    // The free city filter. Six of those same ten carried the right name and
+    // the wrong city; dropping them here costs nothing, because the card
+    // already prints the person's current city.
+    const stillLocal = rightName.filter((entry) => cardCityLooksRight(entry.city, cleanRegion));
+    const movedAway = rightName.length - stillLocal.length;
+
+    const deduped = dedupeCandidates(stillLocal);
+    const candidates = deduped.slice(0, MAX_NAME_CANDIDATES);
+    const cappedOut = deduped.length > candidates.length;
+
+    broadcastLog(
+      `${candidates.length} candidate${candidates.length === 1 ? "" : "s"} to check` +
+        (wrongName > 0 ? ` (${wrongName} were a different person entirely)` : "") +
+        (movedAway > 0 ? ` (${movedAway} have moved away)` : "") +
+        (cappedOut ? ` (capped at ${MAX_NAME_CANDIDATES})` : "") +
+        "..."
+    );
+
+    if (candidates.length === 0) {
+      broadcastLog("Nobody by that name currently lives there - marking Not Found.");
+      return { found: false };
+    }
+
+    let best = null; // { profile, rank }
+
+    for (const candidate of candidates) {
+      throwIfAborted(signal);
+      const profileUrl = `https://www.fastpeoplesearch.com${candidate.href}`;
+      broadcastLog(`Checking ${candidate.name || nameFromCandidateHref(candidate.href)}...`);
+      await p.goto(profileUrl, { waitUntil: "domcontentloaded" });
+      lastKnownUrl = profileUrl;
+
+      const loaded = await waitForRealContent(p, "#full_name_section", PROFILE_WAIT_MS, signal);
+      if (!loaded) {
+        broadcastLog("This candidate's profile never fully loaded - skipping it.");
+        continue;
+      }
+
+      try {
+        await actLikeSomeoneBrowsing(p, signal, "fastpeoplesearch");
+      } catch (err) {
+        if (err instanceof StoppedByUserError) throw err;
+      }
+
+      // "" as the searched digits, exactly as address mode does - nothing can
+      // equal it, so every number on the profile comes back available.
+      const profile = await extractProfile(p, "");
+
+      // The name is re-checked against the profile's own heading, not just the
+      // card's href slug. The slug is reliable but it is the site's rendering
+      // of the name, and the profile is the record itself.
+      if (!nameMatchesSearched(profile.name || candidate.name, cleanFirst, cleanLast)) {
+        broadcastLog("Their profile is a different person to the one on the list - skipping them.");
+        continue;
+      }
+
+      // The locked rule: they must live in the searched city NOW.
+      if (!profileCityMatches(profile.address, cleanRegion)) {
+        broadcastLog("They don't live in that city any more - skipping them.");
+        continue;
+      }
+
+      const rank = sinceRank(profile.currentAddressSince);
+      if (!best || rank > best.rank) best = { profile, rank };
+    }
+
+    if (!best) {
+      if (cappedOut) {
+        // Genuinely different from Not Found: people by this name do live
+        // there, we just ran out of candidate budget before proving one.
+        // Kept visible so these can be re-run rather than buried among real
+        // negatives.
+        broadcastLog(`Checked ${MAX_NAME_CANDIDATES} people of that name without a match, and more exist.`);
+        return { found: false, status: "too-many-matches" };
+      }
+      broadcastLog("Nobody by that name currently lives there - marking Not Found.");
+      return { found: false };
+    }
+
+    const profile = best.profile;
+    const ranked = rankMobilesByRecency(profile.wirelessPhones);
+    const mobiles = (ranked.length ? ranked : profile.otherMobiles || []).slice(0, 3);
+    const landlines = (profile.landlines || []).slice(0, 3);
+
+    if (mobiles.length === 0) {
+      broadcastLog(`${profile.name || "This person"} has no mobile number - parking them, not discarding.`);
+      return {
+        found: false,
+        status: "no-mobile-number",
+        name: profile.name,
+        address: profile.address,
+        age: profile.age,
+        property: profile.property,
+        mobiles: [],
+        landlines,
+        email: profile.email,
+        source: "FastPeopleSearch",
+      };
+    }
+
+    return {
+      found: true,
+      name: profile.name,
+      address: profile.address,
+      age: profile.age,
+      property: profile.property,
+      phone: mobiles[0],
+      phoneType: "Wireless",
+      otherMobiles: mobiles.slice(1),
+      landlines,
+      mobiles,
+      email: profile.email,
+      source: "FastPeopleSearch",
+      candidatesChecked: candidates.length,
+    };
+  } catch (err) {
+    if (!(err instanceof StoppedByUserError)) {
+      const currentUrl = await p?.evaluate(() => document.location.href).catch(() => null);
+      broadcastStatus("error-detail", {
+        message: err.message,
+        url: currentUrl || lastKnownUrl,
+        previousUrl: lastKnownUrl,
+        context: `runNameSearch(${label})`,
+      });
+    }
+    throw err;
+  } finally {
+    currentAbortController = null;
+  }
+}
+
+// TruePeopleSearch, name mode. Mirrors runAddressSearchTruePeopleSearch, with
+// the same two differences FastPeopleSearch's name mode has: the name is
+// checked, and the proof is the city rather than a street.
+//
+// One thing is simpler here than in address mode. Address mode needed its own
+// no-results sentence, because this site words the address miss differently
+// ("...associated with that address") from the phone one. Name mode's miss was
+// confirmed live as the PHONE wording - "We could not find any records for
+// that search criteria." - so the site's ordinary results waiter already
+// recognises it and no special-casing is needed.
+async function runNameSearchTruePeopleSearch(first, last, region, slot = "B") {
+  const cleanFirst = String(first || "").trim();
+  const cleanLast = String(last || "").trim();
+  const cleanRegion = String(region || "").trim();
+  if (!cleanFirst || !cleanLast || !cleanRegion) {
+    throw new Error("A first name, a last name and a city/state are all needed to search a name.");
+  }
+  const label = `${cleanFirst} ${cleanLast}, ${cleanRegion}`;
+
+  currentAbortController = new AbortController();
+  const signal = currentAbortController.signal;
+
+  let lastKnownUrl = null;
+  let p;
+
+  try {
+    p = await ensurePage(slot);
+    await p.bringToFront();
+    throwIfAborted(signal);
+
+    broadcastLog(`Searching TruePeopleSearch for ${label}...`);
+    // Note the endpoint: plain `/results`, not the mode-specific
+    // `/resultaddress` or `/resultphone`. Confirmed live 2026-08-23.
+    const resultsUrl =
+      "https://www.truepeoplesearch.com/results" +
+      `?name=${encodeURIComponent(`${cleanFirst} ${cleanLast}`)}` +
+      `&citystatezip=${encodeURIComponent(cleanRegion)}`;
+    await p.goto(resultsUrl, { waitUntil: "domcontentloaded" });
+    lastKnownUrl = resultsUrl;
+
+    const outcome = await waitForTPSResultsOutcome(p, TPS_RESULTS_WAIT_MS, signal);
+    if (outcome === "no-results") {
+      broadcastLog("No records found for this name.");
+      return { found: false };
+    }
+    if (outcome === "timeout") {
+      broadcastLog("This name's page never fully loaded - giving up on it for now.");
+      throw new Error("This name's page never fully loaded (may still be showing a verification check) - try again.");
+    }
+
+    try {
+      await actLikeSomeoneBrowsing(p, signal, "truepeoplesearch");
+    } catch (err) {
+      if (err instanceof StoppedByUserError) throw err;
+    }
+
+    const rawCandidates = await p
+      .evaluate(() => {
+        const out = [];
+        const seen = new Set();
+        // Both guards against the hidden template card, exactly as address
+        // mode does - and confirmed still present on name results (a search
+        // returning 1 real person reported 2 matching elements).
+        document.querySelectorAll(".card-summary[data-detail-link]:not(.d-none)").forEach((card) => {
+          const href = card.getAttribute("data-detail-link");
+          const nameEl = card.querySelector(".content-header");
+          if (!href || !nameEl) return;
+          if (seen.has(href)) return; // one card renders two View Details anchors (desktop + mobile)
+          seen.add(href);
+
+          const values = Array.from(card.querySelectorAll(":scope > .row .content-value"));
+          const townText = values.length ? values[values.length - 1].textContent.trim() : "";
+          out.push({
+            href,
+            name: nameEl.textContent.replace(/\s+/g, " ").trim(),
+            city: /^[A-Za-z .'-]+,\s*[A-Z]{2}$/.test(townText) ? townText : "",
+          });
+        });
+        return out;
+      })
+      .catch(() => []);
+
+    // This site DOES broadly honour the searched name (its own looseness is
+    // the city, plus Jr/Sr variants), but the check runs here too rather than
+    // being skipped on one site and not the other - a rule that only holds on
+    // one of two sources is a rule waiting to be forgotten.
+    const rightName = rawCandidates.filter((entry) => nameMatchesSearched(entry.name, cleanFirst, cleanLast));
+    const wrongName = rawCandidates.length - rightName.length;
+
+    const stillLocal = rightName.filter((entry) => cardCityLooksRight(entry.city, cleanRegion));
+    const movedAway = rightName.length - stillLocal.length;
+
+    const candidates = stillLocal.slice(0, MAX_NAME_CANDIDATES);
+    const cappedOut = stillLocal.length > candidates.length;
+
+    broadcastLog(
+      `${candidates.length} candidate${candidates.length === 1 ? "" : "s"} to check` +
+        (wrongName > 0 ? ` (${wrongName} were a different person entirely)` : "") +
+        (movedAway > 0 ? ` (${movedAway} have moved away)` : "") +
+        (cappedOut ? ` (capped at ${MAX_NAME_CANDIDATES})` : "") +
+        "..."
+    );
+
+    if (candidates.length === 0) {
+      broadcastLog("Nobody by that name currently lives there - marking Not Found.");
+      return { found: false };
+    }
+
+    let best = null; // { profile, rank }
+
+    for (const candidate of candidates) {
+      throwIfAborted(signal);
+      const profileUrl = `https://www.truepeoplesearch.com${candidate.href}`;
+      broadcastLog(`Checking ${candidate.name || nameFromCandidateHref(candidate.href)}...`);
+      await p.goto(profileUrl, { waitUntil: "domcontentloaded" });
+      lastKnownUrl = profileUrl;
+
+      const loaded = await waitForTPSProfileOutcome(p, TPS_PROFILE_WAIT_MS, signal);
+      if (loaded !== "loaded") {
+        broadcastLog("This candidate's profile never fully loaded - skipping it.");
+        continue;
+      }
+
+      try {
+        await actLikeSomeoneBrowsing(p, signal, "truepeoplesearch");
+      } catch (err) {
+        if (err instanceof StoppedByUserError) throw err;
+      }
+
+      const profile = await extractTPSProfile(p, "");
+
+      if (!nameMatchesSearched(profile.name || candidate.name, cleanFirst, cleanLast)) {
+        broadcastLog("Their profile is a different person to the one on the list - skipping them.");
+        continue;
+      }
+
+      if (!profileCityMatches(profile.address, cleanRegion)) {
+        broadcastLog("They don't live in that city any more - skipping them.");
+        continue;
+      }
+
+      const rank = sinceRank(profile.currentAddressSince);
+      if (!best || rank > best.rank) best = { profile, rank };
+    }
+
+    if (!best) {
+      if (cappedOut) {
+        broadcastLog(`Checked ${MAX_NAME_CANDIDATES} people of that name without a match, and more exist.`);
+        return { found: false, status: "too-many-matches" };
+      }
+      broadcastLog("Nobody by that name currently lives there - marking Not Found.");
+      return { found: false };
+    }
+
+    const profile = best.profile;
+    const ranked = rankMobilesByRecency(profile.wirelessPhones);
+    const mobiles = (ranked.length ? ranked : profile.otherMobiles || []).slice(0, 3);
+    const landlines = (profile.landlines || []).slice(0, 3);
+
+    if (mobiles.length === 0) {
+      broadcastLog(`${profile.name || "This person"} has no mobile number - parking them, not discarding.`);
+      return {
+        found: false,
+        status: "no-mobile-number",
+        name: profile.name,
+        address: profile.address,
+        age: profile.age,
+        property: profile.property,
+        mobiles: [],
+        landlines,
+        email: profile.email,
+        source: "TruePeopleSearch",
+      };
+    }
+
+    return {
+      found: true,
+      name: profile.name,
+      address: profile.address,
+      age: profile.age,
+      property: profile.property,
+      phone: mobiles[0],
+      phoneType: "Wireless",
+      otherMobiles: mobiles.slice(1),
+      mobiles,
+      landlines,
+      email: profile.email,
+      source: "TruePeopleSearch",
+      candidatesChecked: candidates.length,
+    };
+  } catch (err) {
+    if (!(err instanceof StoppedByUserError)) {
+      const currentUrl = await p?.evaluate(() => document.location.href).catch(() => null);
+      broadcastStatus("error-detail", {
+        message: err.message,
+        url: currentUrl || lastKnownUrl,
+        previousUrl: lastKnownUrl,
+        context: `runNameSearchTruePeopleSearch(${label})`,
+      });
+    }
+    throw err;
+  } finally {
+    currentAbortController = null;
+  }
+}
+
 module.exports = {
   runPhoneSearch,
   runPhoneSearchTruePeopleSearch,
+  runAddressSearch,
+  runAddressSearchTruePeopleSearch,
+  runNameSearch,
+  runNameSearchTruePeopleSearch,
+  runPropWireListBuild,
+  propWireIsValidSearchUrl,
+  propWireAddressKey,
+  // Exported for unit tests, same reasoning as the address helpers below -
+  // the ranking rule is real logic and shouldn't need a browser to check.
+  rankMobilesByRecency,
+  tpsRegionTown,
+  tpsCandidateStillLivesInTown,
+  // Exported purely so they can be unit-tested without a browser (the
+  // parsing/ranking/dedupe rules are where address mode's real logic lives).
+  addressSlug,
+  // Name mode's own pure logic - the name comparison in particular is where
+  // its correctness lives, since the sites do not honour the searched name.
+  nameSlug,
+  nameMatchesSearched,
+  regionState,
+  sameTown,
+  cardCityLooksRight,
+  profileCityMatches,
+  cityFromFpsHeading,
+  parseCandidateHeading,
+  dedupeCandidates,
+  sinceRank,
+  normalizeAddressText,
   resetCookies,
   requestStop,
   onStatus,

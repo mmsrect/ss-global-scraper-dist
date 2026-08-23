@@ -10,9 +10,13 @@
     "dev:electron": "wait-on tcp:5173 && cross-env ELECTRON_START_URL=http://localhost:5173 electron .",
     "build:renderer": "vite build",
     "build:protected": "npm run build:renderer && node scripts/obfuscate.js",
-    "start": "electron ."
+    "start": "electron .",
+    "test": "node tests/engine-helpers.test.cjs && node tests/queue-backups.test.cjs"
   },
   "dependencies": {
+    "@fontsource-variable/bricolage-grotesque": "^5.3.0",
+    "@fontsource-variable/public-sans": "^5.3.0",
+    "@fontsource/ibm-plex-mono": "^5.3.0",
     "@mantine/core": "^7.13.0",
     "@mantine/hooks": "^7.13.0",
     "@napi-rs/keyring": "^1.1.0",
